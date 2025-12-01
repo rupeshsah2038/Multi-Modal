@@ -1,0 +1,7 @@
+torch
+transformers
+sklearn
+numpy
+pillow
+jsonlines
+pyyaml
