@@ -14,8 +14,8 @@ student:
   fusion_layers: 1
 
 training:
-  teacher_epochs: 3
-  student_epochs: 10
+  teacher_epochs: 1
+  student_epochs: 2
   teacher_lr: 1e-5
   student_lr: 3e-4
   alpha: 1.0

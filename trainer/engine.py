@@ -11,7 +11,7 @@ import yaml
 import os
 from datetime import datetime
 from transformers import AutoTokenizer
-
+#
 def train_teacher(model, loader, device, epochs, lr):
     # defensive: ensure epochs and lr are numeric
     try:
@@ -82,7 +82,8 @@ def train_student(student, teacher, loader, device, epochs, lr, distill_fn):
             nsteps += 1
         avg = total / max(1, nsteps)
         print(f"Student Epoch {epoch+1}/{epochs} – loss {avg:.4f}")
-    return student
+    # Return average loss for the final epoch to allow logging
+    return student, avg
 
 def main(cfg):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -186,7 +187,7 @@ def main(cfg):
         raise TypeError(f"training.student_epochs must be int-like, got {cfg['training'].get('student_epochs')}")
 
     for epoch in range(1, student_epochs + 1):
-        student = train_student(
+        student, train_loss = train_student(
             student, teacher, train_loader, device, epochs=1,
             lr=cfg['training'].get('student_lr', 3e-4), distill_fn=distill_fn
         )
@@ -197,6 +198,10 @@ def main(cfg):
             best_path = os.path.join(cfg['logging']['log_dir'], "student_best.pth")
             torch.save(student.state_dict(), best_path)
             print(f"  New best dev score: {dev_score:.4f}")
+        # Log epoch-level metrics including train loss and evaluation metrics
+        all_metrics = {}
+        all_metrics.update(dev_metrics)
+        logger.log_epoch(epoch, train_loss, all_metrics)
     
     # Test
     if best_dev_score > 0:
@@ -206,6 +211,8 @@ def main(cfg):
     
     final_path = os.path.join(cfg['logging']['log_dir'], "student_final.pth")
     torch.save(student.state_dict(), final_path)
+    os.remove(final_path)
+    os.remove(best_path)
     logger.save_csv()
     logger.save_json()
     print(f"All outputs saved in {cfg['logging']['log_dir']}")

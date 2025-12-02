@@ -23,10 +23,12 @@ class DistillationLoss(nn.Module):
             F.log_softmax(s_out['logits_location'] / self.T, dim=-1),
             F.softmax(t_out['logits_location'] / self.T, dim=-1)
         ) * (self.T ** 2)
-        dev = s_out['img_emb'].device
-        t_img_proj = self.proj_t_img.to(dev)(t_out['img_emb'])
-        t_txt_proj = self.proj_t_txt.to(dev)(t_out['txt_emb'])
-        feat_img = self.mse(s_out['img_emb'], t_img_proj)
-        feat_txt = self.mse(s_out['txt_emb'], t_txt_proj)
+        # Use consistent keys with the rest of the project:
+        # student provides `img_proj` / `txt_proj`; teacher provides `img_raw` / `txt_raw`
+        dev = s_out['img_proj'].device
+        t_img_proj = self.proj_t_img.to(dev)(t_out['img_raw'])
+        t_txt_proj = self.proj_t_txt.to(dev)(t_out['txt_raw'])
+        feat_img = self.mse(s_out['img_proj'], t_img_proj)
+        feat_txt = self.mse(s_out['txt_proj'], t_txt_proj)
         loss = ce_mod + ce_loc + self.alpha * (kl_mod + kl_loc) + self.beta * (feat_img + feat_txt)
         return loss

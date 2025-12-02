@@ -1,5 +1,5 @@
 import torch.nn as nn
-
+import torch
 class SimpleFusion(nn.Module):
     def __init__(self, dim: int, heads: int = 8, layers: int = 2, dropout: float = 0.1):
         super().__init__()
