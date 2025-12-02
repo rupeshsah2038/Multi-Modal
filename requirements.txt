@@ -1,6 +1,6 @@
 torch
 transformers
-sklearn
+scikit-learn
 numpy
 pillow
 jsonlines

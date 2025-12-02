@@ -18,6 +18,24 @@ pip install -r requirements.txt
 python experiments/run.py config/default.yaml
 ```
 
+Note: If you previously saw a `ModuleNotFoundError: No module named 'trainer'` when running
+`python experiments/run.py` it happened because Python places the `experiments/` directory on
+`sys.path[0]` when executing the script directly, so sibling packages (like `trainer`) were not
+discoverable. The launcher now ensures the repository root is added to `sys.path` so running the
+script directly from the repository root works as expected. Alternatively you can run the module
+with:
+
+```fish
+python -m experiments.run config/default.yaml
+```
+
+Also note that the training code imports heavy dependencies (Torch, HuggingFace tokenizers, etc.).
+If `ModuleNotFoundError: No module named 'torch'` occurs, install required packages with:
+
+```fish
+pip install -r requirements.txt
+```
+
 Outputs (check `config/default.yaml.logging.log_dir`) will include model checkpoints (`student_best.pth`, `student_final.pth`), `metrics.csv`, `metrics.json` and confusion matrix `.npy` files.
 
 ## Key files & architecture
@@ -34,6 +52,8 @@ Outputs (check `config/default.yaml.logging.log_dir`) will include model checkpo
 - `config/default.yaml` contains dataset location, batch size, model choices and training hyperparameters.
 - New: `config['loss']['type']` lets you select which loss implementation to use at runtime. Supported keys: `vanilla`, `combined`, `crd`, `rkd`, `mmd`.
 - `trainer/engine` will introspect the selected loss class and forward supported keys from `cfg['training']` (e.g., alpha, beta, gamma, T) to the loss constructor.
+
+Note: `trainer/engine` now performs defensive parsing on numeric config fields it uses (for example, `data.batch_size`, `data.num_workers`, `training.teacher_epochs`, `training.student_epochs`, `training.teacher_lr`, `training.student_lr`). If these fields are provided as strings the engine will attempt to coerce them to ints/floats. A helpful TypeError will be raised if coercion fails.
 
 ## Data layout (expected)
 

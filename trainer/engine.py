@@ -13,6 +13,16 @@ from datetime import datetime
 from transformers import AutoTokenizer
 
 def train_teacher(model, loader, device, epochs, lr):
+    # defensive: ensure epochs and lr are numeric
+    try:
+        epochs = int(epochs)
+    except Exception:
+        raise TypeError(f"teacher epochs must be int-like, got {type(epochs)}: {epochs}")
+    try:
+        lr = float(lr)
+    except Exception:
+        raise TypeError(f"teacher lr must be float-like, got {type(lr)}: {lr}")
+
     model.train()
     opt = torch.optim.AdamW(model.parameters(), lr=lr)
     ce = torch.nn.CrossEntropyLoss()
@@ -38,6 +48,16 @@ def train_teacher(model, loader, device, epochs, lr):
 
 def train_student(student, teacher, loader, device, epochs, lr, distill_fn):
     teacher.eval()
+    # defensive: ensure epochs and lr are numeric
+    try:
+        epochs = int(epochs)
+    except Exception:
+        raise TypeError(f"student epochs must be int-like, got {type(epochs)}: {epochs}")
+    try:
+        lr = float(lr)
+    except Exception:
+        raise TypeError(f"student lr must be float-like, got {type(lr)}: {lr}")
+
     student.train()
     opt = torch.optim.AdamW(student.parameters(), lr=lr)
     for epoch in range(epochs):
@@ -82,9 +102,19 @@ def main(cfg):
     dev_dataset = make_dataset("dev")
     test_dataset = make_dataset("test")
     
-    train_loader = DataLoader(train_dataset, batch_size=cfg['data']['batch_size'], shuffle=True, num_workers=cfg['data']['num_workers'])
-    dev_loader = DataLoader(dev_dataset, batch_size=cfg['data']['batch_size'], shuffle=False, num_workers=cfg['data']['num_workers'])
-    test_loader = DataLoader(test_dataset, batch_size=cfg['data']['batch_size'], shuffle=False, num_workers=cfg['data']['num_workers'])
+    # defensive parsing of common numeric config values
+    try:
+        batch_size = int(cfg['data'].get('batch_size', 16))
+    except Exception:
+        raise TypeError(f"data.batch_size must be int-like, got {cfg['data'].get('batch_size')}")
+    try:
+        num_workers = int(cfg['data'].get('num_workers', 4))
+    except Exception:
+        raise TypeError(f"data.num_workers must be int-like, got {cfg['data'].get('num_workers')}")
+
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    dev_loader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     
     teacher = Teacher(
         vision=cfg['teacher']['vision'],
@@ -140,14 +170,26 @@ def main(cfg):
     
     # Train teacher
     print("\n=== Training Teacher ===")
-    teacher = train_teacher(teacher, train_loader, device, epochs=cfg['training']['teacher_epochs'], lr=cfg['training']['teacher_lr'])
+    teacher = train_teacher(
+        teacher, train_loader, device,
+        epochs=cfg['training'].get('teacher_epochs', 1),
+        lr=cfg['training'].get('teacher_lr', 1e-5)
+    )
     
     torch.cuda.empty_cache()
     
     print("\n=== Distilling to Student ===")
     best_dev_score = 0.0
-    for epoch in range(1, cfg['training']['student_epochs'] + 1):
-        student = train_student(student, teacher, train_loader, device, epochs=1, lr=cfg['training']['student_lr'], distill_fn=distill_fn)
+    try:
+        student_epochs = int(cfg['training'].get('student_epochs', 1))
+    except Exception:
+        raise TypeError(f"training.student_epochs must be int-like, got {cfg['training'].get('student_epochs')}")
+
+    for epoch in range(1, student_epochs + 1):
+        student = train_student(
+            student, teacher, train_loader, device, epochs=1,
+            lr=cfg['training'].get('student_lr', 3e-4), distill_fn=distill_fn
+        )
         dev_metrics = evaluate_detailed(student, dev_loader, device, logger=logger, split="dev", token_type='student')
         dev_score = (dev_metrics['dev_mod_f1'] + dev_metrics['dev_loc_f1']) / 2
         if dev_score > best_dev_score:
