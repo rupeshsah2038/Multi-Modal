@@ -29,4 +29,5 @@ fusion:
   type: "simple"
 
 loss:
-  type: "vanilla"
+#  type: "vanilla"
+  type: "combined"
