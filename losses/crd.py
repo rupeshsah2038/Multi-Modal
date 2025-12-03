@@ -7,14 +7,21 @@ class CRDLoss(nn.Module):
         super().__init__()
         self.temperature = temperature
         self.base_temperature = base_temperature
+        # Projection layers to match student feature dimension (512)
+        self.proj_t_img = nn.Linear(1024, 512)
+        self.proj_t_txt = nn.Linear(768, 512)
 
     def forward(self, s_out, t_out, y_mod, y_loc):
         # Accept both dict-based calls (from trainer) and direct tensor calls (for compatibility)
         if isinstance(s_out, dict):
             s_img = s_out["img_proj"]
             s_txt = s_out["txt_proj"]
-            t_img = t_out["img_raw"]
-            t_txt = t_out["txt_raw"]
+            t_img_raw = t_out["img_raw"]
+            t_txt_raw = t_out["txt_raw"]
+            # Project teacher features to match student dimension
+            dev = s_img.device
+            t_img = self.proj_t_img.to(dev)(t_img_raw)
+            t_txt = self.proj_t_txt.to(dev)(t_txt_raw)
         else:
             # Direct tensor calls (old interface for backward compatibility)
             s_img = s_out
