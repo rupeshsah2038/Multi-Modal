@@ -31,4 +31,6 @@ fusion:
 loss:
 #  type: "vanilla"
 #  type: "combined"
-  type: "crd"
+#  type: "crd"
+  type: "rkd"
+  
