@@ -25,6 +25,5 @@ class MedKDCombinedLoss(nn.Module):
         t_img = self.proj_t_img.to(dev)(t_out["img_raw"])
         t_txt = self.proj_t_txt.to(dev)(t_out["txt_raw"])
         mse = self.mse(s_out["img_proj"], t_img) + self.mse(s_out["txt_proj"], t_txt)
-        crd = self.crd(s_out["img_proj"], s_out["txt_proj"],
-                       t_img.detach(), t_txt.detach(), y_mod)
+        crd = self.crd(s_out, t_out, y_mod, y_loc)
         return ce + self.alpha * kl + self.beta * mse + self.gamma * crd
