@@ -30,4 +30,5 @@ fusion:
 
 loss:
 #  type: "vanilla"
-  type: "combined"
+#  type: "combined"
+  type: "crd"
