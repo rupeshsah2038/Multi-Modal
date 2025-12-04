@@ -16,9 +16,9 @@ def gaussian_kernel(x, y, bandwidths=[0.2, 0.5, 1, 2, 5]):
 class MMDLoss(nn.Module):
     def __init__(self):
         super().__init__()
-        # Projection layers for teacher raw features to student dim (512)
-        self.proj_t_img = nn.Linear(1024, 512)
-        self.proj_t_txt = nn.Linear(768, 512)
+        # Projection layers will be created lazily on first forward pass
+        self.proj_t_img = None
+        self.proj_t_txt = None
 
     def forward(self, s_feats, t_feats=None, y_mod=None, y_loc=None):
         """
@@ -34,8 +34,18 @@ class MMDLoss(nn.Module):
             t_img_raw = t_feats['img_raw'] if isinstance(t_feats, dict) else t_feats['img_raw']
             t_txt_raw = t_feats['txt_raw'] if isinstance(t_feats, dict) else t_feats['txt_raw']
             dev = s_img.device
-            t_img = self.proj_t_img.to(dev)(t_img_raw)
-            t_txt = self.proj_t_txt.to(dev)(t_txt_raw)
+            # Create projections lazily based on runtime tensor shapes
+            in_img = t_img_raw.size(-1)
+            out_img = s_img.size(-1)
+            if (self.proj_t_img is None) or (getattr(self.proj_t_img, 'in_features', None) != in_img) or (getattr(self.proj_t_img, 'out_features', None) != out_img):
+                self.proj_t_img = nn.Linear(in_img, out_img).to(dev)
+            t_img = self.proj_t_img(t_img_raw.to(dev))
+            # Text projection
+            in_txt = t_txt_raw.size(-1)
+            out_txt = s_txt.size(-1)
+            if (self.proj_t_txt is None) or (getattr(self.proj_t_txt, 'in_features', None) != in_txt) or (getattr(self.proj_t_txt, 'out_features', None) != out_txt):
+                self.proj_t_txt = nn.Linear(in_txt, out_txt).to(dev)
+            t_txt = self.proj_t_txt(t_txt_raw.to(dev))
         else:
             # legacy tensor-based call: s_feats, t_feats
             s_img = s_feats

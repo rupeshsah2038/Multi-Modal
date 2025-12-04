@@ -87,7 +87,13 @@ def train_student(student, teacher, loader, device, epochs, lr, distill_fn):
     return student, avg
 
 def main(cfg):
-    device = torch.device("cuda:4" if torch.cuda.is_available() else "cpu")
+    # Allow overriding device from the config (e.g. 'cuda:3' or 'cpu').
+    cfg_device = cfg.get('device', None)
+    if cfg_device:
+        # trust user-provided device string
+        device = torch.device(cfg_device)
+    else:
+        device = torch.device("cuda:4" if torch.cuda.is_available() else "cpu")
     teacher_tokenizer = AutoTokenizer.from_pretrained('emilyalsentzer/Bio_ClinicalBERT')
     student_tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
     

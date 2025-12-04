@@ -11,8 +11,9 @@ class MedKDCombinedLoss(nn.Module):
         self.mse = nn.MSELoss()
         self.crd = CRDLoss()
         self.alpha, self.beta, self.gamma, self.T = alpha, beta, gamma, T
-        self.proj_t_img = nn.Linear(1024, 512)
-        self.proj_t_txt = nn.Linear(768, 512)
+        # Projection layers will be created lazily on first forward pass
+        self.proj_t_img = None
+        self.proj_t_txt = None
 
     def forward(self, s_out, t_out, y_mod, y_loc):
         ce = self.ce(s_out["logits_modality"], y_mod) + self.ce(s_out["logits_location"], y_loc)
@@ -22,8 +23,18 @@ class MedKDCombinedLoss(nn.Module):
                       F.softmax(t_out["logits_location"]/self.T, dim=-1)) * (self.T**2)
         # Ensure projection layers are on the same device as model outputs
         dev = s_out.get('img_proj', next(iter(s_out.values()))).device
-        t_img = self.proj_t_img.to(dev)(t_out["img_raw"])
-        t_txt = self.proj_t_txt.to(dev)(t_out["txt_raw"])
+        # Create projections lazily based on runtime tensor shapes
+        in_img = t_out['img_raw'].size(-1)
+        out_img = s_out['img_proj'].size(-1)
+        if (self.proj_t_img is None) or (getattr(self.proj_t_img, 'in_features', None) != in_img) or (getattr(self.proj_t_img, 'out_features', None) != out_img):
+            self.proj_t_img = nn.Linear(in_img, out_img).to(dev)
+        t_img = self.proj_t_img(t_out["img_raw"].to(dev))
+        # Text projection
+        in_txt = t_out['txt_raw'].size(-1)
+        out_txt = s_out['txt_proj'].size(-1)
+        if (self.proj_t_txt is None) or (getattr(self.proj_t_txt, 'in_features', None) != in_txt) or (getattr(self.proj_t_txt, 'out_features', None) != out_txt):
+            self.proj_t_txt = nn.Linear(in_txt, out_txt).to(dev)
+        t_txt = self.proj_t_txt(t_out["txt_raw"].to(dev))
         mse = self.mse(s_out["img_proj"], t_img) + self.mse(s_out["txt_proj"], t_txt)
         crd = self.crd(s_out, t_out, y_mod, y_loc)
         return ce + self.alpha * kl + self.beta * mse + self.gamma * crd
