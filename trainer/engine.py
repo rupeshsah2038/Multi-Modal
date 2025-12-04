@@ -12,6 +12,7 @@ import yaml
 import os
 from datetime import datetime
 from transformers import AutoTokenizer
+from models.backbones import get_text_pretrained_name
 #
 def train_teacher(model, loader, device, epochs, lr):
     # defensive: ensure epochs and lr are numeric
@@ -94,8 +95,21 @@ def main(cfg):
         device = torch.device(cfg_device)
     else:
         device = torch.device("cuda:4" if torch.cuda.is_available() else "cpu")
-    teacher_tokenizer = AutoTokenizer.from_pretrained('emilyalsentzer/Bio_ClinicalBERT')
-    student_tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
+
+    # Load tokenizers that match configured text backbones to avoid
+    # token-id vs embedding-size mismatches when swapping backbones.
+    t_text_name = cfg.get('teacher', {}).get('text')
+    s_text_name = cfg.get('student', {}).get('text')
+    t_pretrained = get_text_pretrained_name(t_text_name) if t_text_name else None
+    s_pretrained = get_text_pretrained_name(s_text_name) if s_text_name else None
+
+    if t_pretrained is None:
+        raise KeyError(f"Teacher text backbone '{t_text_name}' has no known pretrained mapping")
+    if s_pretrained is None:
+        raise KeyError(f"Student text backbone '{s_text_name}' has no known pretrained mapping")
+
+    teacher_tokenizer = AutoTokenizer.from_pretrained(t_pretrained)
+    student_tokenizer = AutoTokenizer.from_pretrained(s_pretrained)
     
     def make_dataset(split):
         return MedPixDataset(

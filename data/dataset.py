@@ -74,6 +74,44 @@ class MedPixDataset(Dataset):
             return_tensors='pt',
         )
 
+        # Defensive checks: ensure token ids are within tokenizer vocab size.
+        def _vocab_size(tokenizer):
+            vs = getattr(tokenizer, 'vocab_size', None)
+            if vs is not None:
+                return int(vs)
+            try:
+                gv = tokenizer.get_vocab()
+                return len(gv)
+            except Exception:
+                return None
+
+        vocab_t = _vocab_size(self.tokenizer_teacher)
+        vocab_s = _vocab_size(self.tokenizer_student)
+
+        max_id_t = int(enc_t['input_ids'].max().item())
+        max_id_s = int(enc_s['input_ids'].max().item())
+
+        if vocab_t is not None and max_id_t >= vocab_t:
+            raise ValueError(
+                "Token id out of range for teacher tokenizer: "
+                f"max id {max_id_t} >= vocab_size {vocab_t}.\n"
+                "This likely means the tokenizer does not match the teacher model. "
+                "Ensure your config text backbone maps to the correct pretrained tokenizer."
+            )
+        if vocab_s is not None and max_id_s >= vocab_s:
+            raise ValueError(
+                "Token id out of range for student tokenizer: "
+                f"max id {max_id_s} >= vocab_size {vocab_s}.\n"
+                "This likely means the tokenizer does not match the student model. "
+                "Ensure your config text backbone maps to the correct pretrained tokenizer."
+            )
+
+        # Sanity check: attention mask and input ids have same shape
+        if enc_t['input_ids'].shape != enc_t['attention_mask'].shape:
+            raise ValueError('Teacher input_ids and attention_mask shape mismatch')
+        if enc_s['input_ids'].shape != enc_s['attention_mask'].shape:
+            raise ValueError('Student input_ids and attention_mask shape mismatch')
+
         modality = self.modality_map.get(desc['Type'], 0)
         location = self.location_map.get(desc['Location Category'], 0)
 
