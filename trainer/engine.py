@@ -6,6 +6,7 @@ from models.student import Student
 import importlib
 import inspect
 from utils.logger import MetricsLogger
+from utils.results_logger import ResultsLogger
 from utils.metrics import evaluate_detailed
 import yaml
 import os
@@ -86,7 +87,7 @@ def train_student(student, teacher, loader, device, epochs, lr, distill_fn):
     return student, avg
 
 def main(cfg):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:4" if torch.cuda.is_available() else "cpu")
     teacher_tokenizer = AutoTokenizer.from_pretrained('emilyalsentzer/Bio_ClinicalBERT')
     student_tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
     
@@ -204,6 +205,7 @@ def main(cfg):
         logger.log_epoch(epoch, train_loss, all_metrics)
     
     # Test
+    test_metrics = {}
     if best_dev_score > 0:
         best_path = os.path.join(cfg['logging']['log_dir'], "student_best.pth")
         student.load_state_dict(torch.load(best_path, map_location=device))
@@ -211,10 +213,14 @@ def main(cfg):
     
     final_path = os.path.join(cfg['logging']['log_dir'], "student_final.pth")
     torch.save(student.state_dict(), final_path)
-    os.remove(final_path)
-    os.remove(best_path)
     logger.save_csv()
     logger.save_json()
+    
+    # Save complete experiment results with all metadata
+    results_logger = ResultsLogger(cfg['logging']['log_dir'])
+    train_metrics = {'final_loss': train_loss} if 'train_loss' in locals() else {}
+    results_logger.log_experiment(cfg, train_metrics, dev_metrics, test_metrics)
+    
     print(f"All outputs saved in {cfg['logging']['log_dir']}")
     
 if __name__ == "__main__":

@@ -14,8 +14,8 @@ student:
   fusion_layers: 1
 
 training:
-  teacher_epochs: 1
-  student_epochs: 2
+  teacher_epochs: 3
+  student_epochs: 15
   teacher_lr: 1e-5
   student_lr: 3e-4
   alpha: 1.0
@@ -29,8 +29,9 @@ fusion:
   type: "simple"
 
 loss:
-#  type: "vanilla"
+  type: "vanilla"
 #  type: "combined"
 #  type: "crd"
-  type: "rkd"
+#  type: "rkd"
+#  type: "mmd"
   
