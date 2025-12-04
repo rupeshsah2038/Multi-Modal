@@ -1,84 +1,298 @@
 # Medpix_kd_modular
 
-Light-weight repository for two-stage multimodal model training + KD (Teacher→Student) on the MedPix dataset.
+Lightweight repository for two-stage multimodal model training + knowledge distillation (Teacher→Student) on the MedPix dataset.
 
-This repo implements a vision+text Teacher network and a smaller Student distilled from it. The experiment entrypoint and training loop are intentionally compact so you can iterate quickly on model/backbone choices, fusion modules and distillation losses.
+This repo implements a vision+text Teacher network and a smaller Student distilled from it. The training pipeline, experiment orchestration, and modular loss implementations allow quick iteration on model/backbone choices, fusion strategies, and distillation methods.
 
-## Quickstart (run an experiment)
+## Quick start
 
-1. Install dependencies:
-
-```fish
+### 1. Install dependencies
+```bash
 pip install -r requirements.txt
 ```
 
-2. Run the default experiment (uses `config/default.yaml`):
-
-```fish
+### 2. Run an experiment
+```bash
 python experiments/run.py config/default.yaml
 ```
 
-Note: If you previously saw a `ModuleNotFoundError: No module named 'trainer'` when running
-`python experiments/run.py` it happened because Python places the `experiments/` directory on
-`sys.path[0]` when executing the script directly, so sibling packages (like `trainer`) were not
-discoverable. The launcher now ensures the repository root is added to `sys.path` so running the
-script directly from the repository root works as expected. Alternatively you can run the module
-with:
+Outputs are saved to the directory specified in `config.logging.log_dir` (default: `logs/`). Each run generates:
+- `metrics.csv` and `metrics.json` — per-epoch and per-split metrics
+- `results.json` — complete experiment metadata (config, hyperparameters, dev/test metrics)
+- `student_best.pth`, `student_final.pth` — model checkpoints
+- Confusion matrices (`.npy`) for each split and task
 
-```fish
-python -m experiments.run config/default.yaml
+### 3. Run multiple experiments with different backbone swaps (batch mode)
+```bash
+python tools/batch_runs.py --base config/default.yaml \
+  --runs original,swap_vision,swap_text,swap_both \
+  --execute --epochs 5 --batch-size 8 --device cuda:3
 ```
 
-Also note that the training code imports heavy dependencies (Torch, HuggingFace tokenizers, etc.).
-If `ModuleNotFoundError: No module named 'torch'` occurs, install required packages with:
-
-```fish
-pip install -r requirements.txt
-```
-
-Outputs (check `config/default.yaml.logging.log_dir`) will include model checkpoints (`student_best.pth`, `student_final.pth`), `metrics.csv`, `metrics.json` and confusion matrix `.npy` files.
+This will:
+- Create per-run configs under `logs/run_<name>/config.yaml`
+- Execute each run sequentially
+- Save outputs to separate `logs/run_<name>/` directories
 
 ## Key files & architecture
 
-- `experiments/run.py`: tiny wrapper that loads a config and calls `trainer/engine.main(cfg)`.
-- `trainer/engine.py`: main orchestration — builds tokenizers, datasets, teacher + student models, picks loss (see `config['loss']['type']`), runs teacher training and distillation loop.
-- `data/dataset.py`: dataset class — expects JSONL splits + images, produces both teacher/student tokenized inputs.
-- `models/`: model backbones, fusion modules, and final classification heads.
-- `losses/`: distillation and auxiliary loss implementations (vanilla, combined, crd, rkd, mmd).
-- `utils/metrics.py`, `utils/logger.py`: evaluation, per-split metrics, and saved logs.
+### Training & orchestration
+- **`experiments/run.py`**: Entry point; loads config and calls trainer
+- **`trainer/engine.py`**: Main orchestration — loads data, builds models, trains teacher, distills to student, evaluates, logs results
 
-## Config / important options
+### Data & models
+- **`data/dataset.py`**: MedPixDataset — produces tokenized inputs for both teacher and student
+- **`models/backbones.py`**: Vision (ViT, DeiT) and text (Bio_ClinicalBERT, DistilBERT) backbone loaders
+- **`models/teacher.py`**, **`models/student.py`**: Teacher and student models with dual tokenization, fusion, and output heads
+- **`models/fusion/`**: Fusion modules (simple, concat_mlp, cross_attention, gated, transformer_concat)
+- **`models/heads.py`**: Classification heads for modality and location tasks
 
-- `config/default.yaml` contains dataset location, batch size, model choices and training hyperparameters.
-- New: `config['loss']['type']` lets you select which loss implementation to use at runtime. Supported keys: `vanilla`, `combined`, `crd`, `rkd`, `mmd`.
-- `trainer/engine` will introspect the selected loss class and forward supported keys from `cfg['training']` (e.g., alpha, beta, gamma, T) to the loss constructor.
+### Losses & metrics
+- **`losses/`**: Distillation loss implementations:
+  - `vanilla.py` — CE + KL + MSE (baseline)
+  - `combined.py` — CE + KL + MSE + CRD
+  - `crd.py` — Contrastive Representation Distillation
+  - `rkd.py` — Relational Knowledge Distillation
+  - `mmd.py` — Maximum Mean Discrepancy alignment
+  - ✓ All losses support lazy projection layers (adapt to any backbone dimensions)
+- **`utils/metrics.py`**: Evaluation functions (accuracy, F1, AUC, per-split metrics)
+- **`utils/logger.py`**: Metrics CSV/JSON export and confusion matrix saving
+- **`utils/results_logger.py`**: Full experiment metadata persistence (`results.json`)
 
-Note: `trainer/engine` now performs defensive parsing on numeric config fields it uses (for example, `data.batch_size`, `data.num_workers`, `training.teacher_epochs`, `training.student_epochs`, `training.teacher_lr`, `training.student_lr`). If these fields are provided as strings the engine will attempt to coerce them to ints/floats. A helpful TypeError will be raised if coercion fails.
+### Tooling
+- **`tools/batch_runs.py`**: Batch experiment runner supporting vision/text backbone swaps
+
+## Configuration
+
+### Structure (config/default.yaml)
+```yaml
+data:
+  root: "MedPix-2-0"          # Dataset root (contains splitted_dataset/, images/)
+  batch_size: 16              # Batch size for training/eval
+  num_workers: 4              # DataLoader workers
+
+teacher:
+  vision: "vit-large"         # Vision backbone: vit-large, deit-base, deit-small, etc.
+  text: "bio-clinical-bert"   # Text backbone: bio-clinical-bert, distilbert, etc.
+  fusion_layers: 2            # Fusion module layers
+
+student:
+  vision: "deit-base"         # Student vision (typically smaller)
+  text: "distilbert"          # Student text (typically smaller)
+  fusion_layers: 1
+
+training:
+  teacher_epochs: 1           # Number of teacher pre-training epochs
+  student_epochs: 1           # Number of distillation epochs
+  teacher_lr: 1e-5
+  student_lr: 3e-4
+  alpha: 1.0                  # KL divergence weight
+  beta: 100.0                 # Feature MSE weight
+  T: 2.0                      # Temperature for KL
+  # gamma: null               # Optional: used by some losses (combined, etc.)
+
+logging:
+  log_dir: "logs"             # Output directory
+
+fusion:
+  type: "simple"              # Fusion type: simple, concat_mlp, cross_attention, gated, transformer_concat
+
+loss:
+  type: "rkd"                 # Loss type: vanilla, combined, crd, rkd, mmd
+
+device: "cuda:3"              # Optional: GPU device; defaults to cuda:4 if omitted
+```
+
+### Loss types & supported hyperparameters
+| Loss | Config key | Additional params |
+|------|------------|-------------------|
+| `vanilla` | `loss.type: vanilla` | `alpha`, `beta`, `T` |
+| `combined` | `loss.type: combined` | `alpha`, `beta`, `gamma`, `T` |
+| `crd` | `loss.type: crd` | `temperature`, `base_temperature` |
+| `rkd` | `loss.type: rkd` | `w_dist`, `w_angle` |
+| `mmd` | `loss.type: mmd` | (none) |
+
+The trainer automatically forwards matching keys from `cfg['training']` to the loss constructor.
 
 ## Data layout (expected)
 
-Following items are expected under `config.data.root` (default: `Medpix-2-0`):
+The dataset root (default: `MedPix-2-0`) must contain:
 
-- `splitted_dataset/data_{split}.jsonl` (train/dev/test item metadata)
-- `splitted_dataset/descriptions_{split}.jsonl` (descriptions mapping)
-- `images/{image_name}.png` (preprocessed image files)
+```
+MedPix-2-0/
+├── splitted_dataset/
+│   ├── data_train.jsonl
+│   ├── data_dev.jsonl
+│   ├── data_test.jsonl
+│   ├── descriptions_train.jsonl
+│   ├── descriptions_dev.jsonl
+│   └── descriptions_test.jsonl
+└── images/
+    ├── image_001.png
+    ├── image_002.png
+    └── ...
+```
 
-If images are missing, `MedPixDataset` will raise `FileNotFoundError` — verify `config.data.root` points to the correct folder.
+If images are missing, `MedPixDataset` raises `FileNotFoundError`. Verify `config.data.root` is correct.
 
-## Project-specific gotchas & debugging
+## Important implementation details
 
-- Two tokenizers are used simultaneously in each dataset example: `input_ids_teacher` / `attention_mask_teacher` and `input_ids_student` / `attention_mask_student`. Keep both tokenizers in sync when changing text preprocessing.
-- Model output naming: most losses expect teacher outputs to include `img_raw`/`txt_raw` and student outputs `img_proj`/`txt_proj`. There is a naming mismatch in `losses/vanilla.py` which uses `img_emb`/`txt_emb` — switching `loss.type` to `vanilla` may need either adjusting the loss to read `img_raw`/`img_proj` consistently or updating models to include the keys `img_emb`/`txt_emb`.
-- Transformer / Hugging Face downloads may fail in offline environments; prefer pre-populating the HF cache if needed.
+### Dual tokenization
+- Each dataset example is tokenized twice: once with the **teacher tokenizer** (Bio_ClinicalBERT by default), once with the **student tokenizer** (DistilBERT by default)
+- This ensures each model gets appropriately-sized token sequences
+- Keep both tokenizers in sync if you change text backbones
 
-## Fast iteration & tips
+### Model output keys
+All models (teacher & student) return:
+```python
+{
+  "logits_modality": tensor,       # Shape (B, 2)
+  "logits_location": tensor,       # Shape (B, 5)
+  "img_raw": tensor,               # Vision backbone last hidden (B, D_vis)
+  "txt_raw": tensor,               # Text backbone last hidden (B, D_txt)
+  "img_proj": tensor,              # Projected vision (B, 512)
+  "txt_proj": tensor,              # Projected text (B, 512)
+}
+```
 
-- For quick experiments: lower `data.batch_size`, `training.teacher_epochs` and `training.student_epochs` in `config/default.yaml`.
-- Use `utils/metrics.evaluate_detailed()` for per-split metrics and inspect confusion matrices saved into the log directory.
+### Loss interfaces & backbone flexibility
+- **All losses now support lazy projection layers**: projections are created at first forward pass based on actual tensor shapes, so teacher/student backbone swaps work without code changes
+- Supported loss calls:
+  ```python
+  loss = loss_fn(s_out, t_out, y_mod, y_loc)
+  # where s_out, t_out are the model output dicts above
+  ```
 
-## Next steps you might ask me to do
+### Fusion modules
+- All fusion modules (simple, concat_mlp, cross_attention, gated, transformer_concat) receive pre-projected features (both at the same `fusion_dim`)
+- They work seamlessly with any backbone combination since projections happen before fusion
 
-- Fix the `losses/vanilla.py` naming mismatch so it matches other loss implementations.
-- Add unit tests / a small synthetic data runner to validate each loss and model forward pass without requiring full dataset or GPUs.
+### Device handling
+- Trainer respects `cfg['device']` if provided; otherwise defaults to `cuda:4`
+- Multi-GPU support: set `device: cuda:0` (or any GPU index) in the config
 
-If you want, I can implement one of those next — tell me which and I’ll follow up with code + tests.
+### Metrics & logging
+- Per-epoch metrics (train loss, dev F1, dev accuracy, etc.) are saved to `metrics.csv` and `metrics.json`
+- Full experiment metadata (config, hyperparameters, final dev/test metrics) is saved to `results.json`
+- Confusion matrices (`.npy`) are saved for modality and location tasks on each split
+
+## Common use cases
+
+### Quick experiment with smaller batch size
+Edit `config/default.yaml` and change:
+```yaml
+data:
+  batch_size: 8
+training:
+  student_epochs: 3
+```
+Then run:
+```bash
+python experiments/run.py config/default.yaml
+```
+
+### Run on a specific GPU
+```yaml
+device: "cuda:2"
+```
+
+### Swap vision and text backbones
+```yaml
+teacher:
+  vision: "deit-base"         # Smaller model as teacher
+  text: "distilbert"
+student:
+  vision: "vit-large"         # Larger model as student
+  text: "bio-clinical-bert"
+```
+Or use the batch runner to test multiple configurations automatically.
+
+### Use a different loss function
+```yaml
+loss:
+  type: "mmd"
+training:
+  # MMD doesn't use alpha/beta but still respects T if present
+  T: 2.0
+```
+
+### Switch fusion strategy
+```yaml
+fusion:
+  type: "cross_attention"
+```
+
+## Debugging & troubleshooting
+
+### ModuleNotFoundError: No module named 'trainer'
+- Ensure you run from the repository root: `python experiments/run.py config/default.yaml`
+- The launcher adds the repo root to `sys.path` automatically
+
+### FileNotFoundError: images missing
+- Verify `config.data.root` points to the correct dataset folder
+- Check that `{root}/images/` contains the expected image files
+
+### CUDA out of memory
+- Reduce `data.batch_size` (e.g., 8 or 4)
+- Reduce `training.student_epochs` or `training.teacher_epochs` for quicker iteration
+- Use a GPU with more memory or target a specific GPU with `device: cuda:X`
+
+### Slow data loading
+- Reduce `data.num_workers` if you see I/O bottlenecks
+- Increase `data.num_workers` if CPU is underutilized
+
+### Metrics files empty or missing
+- Ensure `config.logging.log_dir` exists or is writable
+- Check that `training.student_epochs >= 1` (at least one epoch needed to log metrics)
+
+## Example workflows
+
+### Baseline run (1 epoch for quick test)
+```bash
+python experiments/run.py config/default.yaml
+```
+
+### Multi-run comparison (backbone swaps)
+```bash
+python tools/batch_runs.py --base config/default.yaml \
+  --runs original,swap_vision,swap_text \
+  --execute --epochs 3 --batch-size 8 --device cuda:3
+```
+Results saved to `logs/run_original/`, `logs/run_swap_vision/`, etc.
+
+### Longer training run
+Edit `config/default.yaml`:
+```yaml
+training:
+  teacher_epochs: 5
+  student_epochs: 10
+data:
+  batch_size: 32
+```
+Then run:
+```bash
+python experiments/run.py config/default.yaml
+```
+
+### Compare loss functions
+Edit `config/default.yaml`:
+```yaml
+loss:
+  type: "combined"  # Try vanilla, combined, crd, rkd, mmd
+```
+
+## References & implementation notes
+
+- Teacher/Student models use Hugging Face transformers for backbones (ViT, DeiT, BERT variants)
+- Dual tokenization ensures both models handle text appropriately for their architecture
+- Lazy projection layers in all losses enable flexible backbone swapping without code changes
+- Batch runner supports configuration generation and sequential experiment execution
+- Results are persisted in multiple formats (CSV, JSON, `.npy` matrices) for analysis
+
+## Tips for fast iteration
+
+1. **Start small**: Use 1 epoch and `batch_size=8` for quick validation
+2. **Check metrics early**: Inspect `logs/metrics.json` after first run to confirm training is working
+3. **Inspect confusion matrices**: Review `.npy` files to understand per-class performance
+4. **Use batch runner for ablations**: Test multiple backbone/loss/fusion combinations systematically
+5. **Monitor GPU memory**: Use `nvidia-smi` to ensure no other processes are consuming VRAM
