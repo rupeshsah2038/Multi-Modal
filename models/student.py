@@ -19,17 +19,21 @@ class Student(nn.Module):
 
     def forward(self, pixel_values, input_ids, attention_mask):
         v_out = self.vision(pixel_values)
-        v = v_out.last_hidden_state[:, 0] if hasattr(v_out, 'last_hidden_state') else v_out[0][:, 0]
+        # keep backbone raw vision features
+        v_raw = v_out.last_hidden_state[:, 0] if hasattr(v_out, 'last_hidden_state') else v_out[0][:, 0]
         t_out = self.text(input_ids=input_ids, attention_mask=attention_mask)
-        t = t_out.last_hidden_state[:, 0]
-        v = self.proj_vis(v)
-        t = self.proj_txt(t)
+        # keep backbone raw text features
+        t_raw = t_out.last_hidden_state[:, 0]
+        # projected features used for fusion and downstream heads
+        v = self.proj_vis(v_raw)
+        t = self.proj_txt(t_raw)
         fused = self.dropout(self.fusion(v, t))
         return {
             "logits_modality": self.head_modality(fused),
             "logits_location": self.head_location(fused),
-            "img_raw": v,
-            "txt_raw": t,
+            # `img_raw` / `txt_raw` are backbone outputs; `img_proj` / `txt_proj` are projected
+            "img_raw": v_raw,
+            "txt_raw": t_raw,
             "img_proj": v,
             "txt_proj": t,
         }

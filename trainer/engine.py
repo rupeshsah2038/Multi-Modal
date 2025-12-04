@@ -221,10 +221,17 @@ def main(cfg):
     torch.save(student.state_dict(), final_path)
     logger.save_csv()
     logger.save_json()
-    
+
     # Save complete experiment results with all metadata
     results_logger = ResultsLogger(cfg['logging']['log_dir'])
-    train_metrics = {'final_loss': train_loss} if 'train_loss' in locals() else {}
+    # Serialize train history from MetricsLogger so results.json contains per-epoch info
+    try:
+        serial_history = {k: list(v) for k, v in logger.history.items()}
+    except Exception:
+        serial_history = {}
+    train_metrics = {'train': {'history': serial_history}}
+    if 'train_loss' in locals():
+        train_metrics['train']['final_loss'] = train_loss
     results_logger.log_experiment(cfg, train_metrics, dev_metrics, test_metrics)
     
     print(f"All outputs saved in {cfg['logging']['log_dir']}")
