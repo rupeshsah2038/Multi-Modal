@@ -150,9 +150,25 @@ All models (teacher & student) return:
   "logits_location": tensor,       # Shape (B, 5)
   "img_raw": tensor,               # Vision backbone last hidden (B, D_vis)
   "txt_raw": tensor,               # Text backbone last hidden (B, D_txt)
-  "img_proj": tensor,              # Projected vision (B, 512)
-  "txt_proj": tensor,              # Projected text (B, 512)
+  "img_proj": tensor,              # Projected vision (B, fusion_dim)
+  "txt_proj": tensor,              # Projected text (B, fusion_dim)
 }
+```
+
+Standardized model outputs (important):
+- **`img_raw` / `txt_raw`**: Always refer to the *backbone* raw features (the output of the vision/text encoder before any linear projection). Both the Teacher and Student now provide these raw backbone features.
+- **`img_proj` / `txt_proj`**: Always refer to the features after the model-specific linear projection into the shared `fusion_dim` used by fusion modules and many losses.
+
+Rationale and compatibility:
+- This standardization ensures losses and fusion modules have a stable interface: losses that need access to raw backbone representations (for e.g. CRD or RKD teacher comparisons) should read `*_raw` from the teacher, while comparisons against the student's projected features should use `*_proj` from the student.
+- Historically the Student returned `img_raw` equal to its projected features in earlier commits; that ambiguity has been removed. If you maintain external code that relied on the old behavior, update it to use `img_proj` when you meant the Student's projected/fusion features.
+
+Example usage in a loss implementation:
+```python
+# teacher: use backbone raw features
+t_img_raw = t_out['img_raw']
+# student: use projected features for fusion/heads
+s_img_proj = s_out['img_proj']
 ```
 
 ### Loss interfaces & backbone flexibility
