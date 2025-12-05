@@ -19,6 +19,7 @@ python experiments/run.py config/default.yaml
 - Run multiple backbone-swap experiments in batch:
 
 ```bash
+conda activate fedenv
 python tools/batch_runs.py --base config/default.yaml --runs original,swap_vision,swap_text,swap_both \
   --execute --epochs 8 --batch-size 16 --device cuda:0
 ```
