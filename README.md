@@ -22,6 +22,51 @@ Outputs are saved to the directory specified in `config.logging.log_dir` (defaul
 - `student_best.pth`, `student_final.pth` — model checkpoints
 - Confusion matrices (`.npy`) for each split and task
 
+## Supported Backbones
+
+This project supports configurable vision and text backbones. Below are the commonly used/backed mappings available in `models/backbones.py` (friendly name → Hugging Face identifier).
+
+### Vision backbones
+
+| Friendly name | HuggingFace ID |
+|---|---|
+| `vit-large` (teacher) | `google/vit-large-patch16-224` |
+| `vit-base` | `google/vit-base-patch16-224` |
+| `deit-base` | `facebook/deit-base-distilled-patch16-224` |
+| `deit-tiny` | `facebook/deit-tiny-patch16-224` |
+| `deit-tiny-distilled` / `mobile-vit` | `facebook/deit-tiny-distilled-patch16-224` |
+| `tiny-vit` | `google/vit-base-patch16-224-in21k` |
+| `mobilevit-xx-small` | `apple/mobilevit-xx-small` |
+| `mobilevit-small` | `apple/mobilevit-small` |
+| `mobilevit-medium` | `apple/mobilevit-medium` |
+| `efficientvit-b0` | `mit-han-lab/efficientvit-b0` |
+| `mobilenet-v2` | `google/mobilenet_v2_1.0_224` |
+
+Notes: use the friendly name in `config/default.yaml` (e.g., `teacher.vision: "vit-large"` or `student.vision: "deit-tiny"`).
+
+### Text backbones
+
+| Friendly name | HuggingFace ID |
+|---|---|
+| `bio-clinical-bert` (teacher) | `emilyalsentzer/Bio_ClinicalBERT` |
+| `distilbert` | `distilbert-base-uncased` |
+| `mobile-bert` / `mobilebert` | `google/mobilebert-uncased` |
+| `bert-tiny` | `prajjwal1/bert-tiny` |
+| `bert-mini` | `prajjwal1/bert-mini` |
+| `minilm` | `nreimers/MiniLM-L6-H384-uncased` |
+
+Notes: The dataset is tokenized twice (teacher tokenizer and student tokenizer). Ensure the chosen text backbones are valid HF models — mismatched tokenizer/model pairs can raise token-id range errors.
+
+### Example backbone selections
+
+- Baseline teacher: `teacher.vision: "vit-large"`, `teacher.text: "bio-clinical-bert"`
+- Standard student: `student.vision: "deit-base"`, `student.text: "distilbert"`
+- Edge student: `student.vision: "deit-tiny"`, `student.text: "mobile-bert"`
+- Ultra-edge student: `student.vision: "deit-tiny"`, `student.text: "bert-tiny"`
+
+You can test multiple presets with `tools/batch_runs.py` by using run names such as `original`, `mobile-edge`, `ultra-edge`, `edge-vision`, and `edge-text`.
+
+
 ### 3. Run multiple experiments with different backbone swaps (batch mode)
 ```bash
 python tools/batch_runs.py --base config/default.yaml \
