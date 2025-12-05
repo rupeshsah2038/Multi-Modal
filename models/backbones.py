@@ -7,7 +7,11 @@ VISION_PRETRAINED = {
     "deit-base": "facebook/deit-base-distilled-patch16-224",
     # compact / edge-friendly vision backbones (real HF models)
     "tiny-vit": "google/vit-base-patch16-224-in21k",  # Smaller ViT variant
-    "mobile-vit": "facebook/deit-tiny-distilled-patch16-224",  # Tiny DeiT (actual edge model)
+    "deit-tiny": "facebook/deit-tiny-patch16-224",
+    "mobilevit-xx-small": "apple/mobilevit-xx-small",
+    "mobilevit-small": "apple/mobilevit-small",
+    "mobilevit-medium": "apple/mobilevit-medium",
+    "efficientvit-b0": "mit-han-lab/efficientvit-b0",
     "mobilenet-v2": "google/mobilenet_v2_1.0_224",  # MobileNet v2
 }
 
@@ -18,6 +22,7 @@ TEXT_PRETRAINED = {
     "mobile-bert": "google/mobilebert-uncased",
     "bert-tiny": "prajjwal1/bert-tiny",
     "bert-mini": "prajjwal1/bert-mini",
+    "minilm": "nreimers/MiniLM-L6-H384-uncased",    
 }
 
 

@@ -14,58 +14,8 @@ student:
   fusion_layers: 1
   # Recommended student backbones for ultra-edge deployment (alternatives):
   recommended:
-    vision_table:
-      - name: "deit-base (default)"
-        hf_id: "facebook/deit-base-distilled-patch16-224"
-        params_m: 86
-        latency_ms: 8.5
-        tier: "standard"
-      - name: "vit-base"
-        hf_id: "google/vit-base-patch16-224"
-        params_m: 86
-        latency_ms: 10.2
-        tier: "standard"
-      - name: "deit-tiny"
-        hf_id: "facebook/deit-tiny-distilled-patch16-224"
-        params_m: 5.7
-        latency_ms: 2.1
-        tier: "edge"
-      - name: "mobile-vit"
-        hf_id: "facebook/deit-tiny-distilled-patch16-224"
-        params_m: 5.7
-        latency_ms: 2.1
-        tier: "ultra-edge"
-      - name: "tiny-vit"
-        hf_id: "google/vit-base-patch16-224-in21k"
-        params_m: 86
-        latency_ms: 9.8
-        tier: "standard-pretrain"
-    text_table:
-      - name: "distilbert (default)"
-        hf_id: "distilbert-base-uncased"
-        params_m: 66
-        latency_ms: 4.2
-        tier: "standard"
-      - name: "bio-clinical-bert"
-        hf_id: "emilyalsentzer/Bio_ClinicalBERT"
-        params_m: 110
-        latency_ms: 6.5
-        tier: "standard-domain"
-      - name: "bert-mini"
-        hf_id: "prajjwal1/bert-mini"
-        params_m: 11
-        latency_ms: 1.8
-        tier: "edge"
-      - name: "bert-tiny"
-        hf_id: "prajjwal1/bert-tiny"
-        params_m: 4.4
-        latency_ms: 0.9
-        tier: "ultra-edge"
-      - name: "mobile-bert"
-        hf_id: "google/mobilebert-uncased"
-        params_m: 25
-        latency_ms: 2.3
-        tier: "edge"
+    vision_alternatives: ["tiny-vit", "mobile-vit", "mobilenet-v2", "deit-tiny"]
+    text_alternatives: ["mobile-bert", "bert-tiny", "bert-mini"]
 
 training:
   teacher_epochs: 5
