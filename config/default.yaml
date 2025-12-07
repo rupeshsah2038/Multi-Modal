@@ -1,5 +1,6 @@
 data:
-  root: "MedPix-2-0"
+  type: "medpix"  # Dataset type: 'medpix' or 'wound' (default: medpix for backward compatibility)
+  root: "datasets/MedPix-2-0"
   batch_size: 16
   num_workers: 4
 
@@ -7,11 +8,13 @@ teacher:
   vision: "vit-large"
   text: "bio-clinical-bert"
   fusion_layers: 2
+  fusion_dim: 512
 
 student:
   vision: "deit-base"
   text: "distilbert"
   fusion_layers: 1
+  fusion_dim: 512
   # Recommended student backbones for ultra-edge deployment (alternatives):
   recommended:
     vision_alternatives: ["tiny-vit", "mobile-vit", "mobilenet-v2", "deit-tiny"]

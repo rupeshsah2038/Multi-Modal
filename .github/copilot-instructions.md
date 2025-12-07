@@ -4,16 +4,21 @@ Short, actionable guide for editing this repository. Focus on concrete code path
 
 ## Big picture
 - Two-stage multimodal training: a large Teacher model (vision + text) is trained first, then a smaller Student is distilled from the teacher.
-- Main orchestration lives in `trainer/engine.py` (also callable via `experiments/run.py`). Configs live in `config/default.yaml`.
+- Supports multiple datasets: **MedPix-2-0** (medical imaging) and **Wound-1-0** (wound classification) with unified interface.
+- Main orchestration lives in `trainer/engine.py` (also callable via `experiments/run.py`). Configs live in `config/`.
 - Data flows: `data/dataset.py` -> DataLoader -> training loops in `trainer/engine.py`.
 
 ## Entry points & how to run
 - Install deps: `pip install -r requirements.txt` (Hugging Face models are downloaded at first run).
-- Run a train+distill experiment (uses config/default.yaml by default):
+- Run a train+distill experiment:
 
 ```bash
 conda activate fedenv
+# MedPix dataset
 python experiments/run.py config/default.yaml
+
+# Wound dataset
+python experiments/run.py config/wound.yaml
 ```
 
 - Run multiple backbone-swap experiments in batch:
@@ -24,33 +29,53 @@ python tools/batch_runs.py --base config/default.yaml --runs original,swap_visio
   --execute --epochs 8 --batch-size 16 --device cuda:0
 ```
 
-- Use `config/default.yaml` to change backbones, batch size, epochs, device, and `logging.log_dir`.
+- Use config files to change datasets, backbones, batch size, epochs, device, and `logging.log_dir`.
+
+## Datasets
+
+### MedPix-2-0 (default)
+- Structure: `datasets/MedPix-2-0/` with `splitted_dataset/data_{split}.jsonl`, `descriptions_{split}.jsonl`, `images/`
+- Tasks: CT/MR modality (2 classes), body location (5 classes)
+- Config: `data.type: "medpix"` (or omit for backward compatibility)
+
+### Wound-1-0
+- Structure: `datasets/Wound-1-0/` with `metadata_{split}.csv` (columns: file_path, type, severity, description), `images/`
+- Tasks: wound type (dynamic classes), severity (dynamic classes)
+- Config: `data.type: "wound"`
+- Split tool: `python tools/split_wound_dataset.py --input datasets/Wound-1-0/metadata.csv --output datasets/Wound-1-0`
 
 ## Key files to modify or inspect
-- Orchestration: `trainer/engine.py` (training loops, saving checkpoints, device config, epoch-level logging)
+- Orchestration: `trainer/engine.py` (training loops, dataset loading, dynamic class counts, device config)
 - Experiment wrapper: `experiments/run.py`
 - Batch runner: `tools/batch_runs.py` (generates per-run configs and optionally executes backbone swap experiments)
-- Data: `data/dataset.py` (expects `splitted_dataset/data_{split}.jsonl` and `descriptions_{split}.jsonl` + `images/` folder; includes defensive token-id validation)
-- Models: `models/teacher.py`, `models/student.py`, `models/backbones.py` (includes `TEXT_PRETRAINED` and `VISION_PRETRAINED` mappings), `models/fusion/*`
+- Data: `data/dataset.py` (unified dataset factory with MedPixDataset and WoundDataset classes)
+- Dataset splitter: `tools/split_wound_dataset.py` (splits wound metadata.csv into train/dev/test)
+- Models: `models/teacher.py`, `models/student.py` (now accept `num_modality_classes`, `num_location_classes`), `models/backbones.py`
 - Losses: `losses/` (vanilla, combined, crd, rkd, mmd — all use lazy projections)
 - Evaluation + logging: `utils/metrics.py`, `utils/logger.py` (MetricsLogger), `utils/results_logger.py` (ResultsLogger)
 
 ## Project-specific conventions & gotchas
-- **Tokenizers match backbones:** Tokenizers are now loaded from the pretrained HF identifiers matching the configured text backbones. See `models/backbones.py` for mappings (`TEXT_PRETRAINED` dict). When swapping a text backbone in config, the tokenizer automatically changes to match (e.g., swapping from `bio-clinical-bert` to `distilbert` updates both model and tokenizer). Both `input_ids_teacher` / `input_ids_student` are validated to ensure token ids fit within the respective tokenizer vocab sizes (see `data/dataset.py`).
-- **Feature naming (tensor keys):** Teacher outputs `img_raw` / `txt_raw` (backbone features) and `img_proj` / `txt_proj` (projected features). Student outputs preserve the same convention: `img_raw` / `txt_raw` are backbone outputs, `img_proj` / `txt_proj` are fused/projected features. All losses now accept a dict-based interface and create teacher→student projection layers lazily (at runtime) to support backbone shape mismatches (e.g., when vision or text backbones differ).
-- **Loss module refactor:** All losses (`vanilla`, `combined`, `crd`, `rkd`, `mmd`) now use lazy projection creation (`nn.Linear(in_dim, out_dim)` created on first call with actual tensor shapes). This allows safe backbone swaps without hard-coding projection dimensions. The engine will instantiate the loss from `config['loss']['type']` and forward relevant training hyperparameters if they match the loss constructor signature.
-- **Metrics & results logging:** `trainer/engine.py` now logs epoch-level metrics via `MetricsLogger` (outputs `metrics.csv`, `metrics.json`, confusion matrices). A new `ResultsLogger` (in `utils/results_logger.py`) writes a comprehensive `results.json` file with experiment config, train/dev/test metrics, and the full per-epoch training history. Both are saved to `cfg['logging']['log_dir']`.
+- **Dataset switching:** Set `data.type` to `"medpix"` or `"wound"` in config. Dataset type is auto-detected and class counts are dynamically determined.
+- **Dynamic class counts:** Models and heads adapt to dataset — no hardcoded class numbers. Wound dataset inspects CSV to determine number of type/severity classes.
+- **Unified task mapping:** Both datasets use `modality`/`location` keys. For Wound: type→modality, severity→location.
+- **Tokenizers match backbones:** Tokenizers are loaded from pretrained HF identifiers matching configured text backbones (see `models/backbones.py`).
+- **Feature naming:** Teacher/Student output `img_raw`/`txt_raw` (backbone features) and `img_proj`/`txt_proj` (projected features).
+- **Loss module refactor:** All losses use lazy projection creation to support backbone swaps. Engine instantiates loss from `config['loss']['type']`.
+- **No hardcoded defaults:** All parameters (fusion_dim, class counts, etc.) are explicitly configured via YAML.
 
 ## Debugging & common errors
-- Missing images: `MedPixDataset` raises `FileNotFoundError` if expected image is missing — verify `config.data.root` points to the correct dataset and image filenames.
-- Token-id out of range: `MedPixDataset` validates `input_ids.max() < tokenizer.vocab_size` and raises a clear error if mismatched. This usually means tokenizer and model are not aligned — check that configured text backbones map to the correct pretrained identifiers in `models/backbones.py`.
-- Transformer / HF model download errors: ensure network access for initial download or pre-download models into cache.
-- Mismatched tensor keys: verify your `forward()` returns the required dict keys (see `models/*` and `losses/*`) when implementing new modules.
-- Device/GPU out-of-memory: Use `config['device']` to select a less-busy GPU (e.g., `cuda:3` instead of default `cuda:4`), reduce `batch_size`, or enable gradient accumulation.
+- Missing images: Datasets raise `FileNotFoundError` if expected image is missing — verify `config.data.root` and image paths.
+- Token-id out of range: Dataset validates token IDs fit vocab size. Ensure tokenizer matches text backbone in `models/backbones.py`.
+- Wrong dataset type: Set `data.type` correctly (`medpix` or `wound`) in config.
+- Missing split files: For Wound dataset, run `tools/split_wound_dataset.py` first to create metadata_{train,dev,test}.csv.
+- Class count mismatch: For Wound dataset, ensure all splits use consistent type/severity labels.
+- Device/GPU out-of-memory: Use `config['device']` to select GPU, reduce `batch_size`, or enable gradient accumulation.
 
 ## Testing & iteration tips
-- Smaller, faster experiments: reduce `data.batch_size` and `training.teacher_epochs` / `student_epochs` in `config/default.yaml` for quicker iterations.
-- Local validation: use `utils/metrics.evaluate_detailed()` (printed metrics and saved confusion matrices) to inspect model behavior per split.
+- Smaller experiments: reduce `data.batch_size` and `training.teacher_epochs`/`student_epochs` for quicker iterations.
+- Quick test: use `config/test-1epoch.yaml` for 1-epoch mock runs.
+- Local validation: `utils/metrics.evaluate_detailed()` prints metrics and saves confusion matrices per split.
+- Dataset inspection: Use `get_num_classes()` in `data/dataset.py` to verify class counts before training.
 
 ## Supported backbones and swaps
 Vision backbones (see `models/backbones.py` `VISION_PRETRAINED`):
@@ -62,10 +87,8 @@ Text backbones (see `models/backbones.py` `TEXT_PRETRAINED`):
 - `bio-clinical-bert` → `emilyalsentzer/Bio_ClinicalBERT`
 - `distilbert` → `distilbert-base-uncased`
 
-To run backbone-swap experiments, use `tools/batch_runs.py`:
+To run backbone-swap experiments:
 ```bash
 python tools/batch_runs.py --base config/default.yaml --runs original,swap_vision,swap_text,swap_both \
   --execute --epochs 8 --batch-size 16 --device cuda:3
 ```
-
-This generates per-run configs in `logs/run_<name>/config.yaml` and saves outputs (metrics, results, models) per run.

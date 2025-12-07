@@ -4,7 +4,8 @@ from .fusion.simple import SimpleFusion
 from .heads import ClassificationHead
 
 class Teacher(nn.Module):
-    def __init__(self, vision, text, fusion_dim=512, fusion_heads=8, fusion_layers=2, dropout=0.1):
+    def __init__(self, vision, text, fusion_dim, fusion_heads=8, fusion_layers=2, 
+                 dropout=0.1, num_modality_classes=2, num_location_classes=5):
         super().__init__()
         self.vision = get_vision_backbone(vision)
         self.text = get_text_backbone(text)
@@ -14,8 +15,8 @@ class Teacher(nn.Module):
         self.proj_txt = nn.Linear(txt_dim, fusion_dim)
         self.fusion = SimpleFusion(fusion_dim, fusion_heads, fusion_layers)
         self.dropout = nn.Dropout(dropout)
-        self.head_modality = ClassificationHead(fusion_dim, 2)
-        self.head_location = ClassificationHead(fusion_dim, 5)
+        self.head_modality = ClassificationHead(fusion_dim, num_modality_classes)
+        self.head_location = ClassificationHead(fusion_dim, num_location_classes)
 
     def forward(self, pixel_values, input_ids, attention_mask):
         v_out = self.vision(pixel_values)

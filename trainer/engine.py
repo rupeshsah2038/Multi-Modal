@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import DataLoader
-from data.dataset import MedPixDataset
+from data.dataset import get_dataset, get_num_classes
 from models.teacher import Teacher
 from models.student import Student
 import importlib
@@ -111,18 +111,48 @@ def main(cfg):
     teacher_tokenizer = AutoTokenizer.from_pretrained(t_pretrained)
     student_tokenizer = AutoTokenizer.from_pretrained(s_pretrained)
     
+    # Determine dataset type (default to 'medpix' for backward compatibility)
+    dataset_type = cfg.get('data', {}).get('type', 'medpix')
+    dataset_root = cfg['data']['root']
+    
     def make_dataset(split):
-        return MedPixDataset(
-            data_jsonl_file=os.path.join(cfg['data']['root'], f"splitted_dataset/data_{split}.jsonl"),
-            desc_jsonl_file=os.path.join(cfg['data']['root'], f"splitted_dataset/descriptions_{split}.jsonl"),
-            image_dir=os.path.join(cfg['data']['root'], "images"),
-            tokenizer_teacher=teacher_tokenizer,
-            tokenizer_student=student_tokenizer,
-        )
+        if dataset_type == 'medpix':
+            return get_dataset(
+                dataset_type='medpix',
+                data_jsonl_file=os.path.join(dataset_root, f"splitted_dataset/data_{split}.jsonl"),
+                desc_jsonl_file=os.path.join(dataset_root, f"splitted_dataset/descriptions_{split}.jsonl"),
+                image_dir=os.path.join(dataset_root, "images"),
+                tokenizer_teacher=teacher_tokenizer,
+                tokenizer_student=student_tokenizer,
+            )
+        elif dataset_type == 'wound':
+            return get_dataset(
+                dataset_type='wound',
+                csv_file=os.path.join(dataset_root, f"metadata_{split}.csv"),
+                image_dir=os.path.join(dataset_root, "images"),
+                tokenizer_teacher=teacher_tokenizer,
+                tokenizer_student=student_tokenizer,
+                type_column=cfg['data'].get('type_column', 'type'),
+                severity_column=cfg['data'].get('severity_column', 'severity'),
+                description_column=cfg['data'].get('description_column', 'description'),
+                filepath_column=cfg['data'].get('filepath_column', 'file_path'),
+            )
+        else:
+            raise ValueError(f"Unknown dataset type: {dataset_type}")
     
     train_dataset = make_dataset("train")
     dev_dataset = make_dataset("dev")
     test_dataset = make_dataset("test")
+    
+    # Get number of classes for this dataset (dynamic for wound, static for medpix)
+    num_classes = get_num_classes(
+        dataset_type=dataset_type, 
+        dataset_root=dataset_root,
+        type_column=cfg['data'].get('type_column', 'type'),
+        severity_column=cfg['data'].get('severity_column', 'severity'),
+    )
+    num_modality_classes = num_classes['modality']
+    num_location_classes = num_classes['location']
     
     # defensive parsing of common numeric config values
     try:
@@ -141,13 +171,19 @@ def main(cfg):
     teacher = Teacher(
         vision=cfg['teacher']['vision'],
         text=cfg['teacher']['text'],
-        fusion_layers=cfg['teacher']['fusion_layers']
+        fusion_layers=cfg['teacher']['fusion_layers'],
+        fusion_dim=cfg['teacher']['fusion_dim'],
+        num_modality_classes=num_modality_classes,
+        num_location_classes=num_location_classes,
     ).to(device)
     
     student = Student(
         vision=cfg['student']['vision'],
         text=cfg['student']['text'],
-        fusion_layers=cfg['student']['fusion_layers']
+        fusion_layers=cfg['student']['fusion_layers'],
+        fusion_dim=cfg['student']['fusion_dim'],
+        num_modality_classes=num_modality_classes,
+        num_location_classes=num_location_classes,
     ).to(device)
     
     logger = MetricsLogger(cfg['logging']['log_dir'])
@@ -172,19 +208,34 @@ def main(cfg):
             module = importlib.import_module('losses.vanilla')
             cls = getattr(module, 'DistillationLoss')
 
-        # Build kwargs from cfg['training'] using only the parameters the class accepts
         training_cfg = cfg.get('training', {}) or {}
+        loss_cfg = cfg.get('loss', {}) or {}
+
         kwargs = {}
+        accepts_fusion_dim = False
+        accepts_kwargs = False
         try:
             sig = inspect.signature(cls.__init__)
-            for name, param in sig.parameters.items():
+            params = sig.parameters
+            accepts_kwargs = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in params.values())
+            accepts_fusion_dim = ('fusion_dim' in params) or accepts_kwargs
+            for name, param in params.items():
                 if name == 'self' or param.kind in (inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD):
                     continue
                 if name in training_cfg:
                     kwargs[name] = training_cfg[name]
         except Exception:
-            # if introspection fails, pass nothing and rely on defaults
-            kwargs = {}
+            # if introspection fails, be permissive and allow fusion_dim injection
+            accepts_fusion_dim = True
+
+        if accepts_fusion_dim:
+            # Prefer explicit loss.fusion_dim, otherwise fall back to student/teacher fusion size
+            loss_fusion_dim = loss_cfg.get('fusion_dim')
+            if loss_fusion_dim is None:
+                loss_fusion_dim = cfg.get('student', {}).get('fusion_dim') or cfg.get('teacher', {}).get('fusion_dim')
+            if loss_fusion_dim is None:
+                raise KeyError("fusion_dim must be set in loss, student, or teacher config")
+            kwargs['fusion_dim'] = loss_fusion_dim
 
         return cls(**kwargs)
 

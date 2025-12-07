@@ -1,8 +1,12 @@
 # Medpix_kd_modular
 
-Lightweight repository for two-stage multimodal model training + knowledge distillation (Teacher→Student) on the MedPix dataset.
+Lightweight repository for two-stage multimodal model training + knowledge distillation (Teacher→Student) supporting **multiple medical imaging datasets**.
 
 This repo implements a vision+text Teacher network and a smaller Student distilled from it. The training pipeline, experiment orchestration, and modular loss implementations allow quick iteration on model/backbone choices, fusion strategies, and distillation methods.
+
+**Supported Datasets:**
+- **MedPix-2-0**: Medical imaging dataset (CT/MR modality classification, body location classification)
+- **Wound-1-0**: Wound image dataset (wound type classification, severity classification)
 
 ## Quick start
 
@@ -12,8 +16,19 @@ pip install -r requirements.txt
 ```
 
 ### 2. Run an experiment
+
+**For MedPix dataset:**
 ```bash
 python experiments/run.py config/default.yaml
+```
+
+**For Wound dataset:**
+```bash
+# First time: split the dataset
+python tools/split_wound_dataset.py --input datasets/Wound-1-0/metadata.csv --output datasets/Wound-1-0
+
+# Then run training
+python experiments/run.py config/wound.yaml
 ```
 
 Outputs are saved to the directory specified in `config.logging.log_dir` (default: `logs/`). Each run generates:
@@ -86,9 +101,10 @@ This will:
 - **`trainer/engine.py`**: Main orchestration — loads data, builds models, trains teacher, distills to student, evaluates, logs results
 
 ### Data & models
-- **`data/dataset.py`**: MedPixDataset — produces tokenized inputs for both teacher and student
+- **`data/dataset.py`**: Unified dataset factory supporting MedPixDataset and WoundDataset
+- **`data/wound_dataset.py`**: Standalone Wound dataset implementation (legacy)
 - **`models/backbones.py`**: Vision (ViT, DeiT) and text (Bio_ClinicalBERT, DistilBERT) backbone loaders
-- **`models/teacher.py`**, **`models/student.py`**: Teacher and student models with dual tokenization, fusion, and output heads
+- **`models/teacher.py`**, **`models/student.py`**: Teacher and student models with dual tokenization, fusion, dynamic class counts
 - **`models/fusion/`**: Fusion modules (simple, concat_mlp, cross_attention, gated, transformer_concat)
 - **`models/heads.py`**: Classification heads for modality and location tasks
 
@@ -106,13 +122,16 @@ This will:
 
 ### Tooling
 - **`tools/batch_runs.py`**: Batch experiment runner supporting vision/text backbone swaps
+- **`tools/split_wound_dataset.py`**: Split Wound dataset CSV into train/dev/test splits
+- **`tools/verify_wound_dataset.py`**: Verify Wound dataset structure before training
 
 ## Configuration
 
 ### Structure (config/default.yaml)
 ```yaml
 data:
-  root: "MedPix-2-0"          # Dataset root (contains splitted_dataset/, images/)
+  type: "medpix"              # Dataset type: 'medpix' or 'wound'
+  root: "datasets/MedPix-2-0" # Dataset root
   batch_size: 16              # Batch size for training/eval
   num_workers: 4              # DataLoader workers
 
@@ -120,11 +139,13 @@ teacher:
   vision: "vit-large"         # Vision backbone: vit-large, deit-base, deit-small, etc.
   text: "bio-clinical-bert"   # Text backbone: bio-clinical-bert, distilbert, etc.
   fusion_layers: 2            # Fusion module layers
+  fusion_dim: 512             # Fusion dimension (required)
 
 student:
   vision: "deit-base"         # Student vision (typically smaller)
   text: "distilbert"          # Student text (typically smaller)
   fusion_layers: 1
+  fusion_dim: 512             # Fusion dimension (required)
 
 training:
   teacher_epochs: 1           # Number of teacher pre-training epochs
@@ -161,10 +182,11 @@ The trainer automatically forwards matching keys from `cfg['training']` to the l
 
 ## Data layout (expected)
 
-The dataset root (default: `MedPix-2-0`) must contain:
+### MedPix-2-0 Dataset
+The dataset root (default: `datasets/MedPix-2-0`) must contain:
 
 ```
-MedPix-2-0/
+datasets/MedPix-2-0/
 ├── splitted_dataset/
 │   ├── data_train.jsonl
 │   ├── data_dev.jsonl
@@ -178,7 +200,48 @@ MedPix-2-0/
     └── ...
 ```
 
-If images are missing, `MedPixDataset` raises `FileNotFoundError`. Verify `config.data.root` is correct.
+Configuration:
+```yaml
+data:
+  type: "medpix"              # or omit (defaults to medpix)
+  root: "datasets/MedPix-2-0"
+```
+
+### Wound-1-0 Dataset
+The dataset root (default: `datasets/Wound-1-0`) must contain:
+
+```
+datasets/Wound-1-0/
+├── images/                   # All wound images
+├── metadata.csv             # Original metadata (optional after split)
+├── metadata_train.csv       # Required: training split
+├── metadata_dev.csv         # Required: validation split
+└── metadata_test.csv        # Required: test split
+```
+
+CSV columns: `img_path`, `type`, `severity`, `description`
+
+Configuration:
+```yaml
+data:
+  type: "wound"                      # Required for Wound dataset
+  root: "datasets/Wound-1-0"
+  # Optional: customize column names if your CSV differs
+  filepath_column: "img_path"        # Default: "file_path"
+  type_column: "type"                # Default: "type"
+  severity_column: "severity"        # Default: "severity"
+  description_column: "description"  # Default: "description"
+```
+
+**First time setup for Wound dataset:**
+```bash
+python tools/split_wound_dataset.py \
+  --input datasets/Wound-1-0/metadata.csv \
+  --output datasets/Wound-1-0 \
+  --train 0.7 --dev 0.15 --test 0.15
+```
+
+If images are missing, the dataset raises `FileNotFoundError`. Verify `config.data.root` is correct.
 
 ## Important implementation details
 
@@ -191,14 +254,18 @@ If images are missing, `MedPixDataset` raises `FileNotFoundError`. Verify `confi
 All models (teacher & student) return:
 ```python
 {
-  "logits_modality": tensor,       # Shape (B, 2)
-  "logits_location": tensor,       # Shape (B, 5)
+  "logits_modality": tensor,       # Shape (B, num_modality_classes)
+  "logits_location": tensor,       # Shape (B, num_location_classes)
   "img_raw": tensor,               # Vision backbone last hidden (B, D_vis)
   "txt_raw": tensor,               # Text backbone last hidden (B, D_txt)
   "img_proj": tensor,              # Projected vision (B, fusion_dim)
   "txt_proj": tensor,              # Projected text (B, fusion_dim)
 }
 ```
+
+**Note:** Class counts are dynamic:
+- **MedPix**: 2 modality classes (CT/MR), 5 location classes (body regions)
+- **Wound**: Dynamic based on CSV (e.g., 10 wound types, 3 severity levels)
 
 Standardized model outputs (important):
 - **`img_raw` / `txt_raw`**: Always refer to the *backbone* raw features (the output of the vision/text encoder before any linear projection). Both the Teacher and Student now provide these raw backbone features.
@@ -357,3 +424,40 @@ loss:
 3. **Inspect confusion matrices**: Review `.npy` files to understand per-class performance
 4. **Use batch runner for ablations**: Test multiple backbone/loss/fusion combinations systematically
 5. **Monitor GPU memory**: Use `nvidia-smi` to ensure no other processes are consuming VRAM
+
+## Additional Resources
+
+- **Quick Start (Wound)**: See `QUICK_START_WOUND.md` for Wound dataset setup
+- **Dataset Documentation**: See `docs/WOUND_DATASET.md` for detailed integration guide
+- **Integration Summary**: See `WOUND_INTEGRATION_SUMMARY.md` for implementation details
+
+## Project Structure
+
+```
+Medpix_modular/
+├── config/                    # Configuration files
+│   ├── default.yaml          # MedPix config
+│   ├── wound.yaml            # Wound config
+│   └── test-*.yaml           # Quick test configs
+├── data/                      # Dataset implementations
+│   ├── dataset.py            # Unified dataset factory
+│   └── wound_dataset.py      # Standalone Wound dataset
+├── datasets/                  # Data storage
+│   ├── MedPix-2-0/           # MedPix dataset
+│   └── Wound-1-0/            # Wound dataset
+├── experiments/               # Experiment runners
+├── losses/                    # Loss implementations
+├── models/                    # Model architectures
+│   ├── backbones.py          # Vision/text backbones
+│   ├── teacher.py            # Teacher model
+│   ├── student.py            # Student model
+│   ├── heads.py              # Classification heads
+│   └── fusion/               # Fusion modules
+├── tools/                     # Utility scripts
+│   ├── batch_runs.py         # Batch experiment runner
+│   ├── split_wound_dataset.py
+│   └── verify_wound_dataset.py
+├── trainer/                   # Training engine
+├── utils/                     # Metrics and logging
+└── logs/                      # Experiment outputs
+```

@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class DistillationLoss(nn.Module):
-    def __init__(self, fusion_dim=512, alpha=1.0, beta=100.0, T=2.0):
+    def __init__(self, fusion_dim, alpha=1.0, beta=100.0, T=2.0):
         super().__init__()
         self.ce = nn.CrossEntropyLoss()
         self.kl = nn.KLDivLoss(reduction="batchmean")
