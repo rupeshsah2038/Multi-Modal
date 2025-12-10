@@ -82,17 +82,43 @@ Notes: The dataset is tokenized twice (teacher tokenizer and student tokenizer).
 You can test multiple presets with `tools/batch_runs.py` by using run names such as `original`, `mobile-edge`, `ultra-edge`, `edge-vision`, and `edge-text`.
 
 
-### 3. Run multiple experiments with different backbone swaps (batch mode)
+### 3. Run batch experiments
+
+**Loss exploration (compare different loss functions):**
+```bash
+python tools/run_loss_explore.py
+# or
+./tools/run_loss_explore.sh
+```
+Tests all 5 loss functions (vanilla, combined, crd, rkd, mmd) with cross-attention fusion on both datasets.
+
+**Fusion exploration (compare different fusion modules):**
+```bash
+python tools/run_fusion_explore.py
+# or
+./tools/run_fusion_explore.sh
+```
+Tests all 9 fusion modules (simple, concat_mlp, cross_attention, gated, transformer_concat, modality_dropout, film, energy_aware_adaptive, shomr) with combined loss on both datasets.
+
+**Ultra-edge experiments (lightweight student models):**
+```bash
+python tools/run_ultra_edge.py
+# or
+./tools/run_ultra_edge.sh
+```
+Tests lightweight student configurations (deit-small/deit-tiny with distilbert/minilm) on both datasets.
+
+**Custom backbone swaps:**
 ```bash
 python tools/batch_runs.py --base config/default.yaml \
   --runs original,swap_vision,swap_text,swap_both \
   --execute --epochs 5 --batch-size 8 --device cuda:3
 ```
 
-This will:
-- Create per-run configs under `logs/run_<name>/config.yaml`
-- Execute each run sequentially
-- Save outputs to separate `logs/run_<name>/` directories
+All batch experiments:
+- Execute runs sequentially
+- Save outputs to separate log directories
+- Provide progress updates and final summary
 
 ## Key files & architecture
 
@@ -105,7 +131,7 @@ This will:
 - **`data/wound_dataset.py`**: Standalone Wound dataset implementation (legacy)
 - **`models/backbones.py`**: Vision (ViT, DeiT) and text (Bio_ClinicalBERT, DistilBERT) backbone loaders
 - **`models/teacher.py`**, **`models/student.py`**: Teacher and student models with dual tokenization, fusion, dynamic class counts
-- **`models/fusion/`**: Fusion modules (simple, concat_mlp, cross_attention, gated, transformer_concat)
+- **`models/fusion/`**: Fusion modules (simple, concat_mlp, cross_attention, gated, transformer_concat, modality_dropout, film, energy_aware_adaptive, shomr)
 - **`models/heads.py`**: Classification heads for modality and location tasks
 
 ### Losses & metrics
@@ -122,8 +148,12 @@ This will:
 
 ### Tooling
 - **`tools/batch_runs.py`**: Batch experiment runner supporting vision/text backbone swaps
+- **`tools/run_loss_explore.py` / `.sh`**: Run all loss function experiments (vanilla, combined, crd, rkd, mmd)
+- **`tools/run_fusion_explore.py` / `.sh`**: Run all fusion module experiments (9 fusion types)
+- **`tools/run_ultra_edge.py` / `.sh`**: Run ultra-edge experiments (lightweight student models)
 - **`tools/split_wound_dataset.py`**: Split Wound dataset CSV into train/dev/test splits
 - **`tools/verify_wound_dataset.py`**: Verify Wound dataset structure before training
+- **`tools/test_backbone_availability.py`**: Check availability of backbone models
 
 ## Configuration
 
@@ -161,7 +191,7 @@ logging:
   log_dir: "logs"             # Output directory
 
 fusion:
-  type: "simple"              # Fusion type: simple, concat_mlp, cross_attention, gated, transformer_concat
+  type: "simple"              # Fusion type: simple, concat_mlp, cross_attention, gated, transformer_concat, modality_dropout, film, energy_aware_adaptive, shomr
 
 loss:
   type: "rkd"                 # Loss type: vanilla, combined, crd, rkd, mmd
@@ -304,10 +334,37 @@ s_img_proj = s_out['img_proj']
 - Full experiment metadata (config, hyperparameters, final dev/test metrics) is saved to `results.json`
 - Confusion matrices (`.npy`) are saved for modality and location tasks on each split
 
+## Experiment Results
+
+Comprehensive experiment results are available in the `docs/` directory:
+
+- **`docs/ULTRA_EDGE_RESULTS.md`**: Ultra-edge model comparison (lightweight students)
+  - Tests deit-small/deit-tiny with distilbert/minilm
+  - Covers both MedPix and Wound datasets
+  - Provides accuracy vs latency trade-off analysis
+  
+- **`docs/LOSS_EXPLORE_RESULTS.md`**: Loss function comparison
+  - Tests vanilla, combined, crd, rkd, mmd losses
+  - Fixed cross-attention fusion with vit-base + distilbert student
+  - Shows per-loss performance on both datasets
+
+- **`docs/CONFIGURABLE_METRICS.md`**: Custom task label configuration guide
+- **`docs/LOSS_FUNCTIONS_COMPARISON.md`**: Detailed loss function documentation
+
+### Key Findings
+
+**Best configurations by use case:**
+
+- **MedPix - Best accuracy:** `combined` loss with `cross_attention` fusion
+- **MedPix - Best ultra-edge:** `deit_tiny-minilm` student (good F1, fast inference)
+- **Wound - Best accuracy:** `vanilla` loss with `cross_attention` fusion  
+- **Wound - Best ultra-edge:** `deit_small-minilm` student (dominates accuracy/latency)
+
+See individual result documents for detailed metrics, critical observations, and recommendations.
+
 ## Common use cases
 
 ### Quick experiment with smaller batch size
-Edit `config/default.yaml` and change:
 ```yaml
 data:
   batch_size: 8
@@ -427,9 +484,15 @@ loss:
 
 ## Additional Resources
 
-- **Quick Start (Wound)**: See `QUICK_START_WOUND.md` for Wound dataset setup
-- **Dataset Documentation**: See `docs/WOUND_DATASET.md` for detailed integration guide
-- **Integration Summary**: See `WOUND_INTEGRATION_SUMMARY.md` for implementation details
+- **Experiment Results**:
+  - `docs/ULTRA_EDGE_RESULTS.md` — Ultra-edge model comparison
+  - `docs/LOSS_EXPLORE_RESULTS.md` — Loss function comparison
+  - `docs/CONFIGURABLE_METRICS.md` — Custom metrics configuration
+  - `docs/LOSS_FUNCTIONS_COMPARISON.md` — Loss function details
+- **Dataset Guides**:
+  - `QUICK_START_WOUND.md` — Wound dataset quick start
+  - `docs/WOUND_DATASET.md` — Detailed Wound integration guide
+  - `WOUND_INTEGRATION_SUMMARY.md` — Implementation details
 
 ## Project Structure
 
@@ -438,13 +501,22 @@ Medpix_modular/
 ├── config/                    # Configuration files
 │   ├── default.yaml          # MedPix config
 │   ├── wound.yaml            # Wound config
-│   └── test-*.yaml           # Quick test configs
+│   ├── test-*.yaml           # Quick test configs
+│   ├── loss-explore/         # Loss comparison configs
+│   ├── fusion-explore/       # Fusion comparison configs
+│   └── ultra-edge/           # Ultra-edge model configs
 ├── data/                      # Dataset implementations
 │   ├── dataset.py            # Unified dataset factory
 │   └── wound_dataset.py      # Standalone Wound dataset
 ├── datasets/                  # Data storage
 │   ├── MedPix-2-0/           # MedPix dataset
 │   └── Wound-1-0/            # Wound dataset
+├── docs/                      # Documentation
+│   ├── ULTRA_EDGE_RESULTS.md
+│   ├── LOSS_EXPLORE_RESULTS.md
+│   ├── CONFIGURABLE_METRICS.md
+│   ├── LOSS_FUNCTIONS_COMPARISON.md
+│   └── WOUND_DATASET.md
 ├── experiments/               # Experiment runners
 ├── losses/                    # Loss implementations
 ├── models/                    # Model architectures
@@ -452,12 +524,18 @@ Medpix_modular/
 │   ├── teacher.py            # Teacher model
 │   ├── student.py            # Student model
 │   ├── heads.py              # Classification heads
-│   └── fusion/               # Fusion modules
+│   └── fusion/               # Fusion modules (9 types)
 ├── tools/                     # Utility scripts
 │   ├── batch_runs.py         # Batch experiment runner
+│   ├── run_loss_explore.py/.sh
+│   ├── run_fusion_explore.py/.sh
+│   ├── run_ultra_edge.py/.sh
 │   ├── split_wound_dataset.py
 │   └── verify_wound_dataset.py
 ├── trainer/                   # Training engine
 ├── utils/                     # Metrics and logging
 └── logs/                      # Experiment outputs
+    ├── loss-explore/         # Loss comparison results
+    ├── fusion-explore/       # Fusion comparison results
+    └── ultra-edge/           # Ultra-edge results
 ```

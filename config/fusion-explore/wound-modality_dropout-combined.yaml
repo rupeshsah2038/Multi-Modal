@@ -1,20 +1,24 @@
 data:
-  type: "medpix"
-  root: "datasets/MedPix-2-0"
+  type: "wound"
+  root: "datasets/Wound-1-0"
   batch_size: 16
   num_workers: 4
-  task1_label: "modality"
-  task2_label: "location"
+  type_column: "type"
+  severity_column: "severity"
+  description_column: "description"
+  filepath_column: "img_path"
+  task1_label: "type"
+  task2_label: "severity"
 
 teacher:
   vision: "vit-large"
-  text: "distilbert"
+  text: "bio-clinical-bert"
   fusion_layers: 2
   fusion_dim: 512
 
 student:
   vision: "vit-base"
-  text: "bio-clinical-bert"
+  text: "distilbert"
   fusion_layers: 1
   fusion_dim: 512
 
@@ -28,7 +32,7 @@ training:
   T: 2.0
 
 logging:
-  log_dir: "logs/medpix-vit-base-512-modality_dropout-combined"
+  log_dir: "logs/fusion-explore/wound-modality_dropout-combined"
 
 fusion:
   type: "modality_dropout"
@@ -36,4 +40,4 @@ fusion:
 loss:
   type: "combined"
 
-device: "cuda:3"
+device: "cuda:4"

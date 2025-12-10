@@ -8,13 +8,13 @@ data:
 
 teacher:
   vision: "vit-large"
-  text: "distilbert"
+  text: "bio-clinical-bert"
   fusion_layers: 2
   fusion_dim: 512
 
 student:
   vision: "vit-base"
-  text: "bio-clinical-bert"
+  text: "distilbert"
   fusion_layers: 1
   fusion_dim: 512
 
@@ -28,7 +28,7 @@ training:
   T: 2.0
 
 logging:
-  log_dir: "logs/medpix-vit-base-512-gated-combined"
+  log_dir: "logs/fusion-explore/medpix-gated-combined"
 
 fusion:
   type: "gated"
@@ -36,4 +36,4 @@ fusion:
 loss:
   type: "combined"
 
-device: "cuda:3"
+device: "cuda:4"
