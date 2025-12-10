@@ -2,31 +2,29 @@ data:
   type: "wound"
   root: "datasets/Wound-1-0"
   batch_size: 8
-  num_workers: 2
-  # Column names in metadata.csv
+  num_workers: 4
   type_column: "type"
   severity_column: "severity"
   description_column: "description"
   filepath_column: "img_path"
-  # Task labels for metrics
   task1_label: "type"
   task2_label: "severity"
 
 teacher:
   vision: "vit-base"
-  text: "distilbert"
-  fusion_layers: 1
+  text: "bio-clinical-bert"
+  fusion_layers: 2
   fusion_dim: 256
 
 student:
-  vision: "deit-base"
+  vision: "deit-small"
   text: "distilbert"
   fusion_layers: 1
   fusion_dim: 256
 
 training:
-  teacher_epochs: 1
-  student_epochs: 1
+  teacher_epochs: 3
+  student_epochs: 10
   teacher_lr: 1e-5
   student_lr: 3e-4
   alpha: 1.0
@@ -34,12 +32,12 @@ training:
   T: 2.0
 
 logging:
-  log_dir: "logs/test_wound_1epoch"
+  log_dir: "logs/ultra-edge/wound-deit_small-distilbert"
 
 fusion:
-  type: "simple"
+  type: "cross_attention"
 
 loss:
-  type: "vanilla"
+  type: "combined"
 
 device: "cuda:4"

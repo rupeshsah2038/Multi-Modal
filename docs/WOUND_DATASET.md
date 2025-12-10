@@ -132,3 +132,31 @@ Set `data.type: "medpix"` or omit (defaults to medpix for backward compatibility
 ✅ All existing MedPix experiments work without changes
 ✅ Default behavior (when `data.type` is omitted) is MedPix
 ✅ All tests pass with both datasets
+
+## Fusion Module Comparison (vit-base-512, combined loss)
+
+For the Wound-1-0 dataset we ran a systematic comparison of nine fusion modules
+using a ViT-Large teacher, ViT-Base student, and the `combined` KD loss
+(`wound-vit-base-512-*-combined` configs). The table below reports the best
+development-set epoch for each fusion in terms of type (modality) and severity
+classification.
+
+| Fusion              | Best Epoch | dev_type_acc | dev_severity_acc | dev_type_f1 | dev_severity_f1 |
+|---------------------|-----------:|-------------:|-----------------:|------------:|----------------:|
+| simple              | 9          | 0.9106       | 0.8043           | 0.8872      | 0.7941          |
+| concat_mlp          | 9          | 0.9106       | 0.8426           | 0.8898      | 0.8238          |
+| cross_attention     | 6          | 0.9234       | 0.9319           | 0.8949      | 0.9124          |
+| gated               | 9          | 0.9191       | 0.9191           | 0.8945      | 0.9215          |
+| transformer_concat  | 10         | 0.9149       | 0.8340           | 0.8920      | 0.8297          |
+| modality_dropout    | 6          | 0.9021       | 0.9362           | 0.8868      | 0.9294          |
+| film                | 7          | 0.8894       | 0.9319           | 0.8775      | 0.9328          |
+| energy_aware        | 6          | 0.8809       | 0.8383           | 0.8555      | 0.8192          |
+| shomr               | 3          | 0.8809       | 0.8809           | 0.8615      | 0.8522          |
+
+In this setting, cross-attention and gated fusion deliver the strongest overall
+performance, with cross-attention slightly ahead in dev accuracy and gated
+slightly ahead in severity F1. Simpler concatenation-based schemes lag
+especially on severity, while modality dropout and FiLM offer strong severity
+results but do not consistently beat cross-attention or gated fusion on both
+tasks. SHoMR and the energy-aware fusion remain competitive but are not
+top-performing under this particular backbone and loss configuration.

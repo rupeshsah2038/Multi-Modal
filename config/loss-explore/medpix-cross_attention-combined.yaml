@@ -1,26 +1,26 @@
 data:
+  type: "medpix"
   root: "datasets/MedPix-2-0"
-  batch_size: 8
-  num_workers: 2
-  # Task labels for metrics
+  batch_size: 16
+  num_workers: 4
   task1_label: "modality"
   task2_label: "location"
 
 teacher:
-  vision: "vit-base"
+  vision: "vit-large"
   text: "bio-clinical-bert"
-  fusion_layers: 1
-  fusion_dim: 256
+  fusion_layers: 2
+  fusion_dim: 512
 
 student:
-  vision: "deit-base"
+  vision: "vit-base"
   text: "distilbert"
   fusion_layers: 1
-  fusion_dim: 256
+  fusion_dim: 512
 
 training:
-  teacher_epochs: 1
-  student_epochs: 1
+  teacher_epochs: 3
+  student_epochs: 10
   teacher_lr: 1e-5
   student_lr: 3e-4
   alpha: 1.0
@@ -28,12 +28,12 @@ training:
   T: 2.0
 
 logging:
-  log_dir: "logs/test_1epoch"
+  log_dir: "logs/loss-explore/medpix-cross_attention-combined"
 
 fusion:
-  type: "simple"
+  type: "cross_attention"
 
 loss:
-  type: "vanilla"
+  type: "combined"
 
 device: "cuda:4"

@@ -5,7 +5,15 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 import time
 
 @torch.no_grad()
-def evaluate_detailed(model, loader, device, logger=None, split="dev", token_type='student'):
+def evaluate_detailed(model, loader, device, logger=None, split="dev", token_type='student', 
+                      task1_label='modality', task2_label='location'):
+    """
+    Evaluate model with configurable task labels.
+    
+    Args:
+        task1_label: Label for primary task (default: 'modality')
+        task2_label: Label for secondary task (default: 'location')
+    """
     model.eval()
     all_mod_pred, all_mod_true = [], []
     all_loc_pred, all_loc_true = [], []
@@ -63,27 +71,27 @@ def evaluate_detailed(model, loader, device, logger=None, split="dev", token_typ
         mod_auc = loc_auc = 0.0
 
     if logger:
-        logger.save_confusion(mod_true, mod_pred, "modality", split)
-        logger.save_confusion(loc_true, loc_pred, "location", split)
+        logger.save_confusion(mod_true, mod_pred, task1_label, split)
+        logger.save_confusion(loc_true, loc_pred, task2_label, split)
 
     metrics = {
-        f"{split}_mod_acc": float(mod_acc),
-        f"{split}_loc_acc": float(loc_acc),
-        f"{split}_mod_f1": float(mod_f1),
-        f"{split}_loc_f1": float(loc_f1),
-        f"{split}_mod_prec": float(mod_prec),
-        f"{split}_loc_prec": float(loc_prec),
-        f"{split}_mod_rec": float(mod_rec),
-        f"{split}_loc_rec": float(loc_rec),
-        f"{split}_mod_auc": float(mod_auc),
-        f"{split}_loc_auc": float(loc_auc),
+        f"{split}_{task1_label}_acc": float(mod_acc),
+        f"{split}_{task2_label}_acc": float(loc_acc),
+        f"{split}_{task1_label}_f1": float(mod_f1),
+        f"{split}_{task2_label}_f1": float(loc_f1),
+        f"{split}_{task1_label}_prec": float(mod_prec),
+        f"{split}_{task2_label}_prec": float(loc_prec),
+        f"{split}_{task1_label}_rec": float(mod_rec),
+        f"{split}_{task2_label}_rec": float(loc_rec),
+        f"{split}_{task1_label}_auc": float(mod_auc),
+        f"{split}_{task2_label}_auc": float(loc_auc),
         f"{split}_infer_ms": float(infer_time),
     }
 
     for k, v in metrics.items():
-        if 'acc' in k or 'f1' in k:
-            print(f"{k}: {v:.4f}")
-        else:
+        if 'infer_ms' in k:
             print(f"{k}: {v:.2f}ms")
+        else:
+            print(f"{k}: {v:.4f}")
 
     return metrics

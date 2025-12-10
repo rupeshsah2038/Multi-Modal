@@ -1,7 +1,7 @@
 data:
   type: "wound"  # Dataset type: 'wound' or 'medpix'
   root: "datasets/Wound-1-0"
-  batch_size: 32
+  batch_size: 16
   num_workers: 4
   # Column names in metadata.csv (customize if needed)
   type_column: "type"
@@ -34,12 +34,12 @@ training:
   T: 2.0
 
 logging:
-  log_dir: "logs/wound-vit-base-512-fusion_shomr-combined_batch-32-2" # student_vision-fusion_dim-fusion_module-loss_type-temperature
+  log_dir: "logs/wound-vit-base-512-fusion_shomr-combined-2" # student_vision-fusion_dim-fusion_module-loss_type-temperature
 
 fusion:
   type: "shomr"
 
 loss:
-  type: "crd"
+  type: "combined"
 
-device: "cuda:4"
+device: "cuda:3"

@@ -154,6 +154,10 @@ def main(cfg):
     num_modality_classes = num_classes['modality']
     num_location_classes = num_classes['location']
     
+    # Get task labels for metrics (defaults for backward compatibility)
+    task1_label = cfg['data'].get('task1_label', 'modality')
+    task2_label = cfg['data'].get('task2_label', 'location')
+    
     # defensive parsing of common numeric config values
     try:
         batch_size = int(cfg['data'].get('batch_size', 16))
@@ -263,8 +267,9 @@ def main(cfg):
             student, teacher, train_loader, device, epochs=1,
             lr=cfg['training'].get('student_lr', 3e-4), distill_fn=distill_fn
         )
-        dev_metrics = evaluate_detailed(student, dev_loader, device, logger=logger, split="dev", token_type='student')
-        dev_score = (dev_metrics['dev_mod_f1'] + dev_metrics['dev_loc_f1']) / 2
+        dev_metrics = evaluate_detailed(student, dev_loader, device, logger=logger, split="dev", token_type='student',
+                                       task1_label=task1_label, task2_label=task2_label)
+        dev_score = (dev_metrics[f'dev_{task1_label}_f1'] + dev_metrics[f'dev_{task2_label}_f1']) / 2
         if dev_score > best_dev_score:
             best_dev_score = dev_score
             best_path = os.path.join(cfg['logging']['log_dir'], "student_best.pth")
@@ -280,7 +285,8 @@ def main(cfg):
     if best_dev_score > 0:
         best_path = os.path.join(cfg['logging']['log_dir'], "student_best.pth")
         student.load_state_dict(torch.load(best_path, map_location=device))
-        test_metrics = evaluate_detailed(student, test_loader, device, logger=logger, split="test", token_type='student')
+        test_metrics = evaluate_detailed(student, test_loader, device, logger=logger, split="test", token_type='student',
+                                        task1_label=task1_label, task2_label=task2_label)
     
     final_path = os.path.join(cfg['logging']['log_dir'], "student_final.pth")
     torch.save(student.state_dict(), final_path)
