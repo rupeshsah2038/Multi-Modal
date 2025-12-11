@@ -1,111 +1,180 @@
-# Ultra-Edge Experiments Summary
+# Ultra-Edge Experiment Results
 
-This document summarizes the ultra-edge student configurations under `logs/ultra-edge`,
-covering both MedPix and Wound datasets. All runs use:
+## Overview
+Comparison of **lightweight student configurations** designed for ultra-edge deployment across **MedPix-2-0** and **Wound-1-0**.
 
-- Teacher: `vit-base` vision + `bio-clinical-bert` text, fusion_dim=256, fusion_layers=2
-- Fusion: `cross_attention`
-- Loss: `combined`
-- Training: 3 teacher epochs, 10 student epochs, `teacher_lr=1e-5`, `student_lr=3e-4`
+**Configuration:**
+- **Teacher:** vit-base (vision) + bio-clinical-bert (text), fusion_dim=256, fusion_layers=2
+- **Student variants (vision / text):**
+  - `deit-small` / `distilbert`
+  - `deit-small` / `minilm`
+  - `deit-tiny` / `distilbert`
+  - `deit-tiny` / `minilm`
+- **Fusion:** `cross_attention`
+- **Loss:** `combined`
+- **Training:** teacher_epochs=3, student_epochs=10, teacher_lr=1e-5, student_lr=3e-4
+- **Device:** cuda:4
 
-For each run we report key **test-set** metrics.
+All numbers below are **test-set** metrics from `logs/ultra-edge/*/results.json`.
 
 ---
 
-## MedPix Ultra-Edge Results
+## MedPix-2-0 Results (Ultra-Edge Students)
 
 Task mapping:
-
 - Task 1: `modality` (CT vs MR)
 - Task 2: `location` (body location)
 
-### Test Performance Overview
+### Test Performance Summary
 
-| Run ID                         | Student (vision / text)   | Test modality F1 | Test location F1 | Avg F1 | Test infer (ms) |
-|--------------------------------|---------------------------|------------------|------------------|--------|------------------|
-| `medpix-deit_small-distilbert` | deit-small / distilbert   | 0.97498          | 0.86052          | 0.91775 | 10.27           |
-| `medpix-deit_small-minilm`     | deit-small / minilm       | 0.96997          | 0.81284          | 0.89141 | 6.75            |
-| `medpix-deit_tiny-distilbert`  | deit-tiny / distilbert    | 0.90977          | 0.77730          | 0.84354 | 9.80            |
-| `medpix-deit_tiny-minilm`      | deit-tiny / minilm        | 0.96500          | 0.82492          | 0.89496 | 7.42            |
+| Run ID                         | Student (vision / text)   | Modality Acc | Modality F1 | Modality AUC | Location Acc | Location F1 | Location AUC | Infer (ms) |
+|--------------------------------|---------------------------|-------------:|------------:|-------------:|-------------:|------------:|-------------:|-----------:|
+| medpix-deit_small-distilbert   | deit-small / distilbert   | 0.975 | 0.975 | 0.989 | 0.895 | 0.861 | 0.945 | 10.27 |
+| medpix-deit_small-minilm       | deit-small / minilm       | 0.970 | 0.970 | 0.997 | 0.850 | 0.813 | 0.944 | 6.75 |
+| medpix-deit_tiny-distilbert    | deit-tiny / distilbert    | 0.910 | 0.910 | 0.984 | 0.825 | 0.777 | 0.941 | 9.80 |
+| medpix-deit_tiny-minilm        | deit-tiny / minilm        | 0.965 | 0.965 | 0.997 | 0.875 | 0.825 | 0.944 | 7.42 |
 
-(All latencies are `test_infer_ms` reported in `results.json`.)
+(F1 and AUC values rounded for readability.)
 
-### MedPix Critical Observations
+### Critical Observations — MedPix
 
-- **`medpix-deit_small-distilbert`**  
-  - Best pure accuracy: highest average F1 (≈0.918) across modality and location.  
-  - Cost: slowest ultra-edge configuration (≈10.3 ms per example).
+**Best accuracy: `medpix-deit_small-distilbert`**
 
-- **`medpix-deit_small-minilm`**  
-  - Slightly lower average F1 (≈0.891) mainly due to lower location F1.  
-  - Major upside: significantly faster inference (≈6.8 ms), offering a strong accuracy–latency trade-off.
+- Highest average performance:
+  - Modality F1 ≈ 0.975.
+  - Location F1 ≈ 0.86.
+- However, it is the **slowest** configuration (~10.3 ms), so best suited when accuracy is the primary concern and latency is secondary.
 
-- **`medpix-deit_tiny-distilbert`**  
-  - Weakest MedPix configuration: both modality and location F1 substantially below the small models.  
-  - Latency (~9.8 ms) is not low enough to justify the performance drop; dominated by `deit_small-*` and `deit_tiny-minilm`.
+**Best ultra-edge trade-off: `medpix-deit_tiny-minilm`**
 
-- **`medpix-deit_tiny-minilm`**  
-  - Very competitive: average F1 (~0.895) slightly **better** than `deit_small-minilm`, and much stronger than `deit_tiny-distilbert`.  
-  - Latency (~7.4 ms) close to the fastest MedPix model; best "tiny" option and arguably the best ultra-edge compromise.
+- Very competitive accuracy:
+  - Modality F1 ≈ 0.965.
+  - Location F1 ≈ 0.825.
+- Inference ~7.4 ms, significantly faster than the small/distilbert model and close to the fastest variant.
+- Among truly small models, this is the best accuracy–latency compromise.
 
-**MedPix takeaway:**
+**`medpix-deit_small-minilm`**
 
-- **Best pure accuracy:** `medpix-deit_small-distilbert`.
-- **Best ultra-edge trade-off (accuracy vs latency):** `medpix-deit_tiny-minilm`.
+- Slightly worse location performance than the tiny/minilm variant (location F1 ≈ 0.81 vs 0.83), with similar AUC.
+- Fastest MedPix model (~6.75 ms) with still-strong modality F1 (≈ 0.97).
+- Good option when latency is the absolute priority and small accuracy losses are acceptable.
+
+**`medpix-deit_tiny-distilbert`**
+
+- Lowest overall performance:
+  - Modality F1 ≈ 0.91.
+  - Location F1 ≈ 0.78.
+- Latency (~9.8 ms) is not low enough to compensate for the drop in accuracy.
+- Dominated by other configurations.
+
+**MedPix takeaway**
+
+- Best pure accuracy: `deit-small` + `distilbert`.
+- Best ultra-edge trade-off: `deit-tiny` + `minilm` (strong performance and low latency).
+- Lowest-latency option: `deit-small` + `minilm`, at the cost of slightly weaker location performance.
 
 ---
 
-## Wound Ultra-Edge Results
+## Wound-1-0 Results (Ultra-Edge Students)
 
 Task mapping (unified to modality/location style):
-
-- Task 1: `type`   → modality-like task
+- Task 1: `type`     → modality-like task
 - Task 2: `severity` → location-like task
 
-### Test Performance Overview
+### Test Performance Summary
 
-| Run ID                          | Student (vision / text)   | Test type F1 | Test severity F1 | Avg F1 | Test infer (ms) |
-|---------------------------------|---------------------------|--------------|------------------|--------|------------------|
-| `wound-deit_small-distilbert`   | deit-small / distilbert   | 0.87907      | 0.92009          | 0.89958 | 10.04           |
-| `wound-deit_small-minilm`       | deit-small / minilm       | 0.88459      | 0.93957          | 0.91208 | 7.84            |
-| `wound-deit_tiny-distilbert`    | deit-tiny / distilbert    | 0.81035      | 0.85489          | 0.83262 | 9.14            |
-| `wound-deit_tiny-minilm`        | deit-tiny / minilm        | 0.77666      | 0.90550          | 0.84108 | 6.62            |
+| Run ID                          | Student (vision / text)   | Type Acc | Type F1 | Type AUC | Severity Acc | Severity F1 | Severity AUC | Infer (ms) |
+|---------------------------------|---------------------------|---------:|--------:|---------:|-------------:|------------:|-------------:|-----------:|
+| wound-deit_small-distilbert     | deit-small / distilbert   | 0.855 | 0.879 | 0.987 | 0.928 | 0.920 | 0.986 | 10.04 |
+| wound-deit_small-minilm         | deit-small / minilm       | 0.860 | 0.885 | 0.979 | 0.940 | 0.940 | 0.993 | 7.84 |
+| wound-deit_tiny-distilbert      | deit-tiny / distilbert    | 0.774 | 0.810 | 0.973 | 0.872 | 0.855 | 0.971 | 9.14 |
+| wound-deit_tiny-minilm          | deit-tiny / minilm        | 0.762 | 0.777 | 0.976 | 0.919 | 0.905 | 0.990 | 6.62 |
 
-### Wound Critical Observations
+### Critical Observations — Wound
 
-- **`wound-deit_small-distilbert`**  
-  - Strong baseline: high type and severity F1 (avg ≈0.900).  
-  - Slowest Wound ultra-edge configuration (~10.0 ms); good as a reference, less ideal for strict edge constraints.
+**Best overall: `wound-deit_small-minilm`**
 
-- **`wound-deit_small-minilm`**  
-  - Best overall Wound configuration: highest average F1 (~0.912) and best severity F1.  
-  - Also clearly faster (~7.8 ms) than `small-distilbert`; dominates on both accuracy and efficiency.
+- Highest average performance:
+  - Type F1 ≈ 0.885.
+  - Severity F1 ≈ 0.94.
+- Also significantly faster (~7.84 ms) than `wound-deit_small-distilbert` (~10.04 ms).
+- Dominates the other configurations on both **accuracy** and **latency**.
 
-- **`wound-deit_tiny-distilbert`**  
-  - Noticeable degradation in both type and severity F1 (avg ≈0.833) compared to the small models.  
-  - Latency (~9.1 ms) is not low enough to compensate, so it is dominated by `wound-deit_small-minilm`.
+**`wound-deit_small-distilbert`**
 
-- **`wound-deit_tiny-minilm`**  
-  - Moderate average F1 (~0.841) with good severity F1 but weaker type F1.  
-  - Fastest Wound model (~6.6 ms); reasonable for very tight latency budgets, but with a clear accuracy trade-off versus `small-minilm`.
+- Strong baseline with good type and severity F1 (≈ 0.88 and ≈ 0.92).
+- Latency (~10.0 ms) is highest among Wound ultra-edge runs, so it is mainly a reference point.
 
-**Wound takeaway:**
+**Latency-focused option: `wound-deit_tiny-minilm`**
 
-- **Best overall:** `wound-deit_small-minilm` (dominates accuracy and latency versus other ultra-edge runs).
-- **Best latency-only option:** `wound-deit_tiny-minilm`, at the cost of lower especially type F1.
+- Fastest Wound configuration (~6.62 ms).
+- Reasonable severity F1 (≈ 0.91) but notably lower type F1 (≈ 0.78) than the small models.
+- Good for extremely tight latency budgets where some loss in type accuracy is acceptable.
+
+**`wound-deit_tiny-distilbert`**
+
+- Lower type and severity performance than the small models (F1 ≈ 0.81 and ≈ 0.86).
+- Latency (~9.14 ms) is not low enough to justify the accuracy drop.
+- Dominated by `wound-deit_small-minilm` and `wound-deit_tiny-minilm` depending on the priority.
+
+**Wound takeaway**
+
+- Best overall and recommended ultra-edge configuration: `deit-small` + `minilm`.
+- Fastest configuration: `deit-tiny` + `minilm`, with a clear but controlled loss in type accuracy.
 
 ---
 
-## Cross-Dataset Recommendations
+## Cross-Dataset Ultra-Edge Analysis
 
-- If you prioritize **maximum accuracy** under ultra-edge constraints:  
-  - MedPix: `medpix-deit_small-distilbert`  
-  - Wound:  `wound-deit_small-minilm`
+### Accuracy-focused ranking
 
-- If you prioritize **accuracy–latency trade-off**:  
-  - MedPix: `medpix-deit_tiny-minilm` (strong F1, fast)  
-  - Wound:  `wound-deit_small-minilm` remains the best compromise; `wound-deit_tiny-minilm` only if latency is critical.
+**MedPix (approximate average over tasks):**
+1. deit-small / distilbert — best F1 on both tasks.
+2. deit-tiny / minilm — slightly lower but still strong, with better latency.
+3. deit-small / minilm — strong modality, weaker location.
+4. deit-tiny / distilbert — weakest.
 
-- If you prioritize **minimum latency** while staying in a reasonable performance regime:  
-  - MedPix: `medpix-deit_small-minilm` (fastest MedPix and solid F1)  
-  - Wound:  `wound-deit_tiny-minilm` (fastest Wound configuration).
+**Wound (approximate average over tasks):**
+1. deit-small / minilm — best type and severity balance.
+2. deit-small / distilbert — strong, but slower.
+3. deit-tiny / minilm — good severity, weaker type.
+4. deit-tiny / distilbert — lowest overall.
+
+### Latency-focused ranking
+
+**MedPix:**
+1. deit-small / minilm — fastest (~6.75 ms).
+2. deit-tiny / minilm — second-fastest (~7.42 ms) with better accuracy.
+3. deit-tiny / distilbert — ~9.80 ms.
+4. deit-small / distilbert — ~10.27 ms.
+
+**Wound:**
+1. deit-tiny / minilm — fastest (~6.62 ms).
+2. deit-small / minilm — ~7.84 ms.
+3. deit-tiny / distilbert — ~9.14 ms.
+4. deit-small / distilbert — ~10.04 ms.
+
+### Recommended configurations
+
+| Priority / Scenario              | MedPix Recommendation           | Wound Recommendation             |
+|----------------------------------|---------------------------------|----------------------------------|
+| Max accuracy                     | deit-small / distilbert         | deit-small / minilm              |
+| Best ultra-edge trade-off        | deit-tiny / minilm              | deit-small / minilm              |
+| Strict latency constraint        | deit-small / minilm             | deit-tiny / minilm               |
+| Single student for both datasets | deit-small / minilm             | deit-small / minilm              |
+
+---
+
+## Summary and Practical Guidance
+
+- For **MedPix-2-0**, use:
+  - `deit-small` + `distilbert` when accuracy is the top priority.
+  - `deit-tiny` + `minilm` when you need a strong ultra-edge trade-off between accuracy and latency.
+
+- For **Wound-1-0**, use:
+  - `deit-small` + `minilm` as the default ultra-edge configuration (best accuracy and very good latency).
+  - `deit-tiny` + `minilm` only if you must minimize inference time further and can tolerate lower type accuracy.
+
+- For a **single ultra-edge student** across both datasets, `deit-small` + `minilm` is the most balanced choice.
+
+All conclusions are based directly on `logs/ultra-edge/*/results.json`.

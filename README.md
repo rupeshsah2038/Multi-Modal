@@ -484,6 +484,44 @@ loss:
 
 ## Additional Resources
 
+## Experiment Results
+
+Comprehensive experiment results and analysis are available in the `docs/` directory:
+
+- `docs/FUSION_EXPLORE_RESULTS.md`: Fusion module comparison
+  - Tests 9 fusion modules (simple, concat_mlp, cross_attention, gated, transformer_concat, modality_dropout, film, energy_aware_adaptive, shomr)
+  - Uses a fixed teacher–student pair with combined loss on both datasets
+  - Includes per-dataset tables, rankings, and speed analysis
+
+- `docs/LOSS_EXPLORE_RESULTS.md`: Loss function comparison
+  - Tests 5 losses (vanilla, combined, crd, rkd, mmd)
+  - Fixed cross-attention fusion with vit-base + distilbert student
+  - Provides MedPix/Wound tables, cross-dataset recommendations, and latency analysis
+
+- `docs/ULTRA_EDGE_RESULTS.md`: Ultra-edge model comparison (lightweight students)
+  - Tests deit-small/deit-tiny with distilbert/minilm
+  - Covers both MedPix and Wound datasets
+  - Focuses on accuracy–latency trade-offs and recommended ultra-edge presets
+
+- `docs/PIPELINE.md`: End-to-end pipeline overview
+  - Describes configuration loading, dataset factory, teacher/student construction, distillation loop, and evaluation
+  - Includes an ASCII pipeline sketch for quick orientation
+
+- `docs/CONFIGURABLE_METRICS.md`: Custom task label configuration guide
+- `docs/LOSS_FUNCTIONS_COMPARISON.md`: Detailed loss function documentation
+
+### Key Findings
+
+Best configurations among the experiments run so far:
+
+- **MedPix – Losses:** `combined` loss outperforms `vanilla` (especially on location) with better latency, given cross-attention fusion.
+- **MedPix – Ultra-edge:** `deit-tiny` + `minilm` offers the best accuracy–latency trade-off; `deit-small` + `distilbert` is best for pure accuracy.
+- **Wound – Losses:** `vanilla` loss is best overall for cross-attention fusion; `combined` is a close second when severity is prioritized.
+- **Wound – Ultra-edge:** `deit-small` + `minilm` dominates both accuracy and latency; `deit-tiny` + `minilm` is the fastest option.
+
+See the individual result documents for detailed metrics, critical observations, and additional recommendations.
+
+
 - **Experiment Results**:
   - `docs/ULTRA_EDGE_RESULTS.md` — Ultra-edge model comparison
   - `docs/LOSS_EXPLORE_RESULTS.md` — Loss function comparison
