@@ -1,4 +1,4 @@
-# Copilot / AI agent guidance — medpix_kd_modular
+# Copilot / AI agent guidance — Multi-Modal
 
 Short, actionable guide for editing this repository. Focus on concrete code paths, conventions, and reproducible dev workflows.
 

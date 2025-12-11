@@ -1,4 +1,4 @@
-# Medpix_kd_modular
+# Multi-Modal
 
 Lightweight repository for two-stage multimodal model training + knowledge distillation (Teacher→Student) supporting **multiple medical imaging datasets**.
 
@@ -535,7 +535,7 @@ See the individual result documents for detailed metrics, critical observations,
 ## Project Structure
 
 ```
-Medpix_modular/
+Multi-Modal/
 ├── config/                    # Configuration files
 │   ├── default.yaml          # MedPix config
 │   ├── wound.yaml            # Wound config
