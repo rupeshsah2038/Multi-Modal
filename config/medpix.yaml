@@ -12,12 +12,16 @@ teacher:
   text: "bio-clinical-bert"
   fusion_layers: 2
   fusion_dim: 512
+  fusion_heads: 8
+  dropout: 0.1
 
 student:
-  vision: "deit-base"
+  vision: "vit-base"
   text: "distilbert"
   fusion_layers: 1
   fusion_dim: 512
+  fusion_heads: 8
+  dropout: 0.1
   # Recommended student backbones for ultra-edge deployment (alternatives):
   recommended:
     vision_alternatives: ["tiny-vit", "mobile-vit", "mobilenet-v2", "deit-tiny"]

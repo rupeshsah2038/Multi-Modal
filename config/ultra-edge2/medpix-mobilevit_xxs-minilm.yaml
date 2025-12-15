@@ -11,12 +11,16 @@ teacher:
   text: "bio-clinical-bert"
   fusion_layers: 2
   fusion_dim: 384
+  fusion_heads: 8
+  dropout: 0.1
 
 student:
   vision: "deit-tiny"
   text: "minilm"
   fusion_layers: 1
   fusion_dim: 384
+  fusion_heads: 8
+  dropout: 0.1
 
 training:
   teacher_epochs: 3

@@ -3,24 +3,28 @@ data:
   root: "datasets/Wound-1-0"
   batch_size: 8
   num_workers: 4
+  task1_label: "type"
+  task2_label: "severity"
   type_column: "type"
   severity_column: "severity"
   description_column: "description"
   filepath_column: "img_path"
-  task1_label: "type"
-  task2_label: "severity"
 
 teacher:
   vision: "vit-base"
   text: "bio-clinical-bert"
   fusion_layers: 2
   fusion_dim: 384
+  fusion_heads: 8
+  dropout: 0.1
 
 student:
   vision: "deit-small"
   text: "minilm"
   fusion_layers: 1
   fusion_dim: 384
+  fusion_heads: 8
+  dropout: 0.1
 
 training:
   teacher_epochs: 3
