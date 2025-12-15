@@ -192,14 +192,26 @@ def main(cfg):
     # Get fusion type from config (default to 'simple' for backward compatibility)
     fusion_type = cfg.get('fusion', {}).get('type', 'simple')
     
+    # Extract fusion_heads and dropout from config (with defaults for backward compatibility)
+    teacher_fusion_heads = cfg.get('teacher', {}).get('fusion_heads', 8)
+    teacher_dropout = cfg.get('teacher', {}).get('dropout', 0.1)
+    student_fusion_heads = cfg.get('student', {}).get('fusion_heads', 8)
+    student_dropout = cfg.get('student', {}).get('dropout', 0.1)
+    
+    # Get fusion-specific parameters (optional, used by specific fusion modules)
+    fusion_params = cfg.get('fusion', {})
+    
     teacher = Teacher(
         vision=cfg['teacher']['vision'],
         text=cfg['teacher']['text'],
         fusion_type=fusion_type,
         fusion_layers=cfg['teacher']['fusion_layers'],
         fusion_dim=cfg['teacher']['fusion_dim'],
+        fusion_heads=teacher_fusion_heads,
+        dropout=teacher_dropout,
         num_modality_classes=num_modality_classes,
         num_location_classes=num_location_classes,
+        fusion_params=fusion_params,
     ).to(device)
     
     student = Student(
@@ -208,8 +220,11 @@ def main(cfg):
         fusion_type=fusion_type,
         fusion_layers=cfg['student']['fusion_layers'],
         fusion_dim=cfg['student']['fusion_dim'],
+        fusion_heads=student_fusion_heads,
+        dropout=student_dropout,
         num_modality_classes=num_modality_classes,
         num_location_classes=num_location_classes,
+        fusion_params=fusion_params,
     ).to(device)
     
     # Count model parameters
