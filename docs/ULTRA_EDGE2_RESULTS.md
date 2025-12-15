@@ -6,14 +6,16 @@ Comparison of **lightweight student configurations** designed for ultra-edge dep
 **Configuration:**
 - **Teacher:** `vit-base` (vision) + `bio-clinical-bert` (text), `fusion_dim=384`, `fusion_layers=2`
 - **Student variants (vision / text):**
-  - `deit-small` / `distilbert`
-  - `deit-small` / `minilm`
-  - `deit-tiny` / `distilbert`
-  - `deit-tiny` / `minilm`
+  - `deit-small` / `distilbert` — **~92.3M parameters** (21.2M vision + 65.9M text + 5.2M fusion/proj/heads)
+  - `deit-small` / `minilm` — **~48.1M parameters** (21.2M vision + 22.3M text + 4.6M fusion/proj/heads)
+  - `deit-tiny` / `distilbert` — **~75.8M parameters** (5.3M vision + 65.9M text + 4.6M fusion/proj/heads)
+  - `deit-tiny` / `minilm` — **~31.6M parameters** (5.3M vision + 22.3M text + 4.0M fusion/proj/heads)
 - **Fusion:** `cross_attention`
 - **Loss:** `combined`
 - **Training:** `teacher_epochs=3`, `student_epochs=10`, `teacher_lr=1e-5`, `student_lr=3e-4`, `alpha=1.0`, `beta=100.0`, `T=2.0`
 - **Device:** `cuda:3`
+
+**Note:** At `fusion_dim=384`, fusion/projection layers are larger than at 256, adding ~3-4M parameters per student compared to ultra-edge (256). Despite this, inference is faster due to implementation optimizations.
 
 All numbers below are **test-set** metrics from `logs/ultra-edge2/*/results.json`.
 
@@ -27,12 +29,12 @@ Task mapping:
 
 ### Test Performance Summary
 
-| Run ID                                  | Student (vision / text)   | Modality Acc | Modality F1 | Modality AUC | Location Acc | Location F1 | Location AUC | Infer (ms) |
-|-----------------------------------------|---------------------------|-------------:|------------:|-------------:|-------------:|------------:|-------------:|-----------:|
-| medpix-deit_small-distilbert-384        | deit-small / distilbert   | 0.975 | 0.975 | 0.9910 | 0.850 | 0.807 | 0.9545 | 5.27 |
-| medpix-deit_small-minilm-384            | deit-small / minilm       | 0.945 | 0.945 | 0.9934 | 0.870 | 0.840 | 0.9553 | 4.41 |
-| medpix-deit_tiny-distilbert-384         | deit-tiny / distilbert    | 0.955 | 0.955 | 0.9917 | 0.790 | 0.717 | 0.9049 | 5.00 |
-| medpix-deit_tiny-minilm-384             | deit-tiny / minilm        | 0.960 | 0.960 | 0.9858 | 0.790 | 0.764 | 0.9208 | 4.33 |
+| Run ID                                  | Student (vision / text)   | Params (M) | Modality Acc | Modality F1 | Modality AUC | Location Acc | Location F1 | Location AUC | Infer (ms) |
+|-----------------------------------------|---------------------------|----------:|-------------:|------------:|-------------:|-------------:|------------:|-------------:|-----------:|
+| medpix-deit_small-distilbert-384        | deit-small / distilbert   | 92.3 | 0.975 | 0.975 | 0.9910 | 0.850 | 0.807 | 0.9545 | 5.27 |
+| medpix-deit_small-minilm-384            | deit-small / minilm       | 48.1 | 0.945 | 0.945 | 0.9934 | 0.870 | 0.840 | 0.9553 | 4.41 |
+| medpix-deit_tiny-distilbert-384         | deit-tiny / distilbert    | 75.8 | 0.955 | 0.955 | 0.9917 | 0.790 | 0.717 | 0.9049 | 5.00 |
+| medpix-deit_tiny-minilm-384             | deit-tiny / minilm        | 31.6 | 0.960 | 0.960 | 0.9858 | 0.790 | 0.764 | 0.9208 | 4.33 |
 
 (F1, AUC and latency values rounded for readability.)
 
@@ -70,12 +72,12 @@ Task mapping (unified to modality/location style):
 
 ### Test Performance Summary
 
-| Run ID                                   | Student (vision / text)   | Type Acc | Type F1 | Type AUC | Severity Acc | Severity F1 | Severity AUC | Infer (ms) |
-|------------------------------------------|---------------------------|---------:|--------:|---------:|-------------:|------------:|-------------:|-----------:|
-| wound-deit_small-distilbert-384          | deit-small / distilbert   | 0.8553 | 0.867 | 0.9880 | 0.8298 | 0.799 | 0.9410 | 5.33 |
-| wound-deit_small-minilm-384              | deit-small / minilm       | 0.8298 | 0.834 | 0.9842 | 0.9489 | 0.935 | 0.9963 | 4.22 |
-| wound-deit_tiny-distilbert-384           | deit-tiny / distilbert    | 0.7872 | 0.832 | 0.9807 | 0.9191 | 0.919 | 0.9848 | 4.87 |
-| wound-deit_tiny-minilm-384               | deit-tiny / minilm        | 0.7830 | 0.782 | 0.9750 | 0.9277 | 0.916 | 0.9895 | 3.87 |
+| Run ID                                   | Student (vision / text)   | Params (M) | Type Acc | Type F1 | Type AUC | Severity Acc | Severity F1 | Severity AUC | Infer (ms) |
+|------------------------------------------|---------------------------|----------:|---------:|--------:|---------:|-------------:|------------:|-------------:|-----------:|
+| wound-deit_small-distilbert-384          | deit-small / distilbert   | 92.3 | 0.8553 | 0.867 | 0.9880 | 0.8298 | 0.799 | 0.9410 | 5.33 |
+| wound-deit_small-minilm-384              | deit-small / minilm       | 48.1 | 0.8298 | 0.834 | 0.9842 | 0.9489 | 0.935 | 0.9963 | 4.22 |
+| wound-deit_tiny-distilbert-384           | deit-tiny / distilbert    | 75.8 | 0.7872 | 0.832 | 0.9807 | 0.9191 | 0.919 | 0.9848 | 4.87 |
+| wound-deit_tiny-minilm-384               | deit-tiny / minilm        | 31.6 | 0.7830 | 0.782 | 0.9750 | 0.9277 | 0.916 | 0.9895 | 3.87 |
 
 (F1, AUC and latency values rounded for readability.)
 

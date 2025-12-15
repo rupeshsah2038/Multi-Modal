@@ -2,6 +2,11 @@
 
 Side-by-side comparison of ultra-edge students at **fusion_dim=256** (original) and **fusion_dim=384** (ultra-edge2) across **MedPix-2-0** and **Wound-1-0**.
 
+**Parameter differences:**
+- At `fusion_dim=256`, fusion/projection layers add ~1.3-1.6M parameters per student
+- At `fusion_dim=384`, fusion/projection layers add ~4.0-5.2M parameters per student
+- **Net increase from 256→384**: ~3-4M parameters per student (modest overhead for the latency gains)
+
 This document is meant to be read together with:
 - `ULTRA_EDGE_RESULTS.md`  (baseline ultra-edge)
 - `ULTRA_EDGE2_RESULTS.md` (new ultra-edge2)
@@ -18,12 +23,12 @@ This document is meant to be read together with:
 
 Values are from `logs/ultra-edge/*/results.json` (256) and `logs/ultra-edge2/*/results.json` (384).
 
-| Student (vision / text)   | Config ID (256)                | Modality Acc (256) | Location Acc (256) | Infer (ms, 256) | Config ID (384)                     | Modality Acc (384) | Location Acc (384) | Infer (ms, 384) |
-|---------------------------|--------------------------------|-------------------:|-------------------:|----------------:|--------------------------------------|-------------------:|-------------------:|----------------:|
-| deit-small / distilbert   | medpix-deit_small-distilbert  | 0.975 | 0.895 | 10.27 | medpix-deit_small-distilbert-384  | 0.975 | 0.850 | 5.27 |
-| deit-small / minilm       | medpix-deit_small-minilm      | 0.970 | 0.850 | 6.75  | medpix-deit_small-minilm-384      | 0.945 | 0.870 | 4.41 |
-| deit-tiny / distilbert    | medpix-deit_tiny-distilbert   | 0.910 | 0.825 | 9.80  | medpix-deit_tiny-distilbert-384   | 0.955 | 0.790 | 5.00 |
-| deit-tiny / minilm        | medpix-deit_tiny-minilm       | 0.965 | 0.875 | 7.42  | medpix-deit_tiny-minilm-384       | 0.960 | 0.790 | 4.33 |
+| Student (vision / text)   | Params (M, 256) | Params (M, 384) | Config ID (256)                | Modality Acc (256) | Location Acc (256) | Infer (ms, 256) | Config ID (384)                     | Modality Acc (384) | Location Acc (384) | Infer (ms, 384) |
+|---------------------------|----------------:|----------------:|--------------------------------|-------------------:|-------------------:|----------------:|--------------------------------------|-------------------:|-------------------:|----------------:|
+| deit-small / distilbert   | 89.3 | 92.3 | medpix-deit_small-distilbert  | 0.975 | 0.895 | 10.27 | medpix-deit_small-distilbert-384  | 0.975 | 0.850 | 5.27 |
+| deit-small / minilm       | 45.5 | 48.1 | medpix-deit_small-minilm      | 0.970 | 0.850 | 6.75  | medpix-deit_small-minilm-384      | 0.945 | 0.870 | 4.41 |
+| deit-tiny / distilbert    | 73.0 | 75.8 | medpix-deit_tiny-distilbert   | 0.910 | 0.825 | 9.80  | medpix-deit_tiny-distilbert-384   | 0.955 | 0.790 | 5.00 |
+| deit-tiny / minilm        | 29.2 | 31.6 | medpix-deit_tiny-minilm       | 0.965 | 0.875 | 7.42  | medpix-deit_tiny-minilm-384       | 0.960 | 0.790 | 4.33 |
 
 (Here we focus on **accuracy** and **latency**; F1/AUC trends are consistent with these numbers.)
 
@@ -63,12 +68,12 @@ Values are from `logs/ultra-edge/*/results.json` (256) and `logs/ultra-edge2/*/r
 
 ### Test Metrics by Student
 
-| Student (vision / text)   | Config ID (256)               | Type Acc (256) | Severity Acc (256) | Infer (ms, 256) | Config ID (384)                     | Type Acc (384) | Severity Acc (384) | Infer (ms, 384) |
-|---------------------------|-------------------------------|---------------:|-------------------:|----------------:|--------------------------------------|---------------:|-------------------:|----------------:|
-| deit-small / distilbert   | wound-deit_small-distilbert  | 0.855 | 0.928 | 10.04 | wound-deit_small-distilbert-384  | 0.855 | 0.830 | 5.33 |
-| deit-small / minilm       | wound-deit_small-minilm      | 0.860 | 0.940 | 7.84  | wound-deit_small-minilm-384      | 0.830 | 0.949 | 4.22 |
-| deit-tiny / distilbert    | wound-deit_tiny-distilbert   | 0.774 | 0.872 | 9.14  | wound-deit_tiny-distilbert-384   | 0.787 | 0.919 | 4.87 |
-| deit-tiny / minilm        | wound-deit_tiny-minilm       | 0.762 | 0.919 | 6.62  | wound-deit_tiny-minilm-384       | 0.783 | 0.928 | 3.87 |
+| Student (vision / text)   | Params (M, 256) | Params (M, 384) | Config ID (256)               | Type Acc (256) | Severity Acc (256) | Infer (ms, 256) | Config ID (384)                     | Type Acc (384) | Severity Acc (384) | Infer (ms, 384) |
+|---------------------------|----------------:|----------------:|-------------------------------|---------------:|-------------------:|----------------:|--------------------------------------|---------------:|-------------------:|----------------:|
+| deit-small / distilbert   | 89.3 | 92.3 | wound-deit_small-distilbert  | 0.855 | 0.928 | 10.04 | wound-deit_small-distilbert-384  | 0.855 | 0.830 | 5.33 |
+| deit-small / minilm       | 45.5 | 48.1 | wound-deit_small-minilm      | 0.860 | 0.940 | 7.84  | wound-deit_small-minilm-384      | 0.830 | 0.949 | 4.22 |
+| deit-tiny / distilbert    | 73.0 | 75.8 | wound-deit_tiny-distilbert   | 0.774 | 0.872 | 9.14  | wound-deit_tiny-distilbert-384   | 0.787 | 0.919 | 4.87 |
+| deit-tiny / minilm        | 29.2 | 31.6 | wound-deit_tiny-minilm       | 0.762 | 0.919 | 6.62  | wound-deit_tiny-minilm-384       | 0.783 | 0.928 | 3.87 |
 
 (Again focusing on **accuracy** and **latency**; F1/AUC trends follow these patterns.)
 
