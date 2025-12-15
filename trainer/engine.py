@@ -13,7 +13,24 @@ import os
 from datetime import datetime
 from transformers import AutoTokenizer
 from models.backbones import get_text_pretrained_name
-#
+
+def count_parameters(model):
+    """
+    Count the total number of parameters in a model.
+    
+    Args:
+        model: PyTorch model
+    
+    Returns:
+        dict with total_params (int) and params_millions (float)
+    """
+    total_params = sum(p.numel() for p in model.parameters())
+    params_millions = total_params / 1e6
+    return {
+        'total_params': total_params,
+        'params_millions': round(params_millions, 2)
+    }
+
 def train_teacher(model, loader, device, epochs, lr):
     # defensive: ensure epochs and lr are numeric
     try:
@@ -190,6 +207,12 @@ def main(cfg):
         num_location_classes=num_location_classes,
     ).to(device)
     
+    # Count model parameters
+    teacher_params = count_parameters(teacher)
+    student_params = count_parameters(student)
+    print(f"\nTeacher parameters: {teacher_params['params_millions']:.2f}M ({teacher_params['total_params']:,})")
+    print(f"Student parameters: {student_params['params_millions']:.2f}M ({student_params['total_params']:,})")
+    
     logger = MetricsLogger(cfg['logging']['log_dir'])
     
     # Create a distillation/loss object from config
@@ -303,7 +326,8 @@ def main(cfg):
     train_metrics = {'train': {'history': serial_history}}
     if 'train_loss' in locals():
         train_metrics['train']['final_loss'] = train_loss
-    results_logger.log_experiment(cfg, train_metrics, dev_metrics, test_metrics)
+    results_logger.log_experiment(cfg, train_metrics, dev_metrics, test_metrics, 
+                                   teacher_params=teacher_params, student_params=student_params)
     
     print(f"All outputs saved in {cfg['logging']['log_dir']}")
     

@@ -11,7 +11,8 @@ class ResultsLogger:
         self.results_file = os.path.join(log_dir, 'results.json')
         self.results = {}
     
-    def log_experiment(self, config, metrics, dev_metrics=None, test_metrics=None):
+    def log_experiment(self, config, metrics, dev_metrics=None, test_metrics=None, 
+                      teacher_params=None, student_params=None):
         """
         Log a complete experiment run.
         
@@ -20,6 +21,8 @@ class ResultsLogger:
             metrics: dict with train/val metrics
             dev_metrics: optional dev set metrics
             test_metrics: optional test set metrics
+            teacher_params: optional dict with teacher parameter counts
+            student_params: optional dict with student parameter counts
         """
         self.results = {
             'timestamp': datetime.now().isoformat(),
@@ -34,11 +37,15 @@ class ResultsLogger:
                     'vision': config.get('teacher', {}).get('vision'),
                     'text': config.get('teacher', {}).get('text'),
                     'fusion_layers': config.get('teacher', {}).get('fusion_layers'),
+                    'total_params': teacher_params.get('total_params') if teacher_params else None,
+                    'params_millions': teacher_params.get('params_millions') if teacher_params else None,
                 },
                 'student': {
                     'vision': config.get('student', {}).get('vision'),
                     'text': config.get('student', {}).get('text'),
                     'fusion_layers': config.get('student', {}).get('fusion_layers'),
+                    'total_params': student_params.get('total_params') if student_params else None,
+                    'params_millions': student_params.get('params_millions') if student_params else None,
                 },
             },
             'training': {
