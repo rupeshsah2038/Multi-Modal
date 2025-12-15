@@ -13,7 +13,7 @@ class TransformerConcatFusion(nn.Module):
 
     def forward(self, img_emb, txt_emb):
         B = img_emb.shape[0]
-        tokens = self.modality_token.expand(B, -1, -1)
+        tokens = self.modality_token.expand(B, -1, -1).clone()
         tokens[:, 0] = img_emb
         tokens[:, 1] = txt_emb
         out = self.transformer(tokens)

@@ -189,9 +189,13 @@ def main(cfg):
     dev_loader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     
+    # Get fusion type from config (default to 'simple' for backward compatibility)
+    fusion_type = cfg.get('fusion', {}).get('type', 'simple')
+    
     teacher = Teacher(
         vision=cfg['teacher']['vision'],
         text=cfg['teacher']['text'],
+        fusion_type=fusion_type,
         fusion_layers=cfg['teacher']['fusion_layers'],
         fusion_dim=cfg['teacher']['fusion_dim'],
         num_modality_classes=num_modality_classes,
@@ -201,6 +205,7 @@ def main(cfg):
     student = Student(
         vision=cfg['student']['vision'],
         text=cfg['student']['text'],
+        fusion_type=fusion_type,
         fusion_layers=cfg['student']['fusion_layers'],
         fusion_dim=cfg['student']['fusion_dim'],
         num_modality_classes=num_modality_classes,

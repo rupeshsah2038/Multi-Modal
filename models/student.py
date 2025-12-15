@@ -1,11 +1,13 @@
 import torch.nn as nn
 from .backbones import get_vision_backbone, get_text_backbone
-from .fusion.simple import SimpleFusion
+from .fusion import (SimpleFusion, ConcatMLPFusion, CrossAttentionFusion,
+                     GatedFusion, TransformerConcatFusion, ModalityDropoutFusion,
+                     FiLMFusion, EnergyAwareAdaptiveFusion, SHoMRFusion)
 from .heads import ClassificationHead
 
 class Student(nn.Module):
-    def __init__(self, vision, text, fusion_dim, fusion_heads=8, fusion_layers=1, 
-                 dropout=0.1, num_modality_classes=2, num_location_classes=5):
+    def __init__(self, vision, text, fusion_dim, fusion_type='simple', fusion_heads=8, 
+                 fusion_layers=1, dropout=0.1, num_modality_classes=2, num_location_classes=5):
         super().__init__()
         self.vision = get_vision_backbone(vision)
         self.text = get_text_backbone(text)
@@ -13,10 +15,37 @@ class Student(nn.Module):
         txt_dim = self.text.config.hidden_size
         self.proj_vis = nn.Linear(vis_dim, fusion_dim)
         self.proj_txt = nn.Linear(txt_dim, fusion_dim)
-        self.fusion = SimpleFusion(fusion_dim, fusion_heads, fusion_layers)
+        self.fusion = self._create_fusion(fusion_type, fusion_dim, fusion_heads, fusion_layers)
         self.dropout = nn.Dropout(dropout)
         self.head_modality = ClassificationHead(fusion_dim, num_modality_classes)
         self.head_location = ClassificationHead(fusion_dim, num_location_classes)
+
+    def _create_fusion(self, fusion_type, fusion_dim, fusion_heads, fusion_layers):
+        """Factory method to create fusion module based on type."""
+        fusion_type = fusion_type.lower().replace('_', '').replace('-', '')
+        
+        # Map config names to classes and their preferred arguments
+        if fusion_type in ['simple', 'simplefusion']:
+            return SimpleFusion(fusion_dim, fusion_heads, fusion_layers)
+        elif fusion_type in ['concatmlp', 'concatmlpfusion']:
+            return ConcatMLPFusion(dim=fusion_dim, hidden_mult=2, layers=fusion_layers)
+        elif fusion_type in ['crossattention', 'crossattentionfusion']:
+            return CrossAttentionFusion(dim=fusion_dim, heads=fusion_heads, dropout=0.1)
+        elif fusion_type in ['gated', 'gatedfusion']:
+            return GatedFusion(dim=fusion_dim)
+        elif fusion_type in ['transformerconcat', 'transformerconcatfusion']:
+            return TransformerConcatFusion(dim=fusion_dim, heads=fusion_heads, layers=fusion_layers)
+        elif fusion_type in ['modalitydropout', 'modalitydropoutfusion']:
+            return ModalityDropoutFusion(dim=fusion_dim, p_img=0.3, p_txt=0.3)
+        elif fusion_type in ['film', 'filmfusion']:
+            return FiLMFusion(dim=fusion_dim)
+        elif fusion_type in ['energyawareadaptive', 'energyawareadaptivefusion']:
+            return EnergyAwareAdaptiveFusion(dim=fusion_dim, heads=fusion_heads, layers=fusion_layers)
+        elif fusion_type in ['shomr', 'shomrfusion']:
+            return SHoMRFusion(dim=fusion_dim, num_moments=4, heads=fusion_heads, layers=fusion_layers)
+        else:
+            # Default to SimpleFusion
+            return SimpleFusion(fusion_dim, fusion_heads, fusion_layers)
 
     def forward(self, pixel_values, input_ids, attention_mask):
         v_out = self.vision(pixel_values)
