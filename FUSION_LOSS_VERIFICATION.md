@@ -205,9 +205,26 @@ Need to update:
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Loss Module Integration | ✅ Correct | Dynamically loads and configures loss functions |
-| Fusion Module Integration | ❌ Broken | Hardcoded to SimpleFusion, config ignored |
+| Fusion Module Integration | ✅ **FIXED** | Now dynamically loads fusion modules from config |
 | Ultra-edge Experiments | ✅ Valid | Correctly use SimpleFusion as intended |
-| Loss-explore Experiments | ⚠️ Partial | Loss comparison valid, but all use SimpleFusion |
-| Fusion-explore Experiments | ❌ Invalid | All experiments actually use SimpleFusion |
+| Loss-explore Experiments | ✅ Valid | Loss comparison valid (all use SimpleFusion by config) |
+| Fusion-explore Experiments | ⚠️ **Need Rerun** | Previously invalid, can now be run correctly |
 
-**Action Required**: Implement configurable fusion module selection in Teacher and Student models.
+## ✅ FIXED (December 15, 2025)
+
+The fusion module integration has been **corrected**:
+
+1. **Teacher and Student models** now accept `fusion_type` parameter
+2. **_create_fusion() factory method** added to both models (similar to loss modules)
+3. **Engine.py** now passes `cfg['fusion']['type']` to models
+4. **All 9 fusion strategies** are now properly instantiated:
+   - simple, concat_mlp, cross_attention, gated
+   - transformer_concat, modality_dropout, film
+   - energy_aware_adaptive, shomr
+
+5. **Bug fixes**:
+   - Added missing `torch` imports to fusion modules
+   - Fixed in-place assignment issue in TransformerConcatFusion
+   - Normalized parameter signatures across different fusion constructors
+
+**Action Completed**: Fusion modules are now fully configurable through config files, matching the loss module architecture.
