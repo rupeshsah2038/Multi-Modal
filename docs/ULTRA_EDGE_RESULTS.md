@@ -4,12 +4,12 @@
 Comparison of **lightweight student configurations** designed for ultra-edge deployment across **MedPix-2-0** and **Wound-1-0**.
 
 **Configuration:**
-- **Teacher:** vit-base (vision) + bio-clinical-bert (text), fusion_dim=256, fusion_layers=2
+- **Teacher:** vit-base (vision) + bio-clinical-bert (text), fusion_dim=256, fusion_layers=2 — **~194.7M parameters**
 - **Student variants (vision / text):**
-  - `deit-small` / `distilbert`
-  - `deit-small` / `minilm`
-  - `deit-tiny` / `distilbert`
-  - `deit-tiny` / `minilm`
+  - `deit-small` / `distilbert` — **~89.3M parameters** (21.2M vision + 65.9M text + 2.2M fusion/proj/heads)
+  - `deit-small` / `minilm` — **~45.5M parameters** (21.2M vision + 22.3M text + 2.0M fusion/proj/heads)
+  - `deit-tiny` / `distilbert` — **~73.0M parameters** (5.3M vision + 65.9M text + 1.8M fusion/proj/heads)
+  - `deit-tiny` / `minilm` — **~29.2M parameters** (5.3M vision + 22.3M text + 1.6M fusion/proj/heads)
 - **Fusion:** `cross_attention`
 - **Loss:** `combined`
 - **Training:** teacher_epochs=3, student_epochs=10, teacher_lr=1e-5, student_lr=3e-4
@@ -27,12 +27,12 @@ Task mapping:
 
 ### Test Performance Summary
 
-| Run ID                         | Student (vision / text)   | Modality Acc | Modality F1 | Modality AUC | Location Acc | Location F1 | Location AUC | Infer (ms) |
-|--------------------------------|---------------------------|-------------:|------------:|-------------:|-------------:|------------:|-------------:|-----------:|
-| medpix-deit_small-distilbert   | deit-small / distilbert   | 0.975 | 0.975 | 0.989 | 0.895 | 0.861 | 0.945 | 10.27 |
-| medpix-deit_small-minilm       | deit-small / minilm       | 0.970 | 0.970 | 0.997 | 0.850 | 0.813 | 0.944 | 6.75 |
-| medpix-deit_tiny-distilbert    | deit-tiny / distilbert    | 0.910 | 0.910 | 0.984 | 0.825 | 0.777 | 0.941 | 9.80 |
-| medpix-deit_tiny-minilm        | deit-tiny / minilm        | 0.965 | 0.965 | 0.997 | 0.875 | 0.825 | 0.944 | 7.42 |
+| Run ID                         | Student (vision / text)   | Params (M) | Modality Acc | Modality F1 | Modality AUC | Location Acc | Location F1 | Location AUC | Infer (ms) |
+|--------------------------------|---------------------------|----------:|-------------:|------------:|-------------:|-------------:|------------:|-------------:|-----------:|
+| medpix-deit_small-distilbert   | deit-small / distilbert   | 89.3 | 0.975 | 0.975 | 0.989 | 0.895 | 0.861 | 0.945 | 10.27 |
+| medpix-deit_small-minilm       | deit-small / minilm       | 45.5 | 0.970 | 0.970 | 0.997 | 0.850 | 0.813 | 0.944 | 6.75 |
+| medpix-deit_tiny-distilbert    | deit-tiny / distilbert    | 73.0 | 0.910 | 0.910 | 0.984 | 0.825 | 0.777 | 0.941 | 9.80 |
+| medpix-deit_tiny-minilm        | deit-tiny / minilm        | 29.2 | 0.965 | 0.965 | 0.997 | 0.875 | 0.825 | 0.944 | 7.42 |
 
 (F1 and AUC values rounded for readability.)
 
@@ -83,12 +83,12 @@ Task mapping (unified to modality/location style):
 
 ### Test Performance Summary
 
-| Run ID                          | Student (vision / text)   | Type Acc | Type F1 | Type AUC | Severity Acc | Severity F1 | Severity AUC | Infer (ms) |
-|---------------------------------|---------------------------|---------:|--------:|---------:|-------------:|------------:|-------------:|-----------:|
-| wound-deit_small-distilbert     | deit-small / distilbert   | 0.855 | 0.879 | 0.987 | 0.928 | 0.920 | 0.986 | 10.04 |
-| wound-deit_small-minilm         | deit-small / minilm       | 0.860 | 0.885 | 0.979 | 0.940 | 0.940 | 0.993 | 7.84 |
-| wound-deit_tiny-distilbert      | deit-tiny / distilbert    | 0.774 | 0.810 | 0.973 | 0.872 | 0.855 | 0.971 | 9.14 |
-| wound-deit_tiny-minilm          | deit-tiny / minilm        | 0.762 | 0.777 | 0.976 | 0.919 | 0.905 | 0.990 | 6.62 |
+| Run ID                          | Student (vision / text)   | Params (M) | Type Acc | Type F1 | Type AUC | Severity Acc | Severity F1 | Severity AUC | Infer (ms) |
+|---------------------------------|---------------------------|----------:|---------:|--------:|---------:|-------------:|------------:|-------------:|-----------:|
+| wound-deit_small-distilbert     | deit-small / distilbert   | 89.3 | 0.855 | 0.879 | 0.987 | 0.928 | 0.920 | 0.986 | 10.04 |
+| wound-deit_small-minilm         | deit-small / minilm       | 45.5 | 0.860 | 0.885 | 0.979 | 0.940 | 0.940 | 0.993 | 7.84 |
+| wound-deit_tiny-distilbert      | deit-tiny / distilbert    | 73.0 | 0.774 | 0.810 | 0.973 | 0.872 | 0.855 | 0.971 | 9.14 |
+| wound-deit_tiny-minilm          | deit-tiny / minilm        | 29.2 | 0.762 | 0.777 | 0.976 | 0.919 | 0.905 | 0.990 | 6.62 |
 
 ### Critical Observations — Wound
 
