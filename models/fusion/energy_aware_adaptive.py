@@ -106,4 +106,6 @@ class EnergyAwareAdaptiveFusion(nn.Module):
                 drop_txt = torch.rand(B, 1, device=txt_emb.device) < 0.5
                 out = out * (~drop_img) * (~drop_txt)
 
-        return out, energy_loss
+        # Note: energy_loss could be used for additional regularization in future
+        # For now, return only the fused output to match other fusion modules
+        return out

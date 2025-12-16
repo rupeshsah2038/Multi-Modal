@@ -29,38 +29,21 @@ Task mapping:
 
 ### Test Performance Summary
 
-| Run ID                                  | Student (vision / text)   | Params (M) | Modality Acc | Modality F1 | Modality AUC | Location Acc | Location F1 | Location AUC | Infer (ms) |
-|-----------------------------------------|---------------------------|----------:|-------------:|------------:|-------------:|-------------:|------------:|-------------:|-----------:|
-| medpix-deit_small-distilbert-384        | deit-small / distilbert   | 92.3 | 0.975 | 0.975 | 0.9910 | 0.850 | 0.807 | 0.9545 | 5.27 |
-| medpix-deit_small-minilm-384            | deit-small / minilm       | 48.1 | 0.945 | 0.945 | 0.9934 | 0.870 | 0.840 | 0.9553 | 4.41 |
-| medpix-deit_tiny-distilbert-384         | deit-tiny / distilbert    | 75.8 | 0.955 | 0.955 | 0.9917 | 0.790 | 0.717 | 0.9049 | 5.00 |
-| medpix-deit_tiny-minilm-384             | deit-tiny / minilm        | 31.6 | 0.960 | 0.960 | 0.9858 | 0.790 | 0.764 | 0.9208 | 4.33 |
+| Run ID                            | Student (vision / text)   | Params (M) | Modality Acc | Modality F1 | Modality AUC | Location Acc | Location F1 | Location AUC |
+|-----------------------------------|---------------------------|----------:|-------------:|------------:|-------------:|-------------:|------------:|-------------:|
+| medpix-deit_small-distilbert-384 | deit-small / distilbert  | 90.4      | 0.970        | 0.970       | 0.995        | 0.920        | 0.888       | 0.964        |
+| medpix-deit_small-minilm-384     | deit-small / minilm      | 46.6      | 0.960        | 0.960       | 0.988        | 0.860        | 0.833       | 0.944        |
+| medpix-deit_tiny-distilbert-384  | deit-tiny / distilbert   | 74.1      | 0.925        | 0.925       | 0.992        | 0.885        | 0.823       | 0.968        |
+| medpix-deit_tiny-minilm-384      | deit-tiny / minilm       | 30.3      | 0.970        | 0.970       | 0.991        | 0.850        | 0.812       | 0.931        |
 
-(F1, AUC and latency values rounded for readability.)
+Values are rounded from `logs/ultra-edge2/medpix-*/results.json`.
 
 ### Critical Observations — MedPix
 
-**1. Accuracy behaviour**
-
-- `deit-small / distilbert` remains **best on modality** (F1 ≈ 0.975) but its **location accuracy drops** from 0.895 (fusion_dim=256) to 0.850 here.
-- `deit-small / minilm` trades a **small drop in modality** (0.970 → 0.945) for a **clear gain in location** (0.850 → 0.870) and improved AUC for location.
-- `deit-tiny / distilbert` stays the weakest configuration for location (F1 ≈ 0.72) even at higher fusion_dim.
-- `deit-tiny / minilm` improves location F1 vs tiny/distilbert and lands between the two small models.
-
-**2. Latency behaviour**
-
-- All ultra-edge2 students are **substantially faster** than their ultra-edge (256-dim) counterparts:
-  - `deit-small / distilbert`: ~10.27 ms → ~5.27 ms.
-  - `deit-small / minilm`: ~6.75 ms → ~4.41 ms.
-  - `deit-tiny / distilbert`: ~9.80 ms → ~5.00 ms.
-  - `deit-tiny / minilm`: ~7.42 ms → ~4.33 ms.
-- Higher fusion_dim combined with the new implementation gives **lower latency without obvious degradation** in modality performance.
-
-**3. MedPix takeaway (fusion_dim=384)**
-
-- **Best pure modality accuracy:** `deit-small / distilbert` (unchanged vs 256-dim), but worse location.
-- **Best overall MedPix trade-off:** `deit-small / minilm` — slightly weaker modality than small/distilbert but **better location** and much faster than any distilbert variant.
-- **Tiny variants** are still useful when parameters must be minimal, but they **do not beat the small models** in accuracy and are only marginally faster than `deit-small / minilm` now.
+- **High-capacity student:** `deit-small / distilbert` remains extremely strong on modality and now also achieves very high location accuracy (≈0.92), at the cost of the largest parameter count among ultra-edge2 students.
+- **Balanced option:** `deit-small / minilm` offers only a small drop in modality metrics relative to small/distilbert, but with fewer parameters and still solid location performance (location F1 ≈ 0.83).
+- **Tiny variants:** both `deit-tiny` students are competitive but generally sit below the small models; `deit-tiny / minilm` has good modality but noticeably weaker location than `deit-small / distilbert`.
+- **Overall:** for MedPix at fusion_dim=384, `deit-small / distilbert` is best if model size is acceptable; otherwise `deit-small / minilm` is the most balanced accuracy–capacity choice.
 
 ---
 
@@ -72,39 +55,21 @@ Task mapping (unified to modality/location style):
 
 ### Test Performance Summary
 
-| Run ID                                   | Student (vision / text)   | Params (M) | Type Acc | Type F1 | Type AUC | Severity Acc | Severity F1 | Severity AUC | Infer (ms) |
-|------------------------------------------|---------------------------|----------:|---------:|--------:|---------:|-------------:|------------:|-------------:|-----------:|
-| wound-deit_small-distilbert-384          | deit-small / distilbert   | 92.3 | 0.8553 | 0.867 | 0.9880 | 0.8298 | 0.799 | 0.9410 | 5.33 |
-| wound-deit_small-minilm-384              | deit-small / minilm       | 48.1 | 0.8298 | 0.834 | 0.9842 | 0.9489 | 0.935 | 0.9963 | 4.22 |
-| wound-deit_tiny-distilbert-384           | deit-tiny / distilbert    | 75.8 | 0.7872 | 0.832 | 0.9807 | 0.9191 | 0.919 | 0.9848 | 4.87 |
-| wound-deit_tiny-minilm-384               | deit-tiny / minilm        | 31.6 | 0.7830 | 0.782 | 0.9750 | 0.9277 | 0.916 | 0.9895 | 3.87 |
+| Run ID                         | Student (vision / text)   | Params (M) | Type Acc | Type F1 | Type AUC | Severity Acc | Severity F1 | Severity AUC |
+|--------------------------------|---------------------------|----------:|---------:|--------:|---------:|-------------:|------------:|-------------:|
+| wound-deit_small-distilbert-384 | deit-small / distilbert | 90.4      | 0.821    | 0.831   | 0.982    | 0.940        | 0.939       | 0.993        |
+| wound-deit_small-minilm-384     | deit-small / minilm     | 46.6      | 0.787    | 0.778   | 0.977    | 0.936        | 0.923       | 0.986        |
+| wound-deit_tiny-distilbert-384  | deit-tiny / distilbert  | 74.1      | 0.749    | 0.707   | 0.959    | 0.949        | 0.946       | 0.994        |
+| wound-deit_tiny-minilm-384      | deit-tiny / minilm      | 30.3      | 0.723    | 0.746   | 0.964    | 0.936        | 0.924       | 0.991        |
 
-(F1, AUC and latency values rounded for readability.)
+Values are rounded from `logs/ultra-edge2/wound-*/results.json`.
 
 ### Critical Observations — Wound
 
-**1. Accuracy behaviour**
-
-- `deit-small / minilm` remains the **best overall configuration**:
-  - Slight drop in **type** F1 compared to ultra-edge (0.885 → ≈0.834), likely within variance.
-  - **Severity** F1 stays extremely strong (≈0.935) with an AUC ≈ 0.996, essentially unchanged.
-- `deit-small / distilbert` is a little stronger on type than ultra-edge2 minilm but significantly worse on severity.
-- `deit-tiny / distilbert` and `deit-tiny / minilm` both do **surprisingly well on severity** (F1 ≈ 0.919–0.916), but type is clearly weaker than the small models.
-
-**2. Latency behaviour**
-
-- As on MedPix, ultra-edge2 models are **consistently faster** than ultra-edge:
-  - `deit-small / distilbert`: ~10.04 ms → ~5.33 ms.
-  - `deit-small / minilm`: ~7.84 ms → ~4.22 ms.
-  - `deit-tiny / distilbert`: ~9.14 ms → ~4.87 ms.
-  - `deit-tiny / minilm`: ~6.62 ms → ~3.87 ms.
-- `deit-tiny / minilm` is now the **fastest** student while preserving strong severity performance.
-
-**3. Wound takeaway (fusion_dim=384)**
-
-- **Best overall Wound model:** `deit-small / minilm` — severity is excellent, type is competitive, and latency is very low.
-- **Latency-first option:** `deit-tiny / minilm` — strongest severity among the tiny models and fastest inference, at the cost of weaker type.
-- Distilbert students no longer justify their extra latency on this dataset given how strong `deit-small / minilm` is.
+- **Severity is consistently strong:** all ultra-edge2 students achieve high severity accuracy and F1, with the tiny/distilbert variant slightly leading on severity metrics.
+- **Type performance differentiates models:** `deit-small / distilbert` has the strongest type scores, but `deit-small / minilm` is close while using fewer parameters.
+- **Tiny students:** both tiny variants show good severity but noticeably weaker type performance; they are mainly of interest when model size constraints dominate.
+- **Overall:** for Wound at fusion_dim=384, `deit-small / minilm` remains a robust choice when balancing type and severity, while `deit-small / distilbert` is preferable only if maximizing type performance is critical and the larger model is acceptable.
 
 ---
 

@@ -40,4 +40,4 @@ fusion:
 loss:
   type: "combined"
 
-device: "cuda:4"
+device: "cuda:3"

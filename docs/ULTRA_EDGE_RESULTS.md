@@ -27,51 +27,21 @@ Task mapping:
 
 ### Test Performance Summary
 
-| Run ID                         | Student (vision / text)   | Params (M) | Modality Acc | Modality F1 | Modality AUC | Location Acc | Location F1 | Location AUC | Infer (ms) |
-|--------------------------------|---------------------------|----------:|-------------:|------------:|-------------:|-------------:|------------:|-------------:|-----------:|
-| medpix-deit_small-distilbert   | deit-small / distilbert   | 89.3 | 0.975 | 0.975 | 0.989 | 0.895 | 0.861 | 0.945 | 10.27 |
-| medpix-deit_small-minilm       | deit-small / minilm       | 45.5 | 0.970 | 0.970 | 0.997 | 0.850 | 0.813 | 0.944 | 6.75 |
-| medpix-deit_tiny-distilbert    | deit-tiny / distilbert    | 73.0 | 0.910 | 0.910 | 0.984 | 0.825 | 0.777 | 0.941 | 9.80 |
-| medpix-deit_tiny-minilm        | deit-tiny / minilm        | 29.2 | 0.965 | 0.965 | 0.997 | 0.875 | 0.825 | 0.944 | 7.42 |
+| Run ID                       | Student (vision / text)   | Params (M) | Modality Acc | Modality F1 | Modality AUC | Location Acc | Location F1 | Location AUC |
+|-----------------------------|---------------------------|----------:|-------------:|------------:|-------------:|-------------:|------------:|-------------:|
+| medpix-deit_small-distilbert | deit-small / distilbert  | 89.3      | 0.975        | 0.975       | 0.993        | 0.915        | 0.901       | 0.967        |
+| medpix-deit_small-minilm     | deit-small / minilm      | 45.5      | 0.960        | 0.960       | 0.994        | 0.845        | 0.825       | 0.965        |
+| medpix-deit_tiny-distilbert  | deit-tiny / distilbert   | 73.0      | 0.960        | 0.960       | 0.996        | 0.815        | 0.775       | 0.945        |
+| medpix-deit_tiny-minilm      | deit-tiny / minilm       | 29.2      | 0.980        | 0.980       | 0.992        | 0.895        | 0.855       | 0.960        |
 
-(F1 and AUC values rounded for readability.)
+Values are rounded for readability and taken from `logs/ultra-edge/medpix-*/results.json`.
 
 ### Critical Observations — MedPix
 
-**Best accuracy: `medpix-deit_small-distilbert`**
-
-- Highest average performance:
-  - Modality F1 ≈ 0.975.
-  - Location F1 ≈ 0.86.
-- However, it is the **slowest** configuration (~10.3 ms), so best suited when accuracy is the primary concern and latency is secondary.
-
-**Best ultra-edge trade-off: `medpix-deit_tiny-minilm`**
-
-- Very competitive accuracy:
-  - Modality F1 ≈ 0.965.
-  - Location F1 ≈ 0.825.
-- Inference ~7.4 ms, significantly faster than the small/distilbert model and close to the fastest variant.
-- Among truly small models, this is the best accuracy–latency compromise.
-
-**`medpix-deit_small-minilm`**
-
-- Slightly worse location performance than the tiny/minilm variant (location F1 ≈ 0.81 vs 0.83), with similar AUC.
-- Fastest MedPix model (~6.75 ms) with still-strong modality F1 (≈ 0.97).
-- Good option when latency is the absolute priority and small accuracy losses are acceptable.
-
-**`medpix-deit_tiny-distilbert`**
-
-- Lowest overall performance:
-  - Modality F1 ≈ 0.91.
-  - Location F1 ≈ 0.78.
-- Latency (~9.8 ms) is not low enough to compensate for the drop in accuracy.
-- Dominated by other configurations.
-
-**MedPix takeaway**
-
-- Best pure accuracy: `deit-small` + `distilbert`.
-- Best ultra-edge trade-off: `deit-tiny` + `minilm` (strong performance and low latency).
-- Lowest-latency option: `deit-small` + `minilm`, at the cost of slightly weaker location performance.
+- **Strongest overall:** `deit-small / distilbert` has the best combination of modality and location scores, with modality F1 ≈ 0.98 and location F1 ≈ 0.90.
+- **Best tiny configuration:** `deit-tiny / minilm` slightly improves modality metrics over `deit-small / minilm` and clearly outperforms other tiny variants on location (location F1 ≈ 0.86).
+- **Text backbone effect:** Switching from `distilbert` to `minilm` consistently reduces parameters; on MedPix, the `minilm` variants are competitive but the `deit-small / distilbert` student still provides the strongest location performance.
+- **Weaker options:** `deit-small / minilm` and especially `deit-tiny / distilbert` trail in location F1 and are not preferred when accuracy on both tasks matters.
 
 ---
 
@@ -83,44 +53,21 @@ Task mapping (unified to modality/location style):
 
 ### Test Performance Summary
 
-| Run ID                          | Student (vision / text)   | Params (M) | Type Acc | Type F1 | Type AUC | Severity Acc | Severity F1 | Severity AUC | Infer (ms) |
-|---------------------------------|---------------------------|----------:|---------:|--------:|---------:|-------------:|------------:|-------------:|-----------:|
-| wound-deit_small-distilbert     | deit-small / distilbert   | 89.3 | 0.855 | 0.879 | 0.987 | 0.928 | 0.920 | 0.986 | 10.04 |
-| wound-deit_small-minilm         | deit-small / minilm       | 45.5 | 0.860 | 0.885 | 0.979 | 0.940 | 0.940 | 0.993 | 7.84 |
-| wound-deit_tiny-distilbert      | deit-tiny / distilbert    | 73.0 | 0.774 | 0.810 | 0.973 | 0.872 | 0.855 | 0.971 | 9.14 |
-| wound-deit_tiny-minilm          | deit-tiny / minilm        | 29.2 | 0.762 | 0.777 | 0.976 | 0.919 | 0.905 | 0.990 | 6.62 |
+| Run ID                      | Student (vision / text)   | Params (M) | Type Acc | Type F1 | Type AUC | Severity Acc | Severity F1 | Severity AUC |
+|-----------------------------|---------------------------|----------:|---------:|--------:|---------:|-------------:|------------:|-------------:|
+| wound-deit_small-distilbert | deit-small / distilbert  | 89.3      | 0.762    | 0.744   | 0.980    | 0.919        | 0.899       | 0.989        |
+| wound-deit_small-minilm     | deit-small / minilm      | 45.5      | 0.830    | 0.848   | 0.984    | 0.940        | 0.935       | 0.994        |
+| wound-deit_tiny-distilbert  | deit-tiny / distilbert   | 73.0      | 0.723    | 0.763   | 0.967    | 0.919        | 0.914       | 0.975        |
+| wound-deit_tiny-minilm      | deit-tiny / minilm       | 29.2      | 0.689    | 0.712   | 0.968    | 0.949        | 0.951       | 0.993        |
+
+Values are rounded from `logs/ultra-edge/wound-*/results.json`.
 
 ### Critical Observations — Wound
 
-**Best overall: `wound-deit_small-minilm`**
-
-- Highest average performance:
-  - Type F1 ≈ 0.885.
-  - Severity F1 ≈ 0.94.
-- Also significantly faster (~7.84 ms) than `wound-deit_small-distilbert` (~10.04 ms).
-- Dominates the other configurations on both **accuracy** and **latency**.
-
-**`wound-deit_small-distilbert`**
-
-- Strong baseline with good type and severity F1 (≈ 0.88 and ≈ 0.92).
-- Latency (~10.0 ms) is highest among Wound ultra-edge runs, so it is mainly a reference point.
-
-**Latency-focused option: `wound-deit_tiny-minilm`**
-
-- Fastest Wound configuration (~6.62 ms).
-- Reasonable severity F1 (≈ 0.91) but notably lower type F1 (≈ 0.78) than the small models.
-- Good for extremely tight latency budgets where some loss in type accuracy is acceptable.
-
-**`wound-deit_tiny-distilbert`**
-
-- Lower type and severity performance than the small models (F1 ≈ 0.81 and ≈ 0.86).
-- Latency (~9.14 ms) is not low enough to justify the accuracy drop.
-- Dominated by `wound-deit_small-minilm` and `wound-deit_tiny-minilm` depending on the priority.
-
-**Wound takeaway**
-
-- Best overall and recommended ultra-edge configuration: `deit-small` + `minilm`.
-- Fastest configuration: `deit-tiny` + `minilm`, with a clear but controlled loss in type accuracy.
+- **Best overall:** `deit-small / minilm` achieves the strongest balance across both tasks, with type F1 ≈ 0.85 and severity F1 ≈ 0.93.
+- **Severity-focused:** `deit-tiny / minilm` delivers the highest severity metrics (severity F1 ≈ 0.95) but has the weakest type performance; it is suitable only if severity is the dominant objective.
+- **Distilbert variants:** both `deit-small / distilbert` and `deit-tiny / distilbert` underperform the corresponding `minilm` students on at least one task, offering no clear accuracy advantage.
+- **Robust choice:** for Wound, `deit-small / minilm` remains the recommended ultra-edge student thanks to consistently strong type and severity performance with moderate parameter count.
 
 ---
 

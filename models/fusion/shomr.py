@@ -79,7 +79,6 @@ class SHoMRFusion(nn.Module):
         
         Returns:
             fused: Fused representation (B, D)
-            routing_info: Dict with routing statistics (for logging/analysis)
         """
         B, D = img_emb.shape
         
@@ -190,15 +189,17 @@ class SHoMRFusion(nn.Module):
             idx_low = low_conf_mask.nonzero(as_tuple=True)[0]
             fused[idx_low] = (img_emb[idx_low] + txt_emb[idx_low]) / 2
         
-        routing_info = {
-            'routing_counts': routing_counts,
-            'mean_confidence': max_conf.mean().item(),
-            'soft_ratio': mask_soft.float().mean().item(),
-            'conf_weights': conf_weights.detach(),
-            'route_probs': route_probs.detach(),
-        }
+        # Note: routing_info could be logged for analysis in future
+        # For now, return only the fused output to match other fusion modules
+        # routing_info = {
+        #     'routing_counts': routing_counts,
+        #     'mean_confidence': max_conf.mean().item(),
+        #     'soft_ratio': mask_soft.float().mean().item(),
+        #     'conf_weights': conf_weights.detach(),
+        #     'route_probs': route_probs.detach(),
+        # }
         
-        return fused, routing_info
+        return fused
     
     def get_routing_stats(self):
         """Returns statistics about routing decisions (for analysis)."""

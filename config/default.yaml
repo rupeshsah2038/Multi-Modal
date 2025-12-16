@@ -16,19 +16,15 @@ teacher:
   dropout: 0.1     # Dropout rate for regularization
 
 student:
-  vision: "deit-base"
+  vision: "vit-base"
   text: "distilbert"
   fusion_layers: 1
   fusion_dim: 512
   fusion_heads: 8  # Number of attention heads
   dropout: 0.1     # Dropout rate
-  # Recommended student backbones for ultra-edge deployment (alternatives):
-  recommended:
-    vision_alternatives: ["tiny-vit", "mobile-vit", "mobilenet-v2", "deit-tiny"]
-    text_alternatives: ["mobile-bert", "bert-tiny", "bert-mini"]
 
 training:
-  teacher_epochs: 5
+  teacher_epochs: 3
   student_epochs: 10
   teacher_lr: 1e-5
   student_lr: 3e-4
@@ -37,10 +33,10 @@ training:
   T: 2.0
 
 logging:
-  log_dir: "logs"
+  log_dir: "logs/default-cross_attention-combined"
 
 fusion:
-  type: "energy_aware_adaptive"
+  type: "cross_attention"
   # Optional module-specific parameters (with smart defaults):
   # hidden_mult: 2        # For ConcatMLPFusion (default: 2)
   # dropout: 0.1          # For CrossAttentionFusion, EnergyAware, SHoMR (default: 0.1)
@@ -48,8 +44,8 @@ fusion:
   # p_txt: 0.3           # For ModalityDropoutFusion (default: 0.3)
 
 loss:
-  type: "vanilla"
-#  type: "combined"
+#  type: "vanilla"
+  type: "combined"
 #  type: "crd"
 #  type: "rkd"
 #  type: "mmd"

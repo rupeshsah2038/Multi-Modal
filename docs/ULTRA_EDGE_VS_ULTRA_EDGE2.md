@@ -23,40 +23,19 @@ This document is meant to be read together with:
 
 Values are from `logs/ultra-edge/*/results.json` (256) and `logs/ultra-edge2/*/results.json` (384).
 
-| Student (vision / text)   | Params (M, 256) | Params (M, 384) | Config ID (256)                | Modality Acc (256) | Location Acc (256) | Infer (ms, 256) | Config ID (384)                     | Modality Acc (384) | Location Acc (384) | Infer (ms, 384) |
-|---------------------------|----------------:|----------------:|--------------------------------|-------------------:|-------------------:|----------------:|--------------------------------------|-------------------:|-------------------:|----------------:|
-| deit-small / distilbert   | 89.3 | 92.3 | medpix-deit_small-distilbert  | 0.975 | 0.895 | 10.27 | medpix-deit_small-distilbert-384  | 0.975 | 0.850 | 5.27 |
-| deit-small / minilm       | 45.5 | 48.1 | medpix-deit_small-minilm      | 0.970 | 0.850 | 6.75  | medpix-deit_small-minilm-384      | 0.945 | 0.870 | 4.41 |
-| deit-tiny / distilbert    | 73.0 | 75.8 | medpix-deit_tiny-distilbert   | 0.910 | 0.825 | 9.80  | medpix-deit_tiny-distilbert-384   | 0.955 | 0.790 | 5.00 |
-| deit-tiny / minilm        | 29.2 | 31.6 | medpix-deit_tiny-minilm       | 0.965 | 0.875 | 7.42  | medpix-deit_tiny-minilm-384       | 0.960 | 0.790 | 4.33 |
-
-(Here we focus on **accuracy** and **latency**; F1/AUC trends are consistent with these numbers.)
+| Student (vision / text)   | Params (M, 256) | Params (M, 384) | Config ID (256)               | Modality Acc (256) | Location Acc (256) | Config ID (384)                    | Modality Acc (384) | Location Acc (384) |
+|---------------------------|----------------:|----------------:|------------------------------|-------------------:|-------------------:|------------------------------------|-------------------:|-------------------:|
+| deit-small / distilbert   | 89.3            | 90.4            | medpix-deit_small-distilbert | 0.975             | 0.915             | medpix-deit_small-distilbert-384  | 0.970             | 0.920             |
+| deit-small / minilm       | 45.5            | 46.6            | medpix-deit_small-minilm     | 0.960             | 0.845             | medpix-deit_small-minilm-384      | 0.960             | 0.860             |
+| deit-tiny / distilbert    | 73.0            | 74.1            | medpix-deit_tiny-distilbert  | 0.960             | 0.815             | medpix-deit_tiny-distilbert-384   | 0.925             | 0.885             |
+| deit-tiny / minilm        | 29.2            | 30.3            | medpix-deit_tiny-minilm      | 0.980             | 0.895             | medpix-deit_tiny-minilm-384       | 0.970             | 0.850             |
 
 ### MedPix: What changed from 256 → 384?
 
-**1. Latency improvements across the board**
-
-- All students roughly **halve their inference time** when moving from 256 to 384:
-  - `deit-small / distilbert`: ~10.3 → ~5.3 ms.
-  - `deit-small / minilm`: ~6.8 → ~4.4 ms.
-  - `deit-tiny / distilbert`: ~9.8 → ~5.0 ms.
-  - `deit-tiny / minilm`: ~7.4 → ~4.3 ms.
-- Ultra-edge2 is therefore strictly better in terms of **latency** for every student.
-
-**2. Modality vs location trade-offs**
-
-- `deit-small / distilbert` keeps the **same modality accuracy** (0.975) but **loses some location accuracy** (0.895 → 0.850).
-- `deit-small / minilm` trades a **small drop in modality** (0.970 → 0.945) for a **gain in location** (0.850 → 0.870).
-- `deit-tiny / distilbert` gains modality (0.910 → 0.955) but loses location (0.825 → 0.790).
-- `deit-tiny / minilm` is nearly unchanged in modality (0.965 → 0.960) but loses location (0.875 → 0.790).
-
-**3. MedPix recommendations: 256 vs 384**
-
-- If you previously used **`deit-small / distilbert` (256)** purely for accuracy:
-  - At 384, it is still best on **modality**, but the **location drop** is noticeable.
-- If you previously used **`deit-tiny / minilm` (256)** as the best ultra-edge trade-off:
-  - At 384, **`deit-small / minilm`** becomes a **better all-round choice**: slightly slower than tiny/minilm but **better location** and competitive modality.
-- Overall, for MedPix, ultra-edge2 suggests **moving from tiny/minilm (256)** to **small/minilm (384)** when memory allows.
+- **Modality accuracy** stays high for all students across both setups; the changes from 256 → 384 are small (typically within a few points of accuracy).
+- **Location accuracy** shifts more noticeably: some students (e.g. `deit-small / minilm` and `deit-tiny / distilbert`) gain location accuracy at 384, while others (e.g. `deit-tiny / minilm`) lose a bit.
+- **Parameter overhead** from 256 → 384 is modest (~3–4M extra parameters per student) but can still matter on very constrained devices.
+- For MedPix, a consistent pattern is that `deit-small` students provide the strongest overall accuracy, while `deit-tiny` students are only competitive when model size must be kept extremely small.
 
 ---
 
@@ -68,64 +47,43 @@ Values are from `logs/ultra-edge/*/results.json` (256) and `logs/ultra-edge2/*/r
 
 ### Test Metrics by Student
 
-| Student (vision / text)   | Params (M, 256) | Params (M, 384) | Config ID (256)               | Type Acc (256) | Severity Acc (256) | Infer (ms, 256) | Config ID (384)                     | Type Acc (384) | Severity Acc (384) | Infer (ms, 384) |
-|---------------------------|----------------:|----------------:|-------------------------------|---------------:|-------------------:|----------------:|--------------------------------------|---------------:|-------------------:|----------------:|
-| deit-small / distilbert   | 89.3 | 92.3 | wound-deit_small-distilbert  | 0.855 | 0.928 | 10.04 | wound-deit_small-distilbert-384  | 0.855 | 0.830 | 5.33 |
-| deit-small / minilm       | 45.5 | 48.1 | wound-deit_small-minilm      | 0.860 | 0.940 | 7.84  | wound-deit_small-minilm-384      | 0.830 | 0.949 | 4.22 |
-| deit-tiny / distilbert    | 73.0 | 75.8 | wound-deit_tiny-distilbert   | 0.774 | 0.872 | 9.14  | wound-deit_tiny-distilbert-384   | 0.787 | 0.919 | 4.87 |
-| deit-tiny / minilm        | 29.2 | 31.6 | wound-deit_tiny-minilm       | 0.762 | 0.919 | 6.62  | wound-deit_tiny-minilm-384       | 0.783 | 0.928 | 3.87 |
-
-(Again focusing on **accuracy** and **latency**; F1/AUC trends follow these patterns.)
+| Student (vision / text)   | Params (M, 256) | Params (M, 384) | Config ID (256)              | Type Acc (256) | Severity Acc (256) | Config ID (384)                    | Type Acc (384) | Severity Acc (384) |
+|---------------------------|----------------:|----------------:|------------------------------|---------------:|-------------------:|------------------------------------|---------------:|-------------------:|
+| deit-small / distilbert   | 89.3            | 90.4            | wound-deit_small-distilbert | 0.762          | 0.919             | wound-deit_small-distilbert-384   | 0.821          | 0.940             |
+| deit-small / minilm       | 45.5            | 46.6            | wound-deit_small-minilm     | 0.830          | 0.940             | wound-deit_small-minilm-384       | 0.787          | 0.936             |
+| deit-tiny / distilbert    | 73.0            | 74.1            | wound-deit_tiny-distilbert  | 0.723          | 0.919             | wound-deit_tiny-distilbert-384    | 0.749          | 0.949             |
+| deit-tiny / minilm        | 29.2            | 30.3            | wound-deit_tiny-minilm      | 0.689          | 0.949             | wound-deit_tiny-minilm-384        | 0.723          | 0.936             |
 
 ### Wound: What changed from 256 → 384?
 
-**1. Latency improvements**
-
-- As on MedPix, all students are **significantly faster** at 384:
-  - `deit-small / distilbert`: ~10.0 → ~5.3 ms.
-  - `deit-small / minilm`: ~7.8 → ~4.2 ms.
-  - `deit-tiny / distilbert`: ~9.1 → ~4.9 ms.
-  - `deit-tiny / minilm`: ~6.6 → ~3.9 ms.
-
-**2. Accuracy behaviour**
-
-- `deit-small / distilbert` keeps **type** accuracy roughly unchanged (0.855), but **severity** drops (0.928 → 0.830).
-- `deit-small / minilm` has a small **drop in type** (0.860 → 0.830) but a **slight gain in severity** (0.940 → 0.949).
-- Both tiny variants **improve severity** while maintaining comparable type accuracy:
-  - `deit-tiny / distilbert`: severity 0.872 → 0.919.
-  - `deit-tiny / minilm`: severity 0.919 → 0.928.
-
-**3. Wound recommendations: 256 vs 384**
-
-- At 256, `deit-small / minilm` was already the **best overall** Wound configuration.
-- At 384, `deit-small / minilm` **remains best overall**, with similar or slightly better severity and significantly lower latency.
-- `deit-tiny / minilm` improves modestly and becomes an attractive **extreme-latency** model, but still lags in type compared to `deit-small / minilm`.
+- Type and severity accuracy shift in opposite directions for some students when moving to 384, so the **best configuration depends on which task is more critical**.
+- `deit-small / distilbert` improves on both type and severity accuracy at 384, but also remains the largest model.
+- `deit-small / minilm` loses some type accuracy at 384 while keeping severity strong, so it is still attractive when parameter count matters.
+- Tiny students gain some type accuracy at 384 while maintaining high severity, making them viable only when very small models are required, accepting weaker type performance.
 
 ---
 
 ## Global Takeaways
 
-### 1. Latency: ultra-edge2 clearly dominates
+### 1. Accuracy: small but meaningful shifts
 
-- For **every** student on **both** datasets, ultra-edge2 (384) provides **substantially lower inference time** than ultra-edge (256) while keeping the same architecture and training recipe.
-- If you were constrained by latency under the 256-dim setup, **switching to the 384-dim ultra-edge2 configs is a free win**.
+- Accuracy differences between 256 and 384 are generally modest, but **which student is best can change slightly** when you increase fusion_dim.
+- Distilbert students tend to benefit more in Wound severity at 384, while `minilm` students sometimes trade small drops in one task for gains in the other.
 
-### 2. Accuracy: small shifts, no collapse
+### 2. Parameters vs performance
 
-- There are **small shifts** in accuracy per task and per student when going from 256 → 384, but no catastrophic failures.
-- The main patterns:
-  - Some distilbert students lose a bit of performance on the second task (location/severity).
-  - `deit-small / minilm` stays robust and often **improves** on the more challenging task (MedPix location, Wound severity).
+- The parameter increase from 256 → 384 is small in absolute terms, but relevant on very tight memory budgets.
+- In many cases, **`deit-small / minilm` remains the most attractive compromise**: strong performance on both datasets with moderate parameter count.
 
 ### 3. Recommended students after comparison
 
 | Scenario / Constraint               | Recommended Student (384)      | Rationale |
 |------------------------------------|--------------------------------|-----------|
-| Single student for **both** datasets | `deit-small / minilm`         | Strong on both MedPix and Wound, very fast. |
-| MedPix, max modality accuracy      | `deit-small / distilbert`      | Highest modality accuracy; accept location drop. |
-| MedPix, balanced accuracy+latency  | `deit-small / minilm`          | Better location vs tiny, near-best latency. |
-| Wound, balanced accuracy+latency   | `deit-small / minilm`          | Best severity and strong type, low latency. |
-| Extreme latency, both datasets     | `deit-tiny / minilm`           | Fastest overall; accuracy trade-offs acceptable in latency-bound settings. |
+| Single student for **both** datasets | `deit-small / minilm`         | Strong on both MedPix and Wound with moderate parameters. |
+| MedPix, max modality accuracy      | `deit-small / distilbert`      | Slight edge in modality metrics at the cost of a larger model. |
+| MedPix, balanced performance       | `deit-small / minilm`          | Good modality and location scores with fewer parameters. |
+| Wound, balanced performance        | `deit-small / minilm`          | Strong severity and acceptable type accuracy with compact size. |
+| Strict model-size constraint       | `deit-tiny / minilm`           | Smallest student; accuracy is weaker but acceptable when memory is tight. |
 
 ---
 

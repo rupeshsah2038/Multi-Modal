@@ -1,7 +1,7 @@
 data:
   type: "wound"
   root: "datasets/Wound-1-0"
-  batch_size: 8
+  batch_size: 16
   num_workers: 4
   task1_label: "type"
   task2_label: "severity"
@@ -44,4 +44,4 @@ fusion:
 loss:
   type: "combined"
 
-device: "cuda:3"
+device: "cuda:1"
