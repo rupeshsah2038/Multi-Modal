@@ -111,8 +111,8 @@ def objective(trial, base_config, args):
     cfg['training']['T'] = trial.suggest_float('T', 2.0, 6.0)
     
     # Architecture dimensions
-    cfg['teacher']['fusion_dim'] = trial.suggest_categorical('teacher_fusion_dim', [256, 384, 512])
-    cfg['student']['fusion_dim'] = trial.suggest_categorical('student_fusion_dim', [256, 384, 512])
+    cfg['teacher']['fusion_dim'] = trial.suggest_categorical('teacher_fusion_dim', [256, 384])
+    cfg['student']['fusion_dim'] = trial.suggest_categorical('student_fusion_dim', [256, 384])
     cfg['teacher']['fusion_layers'] = trial.suggest_int('teacher_fusion_layers', 1, 3)
     cfg['student']['fusion_layers'] = trial.suggest_int('student_fusion_layers', 1, 2)
     cfg['teacher']['fusion_heads'] = trial.suggest_categorical('teacher_fusion_heads', [4, 8])
