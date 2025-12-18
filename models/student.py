@@ -18,6 +18,23 @@ def get_hidden_dim(model):
     else:
         raise AttributeError(f"Cannot determine hidden dimension for model config: {type(config)}")
 
+
+def extract_vision_features(vision_output):
+    """Extract vision features from different model output formats.
+    
+    - ViT/DeiT: use [CLS] token from last_hidden_state[:, 0]
+    - MobileViT: use pooler_output (global average pooled features)
+    """
+    # MobileViT has pooler_output
+    if hasattr(vision_output, 'pooler_output') and vision_output.pooler_output is not None:
+        return vision_output.pooler_output
+    # ViT/DeiT use [CLS] token
+    elif hasattr(vision_output, 'last_hidden_state'):
+        return vision_output.last_hidden_state[:, 0]
+    # Fallback for tuple outputs
+    else:
+        return vision_output[0][:, 0]
+
 class Student(nn.Module):
     def __init__(self, vision, text, fusion_dim, fusion_type='simple', fusion_heads=8, 
                  fusion_layers=1, dropout=0.1, num_modality_classes=2, num_location_classes=5,
@@ -72,7 +89,7 @@ class Student(nn.Module):
     def forward(self, pixel_values, input_ids, attention_mask):
         v_out = self.vision(pixel_values)
         # keep backbone raw vision features
-        v_raw = v_out.last_hidden_state[:, 0] if hasattr(v_out, 'last_hidden_state') else v_out[0][:, 0]
+        v_raw = extract_vision_features(v_out)
         t_out = self.text(input_ids=input_ids, attention_mask=attention_mask)
         # keep backbone raw text features
         t_raw = t_out.last_hidden_state[:, 0]
