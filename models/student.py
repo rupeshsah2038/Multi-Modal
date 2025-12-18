@@ -5,6 +5,19 @@ from .fusion import (SimpleFusion, ConcatMLPFusion, CrossAttentionFusion,
                      FiLMFusion, EnergyAwareAdaptiveFusion, SHoMRFusion)
 from .heads import ClassificationHead
 
+
+def get_hidden_dim(model):
+    """Get hidden dimension from different model types."""
+    config = model.config
+    # ViT, DeiT, BERT, DistilBERT, etc.
+    if hasattr(config, 'hidden_size'):
+        return config.hidden_size
+    # MobileViT models use neck_hidden_sizes
+    elif hasattr(config, 'neck_hidden_sizes'):
+        return config.neck_hidden_sizes[-1]
+    else:
+        raise AttributeError(f"Cannot determine hidden dimension for model config: {type(config)}")
+
 class Student(nn.Module):
     def __init__(self, vision, text, fusion_dim, fusion_type='simple', fusion_heads=8, 
                  fusion_layers=1, dropout=0.1, num_modality_classes=2, num_location_classes=5,
@@ -12,8 +25,8 @@ class Student(nn.Module):
         super().__init__()
         self.vision = get_vision_backbone(vision)
         self.text = get_text_backbone(text)
-        vis_dim = self.vision.config.hidden_size
-        txt_dim = self.text.config.hidden_size
+        vis_dim = get_hidden_dim(self.vision)
+        txt_dim = get_hidden_dim(self.text)
         self.proj_vis = nn.Linear(vis_dim, fusion_dim)
         self.proj_txt = nn.Linear(txt_dim, fusion_dim)
         # Pass fusion_params for module-specific configuration
