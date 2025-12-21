@@ -39,6 +39,7 @@ class MetricsLogger:
             json.dump(serial, f, indent=2)
         print(f"Metrics JSON saved to {path}")
 
+
     def save_confusion(self, y_true, y_pred, task_name, split):
         from sklearn.metrics import confusion_matrix
         import numpy as np
@@ -46,3 +47,9 @@ class MetricsLogger:
         path = os.path.join(self.run_dir, f"cm_{task_name}_{split}.npy")
         np.save(path, cm)
         print(f"Confusion matrix saved: {path}")
+
+    def save_labels(self, labels, task_name):
+        import numpy as np
+        path = os.path.join(self.run_dir, f"labels_{task_name}.npy")
+        np.save(path, np.array(labels))
+        print(f"Class labels saved: {path}")

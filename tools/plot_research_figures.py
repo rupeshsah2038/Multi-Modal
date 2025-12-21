@@ -1,3 +1,155 @@
+import numpy as np
+import seaborn as sns
+
+def plot_confusion_matrix(cm_path, dataset, task, wound_csv=None):
+    cm = np.load(cm_path)
+    if dataset == 'Medpix':
+        if task == 'modality':
+            labels = ['CT', 'MR']
+        elif task == 'location':
+            labels = ['Abdomen', 'Head', 'Reproductive and Urinary System', 'Thorax', 'Spine and Muscles']
+        else:
+            labels = None
+    elif dataset == 'Wound' and wound_csv is not None:
+        import pandas as pd
+        df = pd.read_csv(wound_csv)
+        if task == 'modality':
+            labels = sorted(df['type'].unique())
+        elif task == 'location':
+            labels = sorted(df['severity'].unique())
+        else:
+            labels = None
+    else:
+        labels = None
+    plt.figure(figsize=(6,5))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=labels, yticklabels=labels)
+    plt.xlabel('Predicted label')
+    plt.ylabel('True label')
+    plt.title(f'{dataset} {task.capitalize()} Confusion Matrix')
+    # Save in the same folder as the confusion matrix file
+    output_dir = os.path.dirname(cm_path)
+    fname = f'{dataset.lower()}_{task}_cm.png'
+    fname = os.path.join(output_dir, fname)
+    plt.savefig(fname)
+    plt.close()
+# Script to plot metrics from all metrics.csv files in logs subfolders
+import os
+import glob
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def find_metrics_csv(logs_dir):
+    # Exclude fusion-explore, loss-explore, optuna*
+    exclude = ['fusion-explore', 'loss-explore']
+    metrics_files = []
+    for root, dirs, files in os.walk(logs_dir):
+        # Skip excluded folders
+        parts = os.path.relpath(root, logs_dir).split(os.sep)
+        if any(part.startswith('optuna') or part in exclude for part in parts):
+            continue
+        for file in files:
+            if file == 'metrics.csv':
+                metrics_files.append(os.path.join(root, file))
+    return metrics_files
+
+def plot_metrics(metrics_path):
+
+    def plot_confusion_matrix(cm_path, dataset, task, output_dir, wound_csv=None):
+        cm = np.load(cm_path)
+        if dataset == 'Medpix':
+            if task == 'modality':
+                labels = ['CT', 'MR']
+            elif task == 'location':
+                labels = ['Abdomen', 'Head', 'Reproductive and Urinary System', 'Thorax', 'Spine and Muscles']
+            else:
+                labels = None
+        elif dataset == 'Wound' and wound_csv is not None:
+            import pandas as pd
+            df = pd.read_csv(wound_csv)
+            if task == 'modality':
+                labels = sorted(df['type'].unique())
+            elif task == 'location':
+                labels = sorted(df['severity'].unique())
+            else:
+                labels = None
+        else:
+            labels = None
+        plt.figure(figsize=(6,5))
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=labels, yticklabels=labels)
+        plt.xlabel('Predicted label')
+        plt.ylabel('True label')
+        plt.title(f'{dataset} {task.capitalize()} Confusion Matrix')
+        # Save in the same folder as the confusion matrix file
+        output_dir = os.path.dirname(cm_path)
+        fname = f'{dataset.lower()}_{task}_cm.png'
+        fname = os.path.join(output_dir, fname)
+        plt.savefig(fname)
+        plt.close()
+    df = pd.read_csv(metrics_path)
+    base = os.path.basename(os.path.dirname(metrics_path))
+    # Try to infer dataset name from folder structure
+    dataset = None
+    for d in ['medpix', 'wound']:
+        if d in base.lower():
+            dataset = d.capitalize()
+            break
+    if not dataset:
+        dataset = 'Unknown'
+    # Only plot train_loss and dev_modality_acc
+    plot_items = [
+        ('train_loss', 'Training Loss'),
+        ('dev_modality_acc', 'Modality Accuracy'),
+    ]
+    # Save plots in the same folder as metrics.csv
+    output_dir = os.path.dirname(metrics_path)
+    for col, label in plot_items:
+        if col in df.columns:
+            plt.figure()
+            plt.plot(df['epoch'], df[col], marker='o')
+            plt.title(f"{dataset} | {base}: {label}")
+            plt.xlabel('Epoch')
+            plt.ylabel(label)
+            plt.grid(True)
+            fname = f"{base}_{col}.png"
+            fname = os.path.join(output_dir, fname)
+            plt.savefig(fname)
+            plt.close()
+
+def main():
+    logs_dir = os.path.join(os.path.dirname(__file__), '../logs')
+    metrics_files = find_metrics_csv(logs_dir)
+    print(f"Found {len(metrics_files)} metrics.csv files.")
+    for metrics_path in metrics_files:
+        print(f"Plotting {metrics_path}")
+        plot_metrics(metrics_path)
+
+    # Plot confusion matrices for each experiment
+    for root, dirs, files in os.walk(logs_dir):
+        base = os.path.basename(root)
+        # Infer dataset
+        dataset = None
+        for d in ['medpix', 'wound']:
+            if d in base.lower():
+                dataset = d.capitalize()
+                break
+        wound_csv = None
+        if dataset == 'Wound':
+            # Try to find the corresponding CSV for wound
+            for f in files:
+                if f.startswith('metadata') and f.endswith('.csv'):
+                    wound_csv = os.path.join(root, f)
+                    break
+            # Or fallback to a default location if needed
+            if wound_csv is None:
+                wound_csv = os.path.join(os.path.dirname(__file__), '../datasets/Wound-1-0/metadata_train.csv')
+        for f in files:
+            if f.startswith('cm_modality') and f.endswith('.npy'):
+                plot_confusion_matrix(os.path.join(root, f), dataset, 'modality', wound_csv)
+            if f.startswith('cm_location') and f.endswith('.npy'):
+                plot_confusion_matrix(os.path.join(root, f), dataset, 'location', wound_csv)
+
+if __name__ == "__main__":
+    main()
 #!/usr/bin/env python3
 """
 Generate publication-quality plots for research article from experimental results.
@@ -169,7 +321,8 @@ class ExperimentLoader:
         """Load ultra-edge experiments (256-dim or 384-dim)."""
         ultra_dir = self.logs_dir / variant
         records = []
-        
+        if not ultra_dir.exists():
+            return pd.DataFrame(records)
         for exp_dir in ultra_dir.iterdir():
             if exp_dir.is_dir():
                 results = self.load_results(exp_dir)
@@ -179,15 +332,11 @@ class ExperimentLoader:
                     dataset = parts[0]
                     vision = parts[1]
                     text = parts[2]
-                    
                     # Extract fusion_dim from config
                     fusion_dim = results['config']['student'].get('fusion_dim', 256)
-                    
                     test_metrics = results['metrics']['test']
-                    
                     # Get model parameters if available
                     student_params = results.get('models', {}).get('student', {}).get('params_millions', np.nan)
-                    
                     record = {
                         'experiment': exp_name,
                         'dataset': dataset,
@@ -197,7 +346,6 @@ class ExperimentLoader:
                         'fusion_dim': fusion_dim,
                         'params_millions': student_params,
                     }
-                    
                     if dataset == 'medpix':
                         record.update({
                             'modality_acc': test_metrics.get('test_modality_acc', test_metrics.get('modality_accuracy', 0)),
@@ -216,11 +364,8 @@ class ExperimentLoader:
                         })
                         record['avg_acc'] = (record['type_acc'] + record['severity_acc']) / 2
                         record['avg_f1'] = (record['type_f1'] + record['severity_f1']) / 2
-                    
                     record['inference_ms'] = test_metrics.get('test_infer_ms', test_metrics.get('inference_time_ms', np.nan))
-                    
                     records.append(record)
-        
         return pd.DataFrame(records)
     
     def load_training_curves(self, experiment_path: Path) -> Dict:
@@ -555,7 +700,7 @@ class ResearchPlotter:
         
         # Calculate standard deviation as measure of consistency
         fusion_std = df_fusion.groupby('dataset')['avg_f1'].std()
-        loss_std = df_loss.groupby('dataset')['avg_f1'].std()
+        loss_std = df_loss.groupby('dataset')['avg_f1'].std();
         
         datasets = ['MedPix', 'Wound']
         fusion_stds = [fusion_std.get('medpix', 0), fusion_std.get('wound', 0)]
