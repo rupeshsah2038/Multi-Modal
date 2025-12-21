@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import DataLoader
-from data.dataset import get_dataset, get_num_classes
+from data.dataset import get_dataset, get_num_classes, MedPixDataset, WoundDataset
 from models.teacher import Teacher
 from models.student import Student
 import importlib
@@ -174,6 +174,25 @@ def main(cfg):
     # Get task labels for metrics (defaults for backward compatibility)
     task1_label = cfg['data'].get('task1_label', 'modality')
     task2_label = cfg['data'].get('task2_label', 'location')
+
+    # Instantiate logger before saving labels
+    logger = MetricsLogger(cfg['logging']['log_dir'])
+
+    # Save class labels for confusion matrices
+    # For MedPix: modality_map and location_map are available on the dataset instance
+    # For Wound: use type_labels and severity_labels from the train dataset
+    if dataset_type == 'medpix':
+        modality_labels = [k for k, v in sorted(train_dataset.modality_map.items(), key=lambda x: x[1])]
+        location_labels = [k for k, v in sorted(train_dataset.location_map.items(), key=lambda x: x[1])]
+    elif dataset_type == 'wound':
+        modality_labels = [v for k, v in sorted(train_dataset.type_labels.items())]
+        location_labels = [v for k, v in sorted(train_dataset.severity_labels.items())]
+    else:
+        modality_labels = []
+        location_labels = []
+
+    logger.save_labels(modality_labels, task_name=task1_label)
+    logger.save_labels(location_labels, task_name=task2_label)
     
     # defensive parsing of common numeric config values
     try:
@@ -232,8 +251,6 @@ def main(cfg):
     student_params = count_parameters(student)
     print(f"\nTeacher parameters: {teacher_params['params_millions']:.2f}M ({teacher_params['total_params']:,})")
     print(f"Student parameters: {student_params['params_millions']:.2f}M ({student_params['total_params']:,})")
-    
-    logger = MetricsLogger(cfg['logging']['log_dir'])
     
     # Create a distillation/loss object from config
     def _make_loss_from_cfg(cfg):
