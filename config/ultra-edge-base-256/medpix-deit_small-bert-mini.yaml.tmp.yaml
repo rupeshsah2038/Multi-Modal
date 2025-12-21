@@ -15,8 +15,8 @@ teacher:
   dropout: 0.1
 
 student:
-  vision: "mobilevit-small"
-  text: "distilbert"
+  vision: "deit-small"
+  text: "bert-mini"
   fusion_layers: 1
   fusion_dim: 256
   fusion_heads: 8
@@ -32,7 +32,7 @@ training:
   T: 2.0
 
 logging:
-  log_dir: "logs/ultra-edge-base-256/medpix-mobilevit_small-distilbert"
+  log_dir: "logs/ultra-edge-base-256/medpix-deit_small-bert-mini"
 
 fusion:
   type: "cross_attention"
