@@ -32,7 +32,7 @@ training:
   T: 2.0
 
 logging:
-  log_dir: "logs/ultra-edge-base/medpix-mobilevit_xx_small-minilm"
+  log_dir: "logs/ultra-edge-base-256/medpix-mobilevit_xx_small-minilm"
 
 fusion:
   type: "cross_attention"
