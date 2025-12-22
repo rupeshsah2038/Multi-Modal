@@ -3,8 +3,12 @@ data:
   root: datasets/Wound-1-0
   batch_size: 16
   num_workers: 4
-  task1_label: modality
-  task2_label: location
+  task1_label: type
+  task2_label: severity
+  type_column: type
+  severity_column: severity
+  description_column: description
+  filepath_column: img_path
 teacher:
   vision: vit-base
   text: bio-clinical-bert
