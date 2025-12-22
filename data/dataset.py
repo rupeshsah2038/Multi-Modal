@@ -211,6 +211,17 @@ class WoundDataset(Dataset):
         self.severity_col = severity_column
         self.desc_col = description_column
         self.filepath_col = filepath_column
+
+        # Defensive validation: ensure CSV provides the configured columns
+        required_cols = {self.type_col, self.severity_col, self.desc_col, self.filepath_col}
+        missing = required_cols - set(self.df.columns)
+        if missing:
+            raise KeyError(
+                "WoundDataset CSV is missing required columns: "
+                f"{sorted(list(missing))}.\n"
+                f"Expected columns (as configured): {sorted(list(required_cols))}.\n"
+                f"CSV path: {csv_file}"
+            )
         
         # Build label mappings dynamically from data
         self.type_map = {label: idx for idx, label in enumerate(sorted(self.df[self.type_col].unique()))}
