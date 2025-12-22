@@ -152,7 +152,8 @@ def main(cfg):
                 type_column=cfg['data'].get('type_column', 'type'),
                 severity_column=cfg['data'].get('severity_column', 'severity'),
                 description_column=cfg['data'].get('description_column', 'description'),
-                filepath_column=cfg['data'].get('filepath_column', 'file_path'),
+                # default to 'img_path' which is used by the Wound-1-0 dataset
+                filepath_column=cfg['data'].get('filepath_column', 'img_path'),
             )
         else:
             raise ValueError(f"Unknown dataset type: {dataset_type}")
