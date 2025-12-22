@@ -187,7 +187,7 @@ class WoundDataset(Dataset):
     """
     def __init__(self, csv_file, image_dir, tokenizer_teacher, tokenizer_student, 
                  max_length=256, type_column='type', severity_column='severity', 
-                 description_column='description', filepath_column='file_path'):
+                 description_column='description', filepath_column='img_path'):
         """
         Args:
             csv_file: Path to metadata.csv
