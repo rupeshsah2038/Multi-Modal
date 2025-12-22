@@ -46,4 +46,4 @@ fusion:
 loss:
   type: "vanilla"
 
-device: "cuda:0"
+device: "cpu"
