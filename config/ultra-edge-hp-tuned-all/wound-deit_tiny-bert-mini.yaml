@@ -1,10 +1,14 @@
 data:
-  type: medpix
-  root: datasets/MedPix-2-0
+  type: wound
+  root: datasets/Wound-1-0
   batch_size: 16
   num_workers: 4
-  task1_label: modality
-  task2_label: location
+  task1_label: type
+  task2_label: severity
+  type_column: type
+  severity_column: severity
+  description_column: description
+  filepath_column: img_path
 teacher:
   vision: vit-base
   text: bio-clinical-bert
@@ -14,7 +18,7 @@ teacher:
   dropout: 0.18490502670069944
 student:
   vision: deit-tiny
-  text: distilbert
+  text: bert-mini
   fusion_layers: 2
   fusion_dim: 384
   fusion_heads: 4
@@ -28,7 +32,7 @@ training:
   beta: 112.37763676785187
   T: 3.1921579031760037
 logging:
-  log_dir: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert
+  log_dir: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini
 fusion:
   type: cross_attention
 loss:
