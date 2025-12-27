@@ -5,8 +5,6 @@ import subprocess
 
 CONFIG_DIRS = [
     "config/ultra-edge-base-256",
-    "config/ultra-edge-base-384",
-    "config/ultra-edge-hp-tuned-all",
 ]
 
 DEFAULT_GPU = "cuda:0"

@@ -33,4 +33,4 @@ fusion:
   type: cross_attention
 loss:
   type: combined
-device: cuda:0
+device: cuda:1

@@ -32,7 +32,7 @@ training:
   beta: 112.37763676785187
   T: 3.1921579031760037
 logging:
-  log_dir: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini
+  log_dir: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini
 fusion:
   type: cross_attention
 loss:

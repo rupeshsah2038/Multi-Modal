@@ -5,9 +5,10 @@ import subprocess
 
 CONFIG_DIRS = [
     "config/ultra-edge-hp-tuned-all",
+    #"config/ultra-edge-base-384",
 ]
 
-DEFAULT_GPU = "cuda:2"
+DEFAULT_GPU = "cuda:0"
 
 if __name__ == "__main__":
     import argparse

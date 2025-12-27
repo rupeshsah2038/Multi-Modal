@@ -16,8 +16,10 @@ teacher:
   dropout: 0.1     # Dropout rate for regularization
 
 student:
-  vision: "deit-small"
-  text: "distilbert"
+  #vision: "deit-small"
+  vision: "mobilevit-xx-small"
+  #text: "distilbert"
+  text: "bert-tiny"
   fusion_layers: 1
   fusion_dim: 256
   fusion_heads: 8  # Number of attention heads
@@ -33,7 +35,7 @@ training:
   T: 2.0
 
 logging:
-  log_dir: "logs/default-ultra-cross_attention-combined"
+  log_dir: "logs/default-optuna"
 
 fusion:
   type: "cross_attention"
