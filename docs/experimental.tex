@@ -1,0 +1,50 @@
+% Experimental setup section for manuscript
+\section{Experimental Setup}
+
+This section summarizes the datasets, preprocessing, model configuration, training procedure, and evaluation protocol used in our experiments. The text is derived from the repository's configuration and training code to reflect the exact experimental choices and defaults.
+
+\subsection{Datasets and preprocessing}
+We support two datasets through a unified interface: MedPix-2-0 (radiology images with textual findings) and Wound-1-0 (wound images and metadata). Dataset selection is controlled by `data.type` in the experiment configuration.
+
+Images are loaded and preprocessed using a Vision Transformer image processor with the following default operations: resize to $224\times224$, channel normalization and conversion to the model input tensor. Text descriptions are tokenized separately for the teacher and the student using tokenizers loaded to match the configured text backbones (see Backbones below). Tokenization uses truncation and `max_length` padding (default 256).
+
+For MedPix the dataset expects split files `splitted_dataset/data_{split}.jsonl` and `splitted_dataset/descriptions_{split}.jsonl` and an `images/` directory. For Wound-1-0 the dataset expects `metadata_{split}.csv` and an `images/` directory; the CSV column names for file path, type and severity are configurable in the YAML.
+
+All dataset code includes defensive validation (file existence, tokenizer vocabulary checks, and attention-mask shapes) to surface configuration mismatches early.
+
+\subsection{Model backbones and fusion}
+Vision and text backbones are configured independently for teacher and student. The repository maps friendly backbone names to Hugging Face pretrained identifiers (e.g., `vit-large` $\to$ `google/vit-large-patch16-224`, `bio-clinical-bert` $\to$ `emilyalsentzer/Bio_ClinicalBERT`). Tokenizers are loaded from the corresponding pretrained names to ensure token id/embedding consistency when swapping backbones.
+
+Multimodal fusion is configurable via `fusion.type` (the default configuration uses `cross_attention` fusion). Fusion hyperparameters such as `fusion_layers`, `fusion_dim`, `fusion_heads` and `dropout` are read from the `teacher` and `student` sections of the config and passed to model constructors.
+
+\subsection{Training schedule and optimization}
+Training is a two-stage process implemented in `trainer/engine.py`:
+
+\begin{enumerate}
+  \item Train the teacher model with a task objective (cross-entropy on modality and location). The teacher is trained for `training.teacher_epochs` epochs (default 3) with `AdamW` optimizer and `training.teacher_lr` (default $1\times10^{-5}$).
+  \item Distill the teacher into the student. The teacher is kept in evaluation mode and the student is trained with a distillation loss for `training.student_epochs` epochs (default 10) using `AdamW` and `training.student_lr` (default $3\times10^{-4}$).
+\end{enumerate}
+
+Distillation losses are configurable through `loss.type` and the code supports `vanilla`, `combined`, `crd`, `rkd`, and `mmd`. Loss constructors are created via a mapping in the training engine and accept training-specific hyperparameters (e.g., $\alpha$, $\beta$, $\gamma$, $T$) read from the YAML.
+
+Data loading uses PyTorch `DataLoader` with `data.batch_size` (default 16) and `data.num_workers` (default 4). Device selection prefers a user-specified `device` in the config; otherwise the code selects `cuda:4` when CUDA is available or `cpu` as fallback.
+
+\subsection{Implementation details}
+\begin{itemize}
+  \item All distillation losses that compare teacher and student features use lazy linear projections to align feature dimensions at runtime, enabling backbone swaps without manual code changes.
+  \item Training uses `AdamW` for both teacher and student; cross-entropy is the task loss for teacher training.
+  \item The code performs defensive parsing of numeric config values (e.g., epochs, learning rates, batch sizes) and raises descriptive errors on type mismatches.
+\end{itemize}
+
+\subsection{Evaluation and logging}
+Models are evaluated on `dev` after each student epoch using `utils/metrics.evaluate_detailed`, which computes per-task accuracy, macro F1, precision, recall, ROC-AUC (where applicable), inference time, and confusion matrices. The primary selection criterion for model checkpointing is the average of the two tasks' macro F1 scores on the dev set; the best student model is saved to `student_best.pth` in the configured `logging.log_dir`. A final `student_final.pth` containing the last epoch's weights is also saved.
+
+A `MetricsLogger` records per-epoch metrics and confusion matrices; a `ResultsLogger` serializes experiment metadata and training history to the same `logging.log_dir` so all artifacts and metrics are colocated.
+
+\subsection{Reproducibility notes}
+\begin{itemize}
+  \item Tokenizers are loaded from pretrained identifiers determined by the mapping in `models/backbones.py`. Ensure the config's `teacher.text` and `student.text` keys map to valid pretrained names to avoid token-id mismatches.
+  \item All hyperparameters (backbones, fusion, learning rates, loss weights, temperatures, batch size, and device) are configurable in the YAML files under `config/`. For quick experiments use `config/test-1epoch.yaml` or `config/test-wound-1epoch.yaml`.
+\end{itemize}
+
+% End of experimental setup

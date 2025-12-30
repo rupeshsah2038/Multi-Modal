@@ -1,0 +1,103 @@
+% Losses section ready for inclusion in the manuscript
+\section{Knowledge Distillation Losses}
+
+This section summarizes the loss functions used for distillation in our experiments. The notation follows standard conventions: $p_{\theta}(c|x)$ denotes model softmax probabilities, $f^{\mathrm{img}}$, $f^{\mathrm{txt}}$ denote modality features, and $T,\tau$ denote temperature hyperparameters.
+
+\subsection{Vanilla distillation}
+The vanilla distillation loss combines task supervision, softened-logit matching, and feature regression:
+
+$$
+\mathcal{L}_{\mathrm{vanilla}} = \mathcal{L}_{\mathrm{CE}} + \alpha\,\mathcal{L}_{\mathrm{KL}} + \beta\,\mathcal{L}_{\mathrm{feat}}.
+$$
+
+Cross-entropy (task) loss for a $C$-class prediction:
+
+$$
+\mathcal{L}_{\mathrm{CE}} = -\sum_{c=1}^C y_c \log p_{\theta_S}(c|x).
+$$
+
+Temperature-scaled KL distillation between teacher ($T$) and student ($S$) logits:
+
+$$
+\mathcal{L}_{\mathrm{KL}} = T^2\,D_{\mathrm{KL}}\big(p_{\theta_T}^{(T)}\,\|\,p_{\theta_S}^{(T)}\big) = T^2\sum_{c} p_{\theta_T}^{(T)}(c)\log\frac{p_{\theta_T}^{(T)}(c)}{p_{\theta_S}^{(T)}(c)}.
+$$
+
+Feature matching (mean-squared error) over projected features (image/text):
+
+$$
+\mathcal{L}_{\mathrm{feat}} = \frac{1}{2D}\big(\|f_S^{\mathrm{img}}-\phi(f_T^{\mathrm{img}})\|^2 + \|f_S^{\mathrm{txt}}-\psi(f_T^{\mathrm{txt}})\|^2\big),
+$$
+
+where $\phi,\psi$ are learnable linear projections (implemented lazily in code to accommodate backbone swaps).
+
+\paragraph{Defaults and notes.} Typical hyperparameters used in experiments: $\alpha=1.0$, $\beta=100.0$, $T\approx2$.
+
+\subsection{Combined loss (MedKDCombinedLoss)}
+The combined loss augments the vanilla loss with a contrastive representation distillation (CRD) term:
+
+$$
+\mathcal{L}_{\mathrm{combined}} = \mathcal{L}_{\mathrm{CE}} + \alpha\,\mathcal{L}_{\mathrm{KL}} + \beta\,\mathcal{L}_{\mathrm{MSE}} + \gamma\,\mathcal{L}_{\mathrm{CRD}}.
+$$
+
+This mixes pointwise supervision (CE, KL, MSE) with a contrastive objective that encourages the student to capture inter-sample relationships present in the teacher.
+
+\subsection{Contrastive representation distillation (CRD)}
+We follow an InfoNCE-style formulation for each modality. For a batch of size $B$, with normalized student features $s_i$ and teacher features $t_j$, CRD uses:
+
+$$
+\mathcal{L}_{\mathrm{NCE}} = -\frac{1}{B}\sum_{i=1}^B \log\frac{\exp\!\,\big( s_i\cdot t_i /\tau\big)}{\sum_{j=1}^B\exp\!\big(s_i\cdot t_j /\tau\big)}.
+$$
+
+The implemented CRD averages the image and text modality terms. Features are $\ell_2$-normalized and teacher features are linearly projected to the student dimension when required.
+
+\paragraph{Note.} The code exposes both `temperature` (used) and `base\_temperature` (present but unused in the current implementation).
+
+\subsection{Relational knowledge distillation (RKD)}
+RKD transfers pairwise geometric relations from teacher to student using distance- and angle-wise losses. Let $d(\cdot,\cdot)$ be Euclidean distance and $\cos\theta$ denote pairwise cosine similarity. The RKD loss is:
+
+$$
+\mathcal{L}_{\mathrm{RKD}} = w_{\mathrm{dist}}\,\mathcal{L}_{\mathrm{dist}} + w_{\mathrm{angle}}\,\mathcal{L}_{\mathrm{angle}},
+$$
+
+with
+
+$$
+\mathcal{L}_{\mathrm{dist}} = \frac{1}{B^2}\sum_{i\neq j}\mathrm{SmoothL1}\big(d_S(i,j),\,d_T(i,j)\big),
+$$
+
+$$
+\mathcal{L}_{\mathrm{angle}} = \frac{1}{B^2}\sum_{i,j}\mathrm{SmoothL1}\big(\cos\theta^{ij}_S,\,\cos\theta^{ij}_T\big),
+$$
+
+where $d(i,j)=\|f_i-f_j\|_2$. RKD preserves teacher manifold geometry and is implemented separately per modality and then averaged.
+
+\subsection{Maximum mean discrepancy (MMD)}
+MMD matches student and teacher feature distributions in an RKHS induced by a characteristic kernel (we use a multi-bandwidth Gaussian RBF). The squared MMD between distributions $p_S$ and $p_T$ has the empirical form
+
+$$
+\mathrm{MMD}^2(p_S,p_T)=\frac{1}{B^2}\sum_{i,j}k(x_i,x_j)+\frac{1}{B^2}\sum_{i,j}k(y_i,y_j)-\frac{2}{B^2}\sum_{i,j}k(x_i,y_j),
+$$
+
+and for a Gaussian kernel with bandwidth set $\mathcal{B}$:
+
+$$
+k(x,y)=\frac{1}{|\mathcal{B}|}\sum_{\sigma\in\mathcal{B}}\exp\left(-\frac{\|x-y\|^2}{2\sigma^2}\right).
+$$
+
+We compute MMD per modality and report the average. The implementation uses bandwidths $\{0.2,0.5,1,2,5\}$ by default.
+
+\subsection{Comparative remarks}
+\begin{itemize}
+  \item Pointwise vs. pairwise vs. setwise: vanilla (CE+KL+MSE) is pointwise; RKD/CRD are pairwise/contrastive; MMD is setwise (distribution matching).
+  \item Complexity: contrastive/relational/distributional losses require $O(B^2)$ pairwise operations; vanilla scales $O(B)$.
+  \item Practical defaults: $\alpha=1,\,\beta=100$ (vanilla), $\gamma\approx10$ for combined CRD weighting, $\tau\in[0.07,0.1]$ for contrastive terms, and RKD weights $w_{\mathrm{dist}}=25,\,w_{\mathrm{angle}}=50$.
+\end{itemize}
+
+\subsection{Implementation notes}
+\begin{itemize}
+  \item All losses use lazy linear projections to align teacher and student feature dimensions, enabling backbone swaps without code changes.
+  \item The CRD implementation normalizes features and uses identity (diagonal) labels in the cross-entropy over similarity scores (InfoNCE). A small housekeeping parameter (`base\_temperature`) is present in code but currently unused.
+  \item These descriptions and the hyperparameter defaults match the repository implementations in `losses/`.
+\end{itemize}
+
+% End of losses section
