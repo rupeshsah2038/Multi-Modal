@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run all ultra-edge2 configs sequentially
+# Run all ultra-edge-hp-tuned-all configs sequentially
 
-echo "Running ultra-edge2 configs..."
+echo "Running ultra-edge-hp-tuned-all configs..."
 
-for cfg in config/ultra-edge2/*.yaml; do
+for cfg in config/ultra-edge-hp-tuned-all/*.yaml; do
   echo ""
   echo "========================================"
   echo "Running $cfg"
@@ -15,4 +15,4 @@ for cfg in config/ultra-edge2/*.yaml; do
 done
 
 echo ""
-echo "All ultra-edge2 configs completed!"
+echo "All ultra-edge-hp-tuned-all configs completed!"

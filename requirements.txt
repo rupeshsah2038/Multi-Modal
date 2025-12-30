@@ -5,3 +5,9 @@ numpy
 pillow
 jsonlines
 pyyaml
+pandas
+matplotlib
+seaborn
+optuna
+tqdm
+plotly

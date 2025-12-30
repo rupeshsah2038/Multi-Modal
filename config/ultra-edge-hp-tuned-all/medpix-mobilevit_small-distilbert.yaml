@@ -8,25 +8,25 @@ data:
 teacher:
   vision: vit-base
   text: bio-clinical-bert
-  fusion_layers: 2
-  fusion_dim: 384
-  fusion_heads: 8
-  dropout: 0.18490502670069944
+  fusion_layers: 3
+  fusion_dim: 256
+  fusion_heads: 4
+  dropout: 0.09621361388138176
 student:
   vision: mobilevit-small
   text: distilbert
-  fusion_layers: 2
-  fusion_dim: 384
-  fusion_heads: 4
-  dropout: 0.2383060985066181
+  fusion_layers: 1
+  fusion_dim: 256
+  fusion_heads: 8
+  dropout: 0.29239615694113963
 training:
   teacher_epochs: 3
   student_epochs: 10
-  teacher_lr: 4.786827188881545e-05
-  student_lr: 0.00010451580210282471
-  alpha: 0.5182561547439836
-  beta: 112.37763676785187
-  T: 3.1921579031760037
+  teacher_lr: 9.021655603568134e-05
+  student_lr: 0.00036732078004620474
+  alpha: 0.9569206537600561
+  beta: 64.65081710095758
+  T: 4.736932106048627
 logging:
   log_dir: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert
 fusion:

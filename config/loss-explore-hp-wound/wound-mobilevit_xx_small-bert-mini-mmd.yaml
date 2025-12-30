@@ -1,0 +1,40 @@
+data:
+  type: wound
+  root: datasets/Wound-1-0
+  batch_size: 16
+  num_workers: 4
+  task1_label: type
+  task2_label: severity
+  type_column: type
+  severity_column: severity
+  description_column: description
+  filepath_column: img_path
+teacher:
+  vision: vit-base
+  text: bio-clinical-bert
+  fusion_layers: 3
+  fusion_dim: 256
+  fusion_heads: 4
+  dropout: 0.09621361388138176
+student:
+  vision: mobilevit-xx-small
+  text: bert-mini
+  fusion_layers: 1
+  fusion_dim: 256
+  fusion_heads: 8
+  dropout: 0.29239615694113963
+training:
+  teacher_epochs: 3
+  student_epochs: 10
+  teacher_lr: 9.021655603568134e-05
+  student_lr: 0.00036732078004620474
+  alpha: 0.9569206537600561
+  beta: 64.65081710095758
+  T: 4.736932106048627
+logging:
+  log_dir: logs/loss-explore-hp-wound/wound-mobilevit_xx_small-bert-mini-mmd
+fusion:
+  type: cross_attention
+loss:
+  type: mmd
+device: cuda:0

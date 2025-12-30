@@ -4,7 +4,11 @@ import glob
 import subprocess
 
 CONFIG_DIRS = [
-    "config/ultra-edge-hp-tuned-all",
+    "config/loss-explore-hp-wound",
+    #"config/fusion-explore-hp",
+    #"config/fusion-explore-hp-wound",
+    #"config/loss-explore-hp"
+    #"config/ultra-edge-hp-tuned-all",
     #"config/ultra-edge-base-384",
 ]
 
