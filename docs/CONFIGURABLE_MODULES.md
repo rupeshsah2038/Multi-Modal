@@ -24,11 +24,12 @@ loss:
 
 ## Available Fusion Modules
 
-Configure any of these 9 fusion strategies:
+This guide assumes `simple` / `SimpleFusion` is not available.
+
+Configure any of these 8 fusion strategies:
 
 | Fusion Type | Config Value | Description |
 |------------|--------------|-------------|
-| **SimpleFusion** | `simple` | Cross-attention based fusion (default) |
 | **ConcatMLPFusion** | `concat_mlp` | Concatenate modalities + MLP |
 | **CrossAttentionFusion** | `cross_attention` | Explicit cross-attention mechanism |
 | **GatedFusion** | `gated` | Gated fusion with learned gates |
@@ -36,14 +37,14 @@ Configure any of these 9 fusion strategies:
 | **ModalityDropoutFusion** | `modality_dropout` | Stochastic modality dropout |
 | **FiLMFusion** | `film` | Feature-wise Linear Modulation |
 | **EnergyAwareAdaptiveFusion** | `energy_aware_adaptive` | Energy-aware adaptive fusion |
-| **SHoMRFusion** | `shomr` | Stochastic Higher-order Moment Regularization |
+| **SHoMRFusion** | `shomr` | Soft-Hard Modality Routing fusion |
 
 ### Example Configs
 
-**Simple Fusion (Default)**:
+**Cross-Attention Fusion (Default)**:
 ```yaml
 fusion:
-  type: "simple"
+  type: "cross_attention"
 
 teacher:
   vision: "vit-base"

@@ -91,7 +91,7 @@ logging:
   log_dir: "logs/wound_experiment"
 
 fusion:
-  type: "simple"
+  type: "cross_attention"
 
 loss:
   type: "vanilla"
