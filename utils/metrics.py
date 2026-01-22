@@ -3,10 +3,94 @@ import torch.nn.functional as F
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_auc_score
 import time
+import math
+
+
+def mcnemar_test(y_true: np.ndarray,
+                 pred_a: np.ndarray,
+                 pred_b: np.ndarray,
+                 *,
+                 exact: bool = True,
+                 correction: bool = True) -> dict:
+    """McNemar's test for paired nominal data (two classifiers on same examples).
+
+    Returns a dict with the 2x2 discordant counts (b, c) and a p-value.
+
+    Table definition (correctness vs correctness):
+      - b: A correct, B wrong
+      - c: A wrong, B correct
+
+    Args:
+        y_true: ground truth labels, shape (N,)
+        pred_a: predictions from model A, shape (N,)
+        pred_b: predictions from model B, shape (N,)
+        exact: if True, uses exact binomial McNemar p-value
+        correction: if exact=False, applies continuity correction for chi-square approx
+    """
+    y_true = np.asarray(y_true)
+    pred_a = np.asarray(pred_a)
+    pred_b = np.asarray(pred_b)
+    if y_true.shape != pred_a.shape or y_true.shape != pred_b.shape:
+        raise ValueError(f"Shape mismatch: y_true={y_true.shape}, pred_a={pred_a.shape}, pred_b={pred_b.shape}")
+
+    a_correct = (pred_a == y_true)
+    b_correct = (pred_b == y_true)
+
+    b = int(np.sum(a_correct & (~b_correct)))
+    c = int(np.sum((~a_correct) & b_correct))
+    n = b + c
+
+    if n == 0:
+        # Identical correctness on all samples => no evidence of difference.
+        return {
+            'b': b,
+            'c': c,
+            'n': n,
+            'statistic': 0.0,
+            'pvalue': 1.0,
+            'method': 'degenerate',
+        }
+
+    if exact:
+        # Exact two-sided binomial test with p=0.5 over discordant pairs.
+        k = min(b, c)
+        # p = 2 * sum_{i=0..k} C(n, i) / 2^n
+        tail = 0.0
+        denom = 2.0 ** n
+        for i in range(0, k + 1):
+            tail += math.comb(n, i) / denom
+        pvalue = min(1.0, 2.0 * tail)
+        # Often reported stat for exact is min(b,c); keep a chi-square style stat too.
+        statistic = float(min(b, c))
+        method = 'exact-binomial'
+        return {
+            'b': b,
+            'c': c,
+            'n': n,
+            'statistic': statistic,
+            'pvalue': float(pvalue),
+            'method': method,
+        }
+
+    # Chi-square approximation with 1 dof.
+    diff = abs(b - c)
+    if correction:
+        diff = max(0.0, diff - 1.0)
+    statistic = (diff * diff) / n
+    # For df=1, survival function is erfc(sqrt(x/2))
+    pvalue = math.erfc(math.sqrt(statistic / 2.0))
+    return {
+        'b': b,
+        'c': c,
+        'n': n,
+        'statistic': float(statistic),
+        'pvalue': float(pvalue),
+        'method': 'chi2-approx' + ('-cc' if correction else ''),
+    }
 
 @torch.no_grad()
 def evaluate_detailed(model, loader, device, logger=None, split="dev", token_type='student', 
-                      task1_label='modality', task2_label='location'):
+                      task1_label='modality', task2_label='location', return_raw: bool = False):
     """
     Evaluate model with configurable task labels.
     
@@ -93,5 +177,16 @@ def evaluate_detailed(model, loader, device, logger=None, split="dev", token_typ
             print(f"{k}: {v:.2f}ms")
         else:
             print(f"{k}: {v:.4f}")
+
+    if return_raw:
+        raw = {
+            'task1_label': task1_label,
+            'task2_label': task2_label,
+            'y_true_task1': mod_true,
+            'y_pred_task1': mod_pred,
+            'y_true_task2': loc_true,
+            'y_pred_task2': loc_pred,
+        }
+        return metrics, raw
 
     return metrics

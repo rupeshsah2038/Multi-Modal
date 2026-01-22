@@ -70,12 +70,19 @@ for f in files:
     dev = metrics.get('dev', {}) or {}
     test = metrics.get('test', {}) or {}
     train = metrics.get('train', {}) or {}
+    teacher_metrics = metrics.get('teacher', {}) or {}
+    teacher_dev = teacher_metrics.get('dev', {}) or {}
+    teacher_test = teacher_metrics.get('test', {}) or {}
 
     # Flatten commonly used metrics (if present)
     for k, v in dev.items():
         row[f'dev_{k}'] = v
     for k, v in test.items():
         row[f'test_{k}'] = v
+    for k, v in teacher_dev.items():
+        row[f'teacher_dev_{k}'] = v
+    for k, v in teacher_test.items():
+        row[f'teacher_test_{k}'] = v
     # train final loss
     row['train_final_loss'] = train.get('final_loss')
 

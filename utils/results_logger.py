@@ -11,7 +11,8 @@ class ResultsLogger:
         self.results_file = os.path.join(log_dir, 'results.json')
         self.results = {}
     
-    def log_experiment(self, config, metrics, dev_metrics=None, test_metrics=None, 
+    def log_experiment(self, config, metrics, dev_metrics=None, test_metrics=None,
+                      teacher_dev_metrics=None, teacher_test_metrics=None,
                       teacher_params=None, student_params=None):
         """
         Log a complete experiment run.
@@ -21,6 +22,8 @@ class ResultsLogger:
             metrics: dict with train/val metrics
             dev_metrics: optional dev set metrics
             test_metrics: optional test set metrics
+            teacher_dev_metrics: optional teacher dev set metrics
+            teacher_test_metrics: optional teacher test set metrics
             teacher_params: optional dict with teacher parameter counts
             student_params: optional dict with student parameter counts
         """
@@ -31,6 +34,10 @@ class ResultsLogger:
                 'train': metrics.get('train', {}),
                 'dev': dev_metrics or {},
                 'test': test_metrics or {},
+                'teacher': {
+                    'dev': teacher_dev_metrics or {},
+                    'test': teacher_test_metrics or {},
+                },
             },
             'models': {
                 'teacher': {

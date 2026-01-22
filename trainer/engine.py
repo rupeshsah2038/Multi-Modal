@@ -7,7 +7,7 @@ import importlib
 import inspect
 from utils.logger import MetricsLogger
 from utils.results_logger import ResultsLogger
-from utils.metrics import evaluate_detailed
+from utils.metrics import evaluate_detailed, mcnemar_test
 import yaml
 import os
 from datetime import datetime
@@ -313,6 +313,24 @@ def main(cfg):
         epochs=cfg['training'].get('teacher_epochs', 1),
         lr=cfg['training'].get('teacher_lr', 1e-5)
     )
+
+    # Optional: evaluate teacher metrics (saved into results.json)
+    save_teacher_metrics = cfg.get('evaluation', {}).get('save_teacher_metrics', True)
+    teacher_dev_metrics = {}
+    teacher_test_metrics = {}
+    if save_teacher_metrics:
+        print("\n=== Evaluating Teacher ===")
+        # Save teacher confusion matrices separately (won't overwrite student dev/test)
+        teacher_dev_metrics = evaluate_detailed(
+            teacher, dev_loader, device,
+            logger=logger, split="teacher_dev", token_type='teacher',
+            task1_label=task1_label, task2_label=task2_label
+        )
+        teacher_test_metrics = evaluate_detailed(
+            teacher, test_loader, device,
+            logger=logger, split="teacher_test", token_type='teacher',
+            task1_label=task1_label, task2_label=task2_label
+        )
     
     torch.cuda.empty_cache()
     
@@ -346,8 +364,55 @@ def main(cfg):
     if best_dev_score > 0:
         best_path = os.path.join(cfg['logging']['log_dir'], "student_best.pth")
         student.load_state_dict(torch.load(best_path, map_location=device))
-        test_metrics = evaluate_detailed(student, test_loader, device, logger=logger, split="test", token_type='student',
-                                        task1_label=task1_label, task2_label=task2_label)
+        # Always evaluate student (and save confusion matrices)
+        student_eval = evaluate_detailed(
+            student, test_loader, device,
+            logger=logger, split="test", token_type='student',
+            task1_label=task1_label, task2_label=task2_label,
+            return_raw=bool(cfg.get('evaluation', {}).get('mcnemar', False))
+        )
+
+        if isinstance(student_eval, tuple):
+            test_metrics, student_raw = student_eval
+        else:
+            test_metrics, student_raw = student_eval, None
+
+        # Optional: McNemar's test vs teacher on the same test examples
+        if cfg.get('evaluation', {}).get('mcnemar', False):
+            teacher_metrics, teacher_raw = evaluate_detailed(
+                teacher, test_loader, device,
+                logger=None, split="test", token_type='teacher',
+                task1_label=task1_label, task2_label=task2_label,
+                return_raw=True
+            )
+
+            # Compare correctness disagreement (teacher vs student)
+            t1 = mcnemar_test(
+                student_raw['y_true_task1'],
+                pred_a=teacher_raw['y_pred_task1'],
+                pred_b=student_raw['y_pred_task1'],
+                exact=bool(cfg.get('evaluation', {}).get('mcnemar_exact', True)),
+                correction=bool(cfg.get('evaluation', {}).get('mcnemar_cc', True)),
+            )
+            t2 = mcnemar_test(
+                student_raw['y_true_task2'],
+                pred_a=teacher_raw['y_pred_task2'],
+                pred_b=student_raw['y_pred_task2'],
+                exact=bool(cfg.get('evaluation', {}).get('mcnemar_exact', True)),
+                correction=bool(cfg.get('evaluation', {}).get('mcnemar_cc', True)),
+            )
+
+            # Store compact significance results in metrics (saved to results.json)
+            test_metrics.update({
+                f"test_{task1_label}_mcnemar_p": float(t1['pvalue']),
+                f"test_{task1_label}_mcnemar_b": int(t1['b']),
+                f"test_{task1_label}_mcnemar_c": int(t1['c']),
+                f"test_{task1_label}_mcnemar_method": t1['method'],
+                f"test_{task2_label}_mcnemar_p": float(t2['pvalue']),
+                f"test_{task2_label}_mcnemar_b": int(t2['b']),
+                f"test_{task2_label}_mcnemar_c": int(t2['c']),
+                f"test_{task2_label}_mcnemar_method": t2['method'],
+            })
     
     final_path = os.path.join(cfg['logging']['log_dir'], "student_final.pth")
     torch.save(student.state_dict(), final_path)
@@ -364,8 +429,14 @@ def main(cfg):
     train_metrics = {'train': {'history': serial_history}}
     if 'train_loss' in locals():
         train_metrics['train']['final_loss'] = train_loss
-    results_logger.log_experiment(cfg, train_metrics, dev_metrics, test_metrics, 
-                                   teacher_params=teacher_params, student_params=student_params)
+    results_logger.log_experiment(
+        cfg, train_metrics,
+        dev_metrics, test_metrics,
+        teacher_dev_metrics=teacher_dev_metrics,
+        teacher_test_metrics=teacher_test_metrics,
+        teacher_params=teacher_params,
+        student_params=student_params
+    )
     
     print(f"All outputs saved in {cfg['logging']['log_dir']}")
     
