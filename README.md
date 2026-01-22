@@ -45,19 +45,13 @@ This project supports configurable vision and text backbones. Below are the comm
 
 | Friendly name | HuggingFace ID |
 |---|---|
-| `vit-large` (teacher) | `google/vit-large-patch16-224` |
-| `vit-base` | `google/vit-base-patch16-224` |
-| `deit-base` | `facebook/deit-base-distilled-patch16-224` |
+| `vit-base` (teacher) | `google/vit-base-patch16-224` |
+| `deit-small` | `facebook/deit-small-patch16-224` |
 | `deit-tiny` | `facebook/deit-tiny-patch16-224` |
-| `deit-tiny-distilled` / `mobile-vit` | `facebook/deit-tiny-distilled-patch16-224` |
-| `tiny-vit` | `google/vit-base-patch16-224-in21k` |
 | `mobilevit-xx-small` | `apple/mobilevit-xx-small` |
 | `mobilevit-small` | `apple/mobilevit-small` |
-| `mobilevit-medium` | `apple/mobilevit-medium` |
-| `efficientvit-b0` | `mit-han-lab/efficientvit-b0` |
-| `mobilenet-v2` | `google/mobilenet_v2_1.0_224` |
 
-Notes: use the friendly name in `config/default.yaml` (e.g., `teacher.vision: "vit-large"` or `student.vision: "deit-tiny"`).
+Notes: use the friendly name in `config/default.yaml` (e.g., `teacher.vision: "vit-base"` or `student.vision: "deit-tiny"`).
 
 ### Text backbones
 
@@ -65,7 +59,6 @@ Notes: use the friendly name in `config/default.yaml` (e.g., `teacher.vision: "v
 |---|---|
 | `bio-clinical-bert` (teacher) | `emilyalsentzer/Bio_ClinicalBERT` |
 | `distilbert` | `distilbert-base-uncased` |
-| `mobile-bert` / `mobilebert` | `google/mobilebert-uncased` |
 | `bert-tiny` | `prajjwal1/bert-tiny` |
 | `bert-mini` | `prajjwal1/bert-mini` |
 | `minilm` | `nreimers/MiniLM-L6-H384-uncased` |
@@ -74,12 +67,8 @@ Notes: The dataset is tokenized twice (teacher tokenizer and student tokenizer).
 
 ### Example backbone selections
 
-- Baseline teacher: `teacher.vision: "vit-large"`, `teacher.text: "bio-clinical-bert"`
-- Standard student: `student.vision: "deit-base"`, `student.text: "distilbert"`
-- Edge student: `student.vision: "deit-tiny"`, `student.text: "mobile-bert"`
-- Ultra-edge student: `student.vision: "deit-tiny"`, `student.text: "bert-tiny"`
-
-You can test multiple presets with `tools/batch_runs.py` by using run names such as `original`, `mobile-edge`, `ultra-edge`, `edge-vision`, and `edge-text`.
+- Baseline teacher: `teacher.vision: "vit-base"`, `teacher.text: "bio-clinical-bert"`
+- Ultra-edge student: `student.vision: "mobilevit-xx-small"`, `student.text: "bert-mini"`
 
 
 ### 3. Run batch experiments
@@ -87,32 +76,18 @@ You can test multiple presets with `tools/batch_runs.py` by using run names such
 **Loss exploration (compare different loss functions):**
 ```bash
 python tools/run_loss_explore.py
-# or
-./tools/run_loss_explore.sh
 ```
 Tests all 5 loss functions (vanilla, combined, crd, rkd, mmd) with cross-attention fusion on both datasets.
 
 **Fusion exploration (compare different fusion modules):**
 ```bash
 python tools/run_fusion_explore.py
-# or
-./tools/run_fusion_explore.sh
 ```
 Tests all 9 fusion modules (simple, concat_mlp, cross_attention, gated, transformer_concat, modality_dropout, film, energy_aware_adaptive, shomr) with combined loss on both datasets.
 
 **Ultra-edge experiments (lightweight student models):**
 ```bash
 python tools/run_ultra_edge.py
-# or
-./tools/run_ultra_edge.sh
-```
-Tests lightweight student configurations (deit-small/deit-tiny with distilbert/minilm) on both datasets.
-
-**Custom backbone swaps:**
-```bash
-python tools/batch_runs.py --base config/default.yaml \
-  --runs original,swap_vision,swap_text,swap_both \
-  --execute --epochs 5 --batch-size 8 --device cuda:3
 ```
 
 All batch experiments:
@@ -166,7 +141,7 @@ data:
   num_workers: 4              # DataLoader workers
 
 teacher:
-  vision: "vit-large"         # Vision backbone: vit-large, deit-base, deit-small, etc.
+  vision: "vit-base"         # Vision backbone: vit-large, deit-base, deit-small, etc.
   text: "bio-clinical-bert"   # Text backbone: bio-clinical-bert, distilbert, etc.
   fusion_layers: 2            # Fusion module layers
   fusion_dim: 512             # Fusion dimension (required)
@@ -465,54 +440,6 @@ loss:
 
 ## Additional Resources
 
-## Experiment Results
-
-Comprehensive experiment results and analysis are available in the `docs/` directory:
-
-- `docs/FUSION_EXPLORE_RESULTS.md`: Fusion module comparison
-  - Tests 9 fusion modules (simple, concat_mlp, cross_attention, gated, transformer_concat, modality_dropout, film, energy_aware_adaptive, shomr)
-  - Uses a fixed teacher–student pair with combined loss on both datasets
-  - Includes per-dataset tables, rankings, and speed analysis
-
-- `docs/LOSS_EXPLORE_RESULTS.md`: Loss function comparison
-  - Tests 5 losses (vanilla, combined, crd, rkd, mmd)
-  - Fixed cross-attention fusion with vit-base + distilbert student
-  - Provides MedPix/Wound tables, cross-dataset recommendations, and latency analysis
-
-- `docs/ULTRA_EDGE_RESULTS.md`: Ultra-edge model comparison (lightweight students)
-  - Tests deit-small/deit-tiny with distilbert/minilm
-  - Covers both MedPix and Wound datasets
-  - Focuses on accuracy–latency trade-offs and recommended ultra-edge presets
-
-- `docs/PIPELINE.md`: End-to-end pipeline overview
-  - Describes configuration loading, dataset factory, teacher/student construction, distillation loop, and evaluation
-  - Includes an ASCII pipeline sketch for quick orientation
-
-- `docs/CONFIGURABLE_METRICS.md`: Custom task label configuration guide
-- `docs/LOSS_FUNCTIONS_COMPARISON.md`: Detailed loss function documentation
-
-### Key Findings
-
-Best configurations among the experiments run so far:
-
-- **MedPix – Losses:** `combined` loss outperforms `vanilla` (especially on location) with better latency, given cross-attention fusion.
-- **MedPix – Ultra-edge:** `deit-tiny` + `minilm` offers the best accuracy–latency trade-off; `deit-small` + `distilbert` is best for pure accuracy.
-- **Wound – Losses:** `vanilla` loss is best overall for cross-attention fusion; `combined` is a close second when severity is prioritized.
-- **Wound – Ultra-edge:** `deit-small` + `minilm` dominates both accuracy and latency; `deit-tiny` + `minilm` is the fastest option.
-
-See the individual result documents for detailed metrics, critical observations, and additional recommendations.
-
-
-- **Experiment Results**:
-  - `docs/ULTRA_EDGE_RESULTS.md` — Ultra-edge model comparison
-  - `docs/LOSS_EXPLORE_RESULTS.md` — Loss function comparison
-  - `docs/CONFIGURABLE_METRICS.md` — Custom metrics configuration
-  - `docs/LOSS_FUNCTIONS_COMPARISON.md` — Loss function details
-- **Dataset Guides**:
-  - `QUICK_START_WOUND.md` — Wound dataset quick start
-  - `docs/WOUND_DATASET.md` — Detailed Wound integration guide
-  - `WOUND_INTEGRATION_SUMMARY.md` — Implementation details
-
 ## Project Structure
 
 ```
@@ -531,10 +458,6 @@ Multi-Modal/
 │   ├── MedPix-2-0/           # MedPix dataset
 │   └── Wound-1-0/            # Wound dataset
 ├── docs/                      # Documentation
-│   ├── ULTRA_EDGE_RESULTS.md
-│   ├── LOSS_EXPLORE_RESULTS.md
-│   ├── CONFIGURABLE_METRICS.md
-│   ├── LOSS_FUNCTIONS_COMPARISON.md
 │   └── WOUND_DATASET.md
 ├── experiments/               # Experiment runners
 ├── losses/                    # Loss implementations
