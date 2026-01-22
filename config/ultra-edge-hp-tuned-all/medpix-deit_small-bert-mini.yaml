@@ -34,3 +34,10 @@ fusion:
 loss:
   type: combined
 device: cuda:0
+
+# Optional: paired significance testing between teacher vs best student
+evaluation:
+  save_teacher_metrics: true  # evaluate teacher on dev/test and save into results.json
+  mcnemar: true         # if true, adds McNemar p-values to test metrics
+  mcnemar_exact: true    # exact binomial McNemar (recommended)
+  mcnemar_cc: true       # continuity correction (used only if mcnemar_exact=false)
