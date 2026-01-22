@@ -334,33 +334,14 @@ s_img_proj = s_out['img_proj']
 - Full experiment metadata (config, hyperparameters, final dev/test metrics) is saved to `results.json`
 - Confusion matrices (`.npy`) are saved for modality and location tasks on each split
 
-## Experiment Results
-
-Comprehensive experiment results are available in the `docs/` directory:
-
-- **`docs/ULTRA_EDGE_RESULTS.md`**: Ultra-edge model comparison (lightweight students)
-  - Tests deit-small/deit-tiny with distilbert/minilm
-  - Covers both MedPix and Wound datasets
-  - Provides accuracy vs latency trade-off analysis
-  
-- **`docs/LOSS_EXPLORE_RESULTS.md`**: Loss function comparison
-  - Tests vanilla, combined, crd, rkd, mmd losses
-  - Fixed cross-attention fusion with vit-base + distilbert student
-  - Shows per-loss performance on both datasets
-
-- **`docs/CONFIGURABLE_METRICS.md`**: Custom task label configuration guide
-- **`docs/LOSS_FUNCTIONS_COMPARISON.md`**: Detailed loss function documentation
+Note: If you enable McNemar in the config (`evaluation.mcnemar: true`), the trainer computes paired McNemar tests (discordant counts `b` and `c`, p-value, and method) and stores them in `results.json` under `metrics.test` as `test_<task>_mcnemar_p`, `test_<task>_mcnemar_b`, `test_<task>_mcnemar_c`, and `test_<task>_mcnemar_method`.
 
 ### Key Findings
+## Experiment Results & Reports
 
-**Best configurations by use case:**
+High-level experiment artifacts and detailed run outputs are saved under `logs/` for each run (see `config.logging.log_dir`). Some historical report files under `docs/` were removed during cleanup — check `docs/` for any remaining reports (for example the McNemar analysis file `docs/mcnemar_analysis_wound-mobilevit_xx_small-bert-mini.md`).
 
-- **MedPix - Best accuracy:** `combined` loss with `cross_attention` fusion
-- **MedPix - Best ultra-edge:** `deit_tiny-minilm` student (good F1, fast inference)
-- **Wound - Best accuracy:** `vanilla` loss with `cross_attention` fusion  
-- **Wound - Best ultra-edge:** `deit_small-minilm` student (dominates accuracy/latency)
-
-See individual result documents for detailed metrics, critical observations, and recommendations.
+If you need aggregated result reports, use the tooling in `tools/` to generate summaries (e.g. `tools/generate_results_excel.py`, `tools/generate_summary_metrics.py`) or ask me to add a small aggregation script that collects `results.json` McNemar entries across multiple runs.
 
 ## Common use cases
 
