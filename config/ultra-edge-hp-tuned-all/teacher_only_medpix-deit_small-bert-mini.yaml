@@ -1,0 +1,50 @@
+# Auto-generated teacher-only variant of medpix-deit_small-bert-mini.yaml
+# Trains only the teacher and saves teacher metrics to teacher.json.
+
+data:
+  type: medpix
+  root: datasets/MedPix-2-0
+  batch_size: 16
+  num_workers: 4
+  task1_label: modality
+  task2_label: location
+
+teacher:
+  vision: vit-base
+  text: bio-clinical-bert
+  fusion_layers: 3
+  fusion_dim: 256
+  fusion_heads: 4
+  dropout: 0.09621361388138176
+
+# Student is kept for dataset/tokenizer fields, but unused in teacher-only mode.
+student:
+  vision: deit-small
+  text: bert-mini
+  fusion_layers: 1
+  fusion_dim: 256
+  fusion_heads: 8
+  dropout: 0.29239615694113963
+
+training:
+  teacher_only: true
+  teacher_epochs: 3
+  teacher_lr: 9.021655603568134e-05
+
+logging:
+  log_dir: logs/ultra-edge-hp-tuned-all/teacher-only/medpix-deit_small-bert-mini
+
+fusion:
+  type: cross_attention
+
+loss:
+  type: combined
+
+device: cuda:0
+
+evaluation:
+  save_teacher_metrics: true
+  # McNemar is student-vs-teacher, so irrelevant in teacher-only mode.
+  mcnemar: false
+  mcnemar_exact: true
+  mcnemar_cc: true

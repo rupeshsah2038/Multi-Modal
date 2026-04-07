@@ -211,6 +211,9 @@ def main(cfg):
     
     # Get fusion type from config (default to 'simple' for backward compatibility)
     fusion_type = cfg.get('fusion', {}).get('type', 'simple')
+
+    # Optional: teacher-only mode (skip student distillation entirely)
+    teacher_only = bool(cfg.get('training', {}).get('teacher_only', False))
     
     # Extract fusion_heads and dropout from config (with defaults for backward compatibility)
     teacher_fusion_heads = cfg.get('teacher', {}).get('fusion_heads', 8)
@@ -234,24 +237,29 @@ def main(cfg):
         fusion_params=fusion_params,
     ).to(device)
     
-    student = Student(
-        vision=cfg['student']['vision'],
-        text=cfg['student']['text'],
-        fusion_type=fusion_type,
-        fusion_layers=cfg['student']['fusion_layers'],
-        fusion_dim=cfg['student']['fusion_dim'],
-        fusion_heads=student_fusion_heads,
-        dropout=student_dropout,
-        num_modality_classes=num_modality_classes,
-        num_location_classes=num_location_classes,
-        fusion_params=fusion_params,
-    ).to(device)
-    
     # Count model parameters
     teacher_params = count_parameters(teacher)
-    student_params = count_parameters(student)
     print(f"\nTeacher parameters: {teacher_params['params_millions']:.2f}M ({teacher_params['total_params']:,})")
-    print(f"Student parameters: {student_params['params_millions']:.2f}M ({student_params['total_params']:,})")
+
+    student = None
+    student_params = None
+    if not teacher_only:
+        student = Student(
+            vision=cfg['student']['vision'],
+            text=cfg['student']['text'],
+            fusion_type=fusion_type,
+            fusion_layers=cfg['student']['fusion_layers'],
+            fusion_dim=cfg['student']['fusion_dim'],
+            fusion_heads=student_fusion_heads,
+            dropout=student_dropout,
+            num_modality_classes=num_modality_classes,
+            num_location_classes=num_location_classes,
+            fusion_params=fusion_params,
+        ).to(device)
+        student_params = count_parameters(student)
+        print(f"Student parameters: {student_params['params_millions']:.2f}M ({student_params['total_params']:,})")
+    else:
+        print("Teacher-only mode: skipping student instantiation and distillation")
     
     # Create a distillation/loss object from config
     def _make_loss_from_cfg(cfg):
@@ -304,7 +312,9 @@ def main(cfg):
 
         return cls(**kwargs)
 
-    distill_fn = _make_loss_from_cfg(cfg)
+    distill_fn = None
+    if not teacher_only:
+        distill_fn = _make_loss_from_cfg(cfg)
     
     # Train teacher
     print("\n=== Training Teacher ===")
@@ -331,6 +341,31 @@ def main(cfg):
             logger=logger, split="teacher_test", token_type='teacher',
             task1_label=task1_label, task2_label=task2_label
         )
+
+    if teacher_only:
+        # Save teacher checkpoint and results; exit without distillation.
+        teacher_path = os.path.join(cfg['logging']['log_dir'], "teacher_final.pth")
+        torch.save(teacher.state_dict(), teacher_path)
+        print(f"Teacher checkpoint saved to {teacher_path}")
+
+        # Persist log artifacts (labels/confusions already saved via MetricsLogger)
+        logger.save_csv()
+        logger.save_json()
+
+        results_logger = ResultsLogger(cfg['logging']['log_dir'])
+        # In teacher-only mode, student metrics are empty.
+        train_metrics = {'train': {}}
+        results_logger.log_experiment(
+            cfg, train_metrics,
+            dev_metrics={},
+            test_metrics={},
+            teacher_dev_metrics=teacher_dev_metrics,
+            teacher_test_metrics=teacher_test_metrics,
+            teacher_params=teacher_params,
+            student_params=None,
+        )
+        print(f"All outputs saved in {cfg['logging']['log_dir']}")
+        return
     
     torch.cuda.empty_cache()
     

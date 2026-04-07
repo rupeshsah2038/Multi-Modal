@@ -1,0 +1,54 @@
+# Teacher-only run (Wound)
+# Trains only the teacher once and saves teacher metrics to teacher.json.
+
+data:
+  type: "wound"
+  root: "datasets/Wound-1-0"
+  batch_size: 32
+  num_workers: 4
+  type_column: "type"
+  severity_column: "severity"
+  description_column: "description"
+  filepath_column: "img_path"
+  task1_label: "type"
+  task2_label: "severity"
+
+teacher:
+  vision: "vit-base"
+  text: "bio-clinical-bert"
+  fusion_layers: 3
+  fusion_dim: 256
+  fusion_heads: 4
+  dropout: 0.09621361388138176
+
+# Student section is kept for tokenizer/dataset compatibility, but is not used
+# when training.teacher_only is true.
+student:
+  vision: "deit-small"
+  text: "bert-mini"
+  fusion_layers: 1
+  fusion_dim: 256
+  fusion_heads: 8
+  dropout: 0.29239615694113963
+
+training:
+  teacher_only: true
+  teacher_epochs: 3
+  teacher_lr: 9.021655603568134e-05
+
+logging:
+  log_dir: "logs/teacher-only-wound"
+
+fusion:
+  type: "cross_attention"
+
+loss:
+  type: "combined"
+
+device: "cuda:0"
+
+evaluation:
+  save_teacher_metrics: true
+  mcnemar: false
+  mcnemar_exact: true
+  mcnemar_cc: true

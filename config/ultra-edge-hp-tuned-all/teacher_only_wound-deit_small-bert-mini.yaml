@@ -1,0 +1,53 @@
+# Auto-generated teacher-only variant of wound-deit_small-bert-mini.yaml
+# Trains only the teacher and saves teacher metrics to teacher.json.
+
+data:
+  type: wound
+  root: datasets/Wound-1-0
+  batch_size: 16
+  num_workers: 4
+  task1_label: type
+  task2_label: severity
+  type_column: type
+  severity_column: severity
+  description_column: description
+  filepath_column: img_path
+
+teacher:
+  vision: vit-base
+  text: bio-clinical-bert
+  fusion_layers: 3
+  fusion_dim: 256
+  fusion_heads: 4
+  dropout: 0.09621361388138176
+
+# Student is kept for dataset/tokenizer fields, but unused in teacher-only mode.
+student:
+  vision: deit-small
+  text: bert-mini
+  fusion_layers: 1
+  fusion_dim: 256
+  fusion_heads: 8
+  dropout: 0.29239615694113963
+
+training:
+  teacher_only: true
+  teacher_epochs: 3
+  teacher_lr: 9.021655603568134e-05
+
+logging:
+  log_dir: logs/ultra-edge-hp-tuned-all/teacher-only/wound-deit_small-bert-mini
+
+fusion:
+  type: cross_attention
+
+loss:
+  type: combined
+
+device: cuda:0
+
+evaluation:
+  save_teacher_metrics: true
+  mcnemar: false
+  mcnemar_exact: true
+  mcnemar_cc: true

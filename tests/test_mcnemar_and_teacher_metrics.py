@@ -72,6 +72,13 @@ def test_results_logger_writes_teacher_metrics():
     assert j['metrics']['teacher']['dev'] == teacher_dev, j['metrics']['teacher']['dev']
     assert j['metrics']['teacher']['test'] == teacher_test, j['metrics']['teacher']['test']
 
+    teacher_path = os.path.join(out_dir, 'teacher.json')
+    assert os.path.exists(teacher_path), 'teacher.json not created'
+    tj = json.load(open(teacher_path))
+    assert 'metrics' in tj, 'teacher.json missing metrics'
+    assert tj['metrics'].get('dev') == teacher_dev, tj.get('metrics', {}).get('dev')
+    assert tj['metrics'].get('test') == teacher_test, tj.get('metrics', {}).get('test')
+
 
 def test_metrics_logger_saves_teacher_confusions():
     out_dir = 'logs/_mock_test_metrics_logger'

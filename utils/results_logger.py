@@ -9,7 +9,13 @@ class ResultsLogger:
         os.makedirs(log_dir, exist_ok=True)
         self.log_dir = log_dir
         self.results_file = os.path.join(log_dir, 'results.json')
+        self.teacher_results_file = os.path.join(log_dir, 'teacher.json')
         self.results = {}
+        self.teacher_results = {}
+
+    def _save_json(self, path: str, payload: dict):
+        with open(path, 'w') as f:
+            json.dump(payload, f, indent=2)
     
     def log_experiment(self, config, metrics, dev_metrics=None, test_metrics=None,
                       teacher_dev_metrics=None, teacher_test_metrics=None,
@@ -27,8 +33,10 @@ class ResultsLogger:
             teacher_params: optional dict with teacher parameter counts
             student_params: optional dict with student parameter counts
         """
+        timestamp = datetime.now().isoformat()
+
         self.results = {
-            'timestamp': datetime.now().isoformat(),
+            'timestamp': timestamp,
             'config': config,
             'metrics': {
                 'train': metrics.get('train', {}),
@@ -77,10 +85,43 @@ class ResultsLogger:
                 'type': config.get('loss', {}).get('type', 'vanilla'),
             },
         }
+
+        # Also persist teacher metrics separately for easier downstream analysis.
+        tdev = teacher_dev_metrics or {}
+        ttest = teacher_test_metrics or {}
+        if (len(tdev) > 0) or (len(ttest) > 0):
+            self.teacher_results = {
+                'timestamp': timestamp,
+                'config': {
+                    'teacher': config.get('teacher', {}) or {},
+                    'training': {
+                        'teacher_epochs': config.get('training', {}).get('teacher_epochs'),
+                        'teacher_lr': config.get('training', {}).get('teacher_lr'),
+                    },
+                    'data': config.get('data', {}) or {},
+                    'evaluation': config.get('evaluation', {}) or {},
+                    'fusion': config.get('fusion', {}) or {},
+                    'loss': config.get('loss', {}) or {},
+                },
+                'metrics': {
+                    'dev': tdev,
+                    'test': ttest,
+                },
+                'model': {
+                    'vision': config.get('teacher', {}).get('vision'),
+                    'text': config.get('teacher', {}).get('text'),
+                    'fusion_layers': config.get('teacher', {}).get('fusion_layers'),
+                    'total_params': teacher_params.get('total_params') if teacher_params else None,
+                    'params_millions': teacher_params.get('params_millions') if teacher_params else None,
+                },
+            }
         self.save()
     
     def save(self):
         """Save results to JSON file."""
-        with open(self.results_file, 'w') as f:
-            json.dump(self.results, f, indent=2)
+        self._save_json(self.results_file, self.results)
         print(f"Experiment results saved to {self.results_file}")
+
+        if self.teacher_results:
+            self._save_json(self.teacher_results_file, self.teacher_results)
+            print(f"Teacher metrics saved to {self.teacher_results_file}")
