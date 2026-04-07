@@ -17,6 +17,11 @@ pip install -r requirements.txt
 
 ### 2. Run an experiment
 
+If you use a local virtualenv, activate it first:
+```bash
+source ~/myenv/bin/activate
+```
+
 **For MedPix dataset:**
 ```bash
 python experiments/run.py config/default.yaml
@@ -31,10 +36,26 @@ python tools/split_wound_dataset.py --input datasets/Wound-1-0/metadata.csv --ou
 python experiments/run.py config/wound.yaml
 ```
 
+### 3. Teacher-only training (train teacher once per dataset)
+
+Set `training.teacher_only: true` to train/evaluate only the teacher (no student distillation).
+
+```bash
+source ~/myenv/bin/activate
+
+# MedPix (teacher-only, tuned)
+python experiments/run.py config/ultra-edge-hp-tuned-all/teacher_only_medpix-deit_small-bert-mini.yaml
+
+# Wound (teacher-only, tuned)
+python experiments/run.py config/ultra-edge-hp-tuned-all/teacher_only_wound-deit_small-bert-mini.yaml
+```
+
 Outputs are saved to the directory specified in `config.logging.log_dir` (default: `logs/`). Each run generates:
 - `metrics.csv` and `metrics.json` — per-epoch and per-split metrics
 - `results.json` — complete experiment metadata (config, hyperparameters, dev/test metrics)
+- `teacher.json` — teacher-only metrics payload (dev/test) for easy downstream analysis
 - `student_best.pth`, `student_final.pth` — model checkpoints
+- `teacher_final.pth` — teacher checkpoint (created for teacher-only runs)
 - Confusion matrices (`.npy`) for each split and task
 
 ## Supported Backbones
@@ -155,6 +176,7 @@ student:
 training:
   teacher_epochs: 1           # Number of teacher pre-training epochs
   student_epochs: 1           # Number of distillation epochs
+  teacher_only: false         # If true, trains/evaluates teacher and exits (no student)
   teacher_lr: 1e-5
   student_lr: 3e-4
   alpha: 1.0                  # KL divergence weight
