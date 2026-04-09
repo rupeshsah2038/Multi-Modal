@@ -3,6 +3,7 @@ from torch.utils.data import DataLoader
 from data.dataset import get_dataset, get_num_classes, MedPixDataset, WoundDataset
 from models.teacher import Teacher
 from models.student import Student
+from models.student_custom import StudentCustom
 import importlib
 import inspect
 from utils.logger import MetricsLogger
@@ -116,17 +117,32 @@ def main(cfg):
     # Load tokenizers that match configured text backbones to avoid
     # token-id vs embedding-size mismatches when swapping backbones.
     t_text_name = cfg.get('teacher', {}).get('text')
-    s_text_name = cfg.get('student', {}).get('text')
     t_pretrained = get_text_pretrained_name(t_text_name) if t_text_name else None
-    s_pretrained = get_text_pretrained_name(s_text_name) if s_text_name else None
-
     if t_pretrained is None:
         raise KeyError(f"Teacher text backbone '{t_text_name}' has no known pretrained mapping")
+
+    student_arch = cfg.get('student', {}).get('arch', 'standard')
+    s_text_name = cfg.get('student', {}).get('text')
+    s_tokenizer_name = cfg.get('student', {}).get('tokenizer') or s_text_name
+    s_pretrained = get_text_pretrained_name(s_tokenizer_name) if s_tokenizer_name else None
+
     if s_pretrained is None:
-        raise KeyError(f"Student text backbone '{s_text_name}' has no known pretrained mapping")
+        raise KeyError(
+            "Student tokenizer backbone has no known pretrained mapping. "
+            "Set student.tokenizer (or student.text) to a supported name."
+        )
 
     teacher_tokenizer = AutoTokenizer.from_pretrained(t_pretrained)
     student_tokenizer = AutoTokenizer.from_pretrained(s_pretrained)
+
+    def _get_vocab_size(tokenizer):
+        vs = getattr(tokenizer, 'vocab_size', None)
+        if vs is not None:
+            return int(vs)
+        try:
+            return len(tokenizer.get_vocab())
+        except Exception:
+            raise ValueError("Unable to determine tokenizer vocab size")
     
     # Determine dataset type (default to 'medpix' for backward compatibility)
     dataset_type = cfg.get('data', {}).get('type', 'medpix')
@@ -244,18 +260,40 @@ def main(cfg):
     student = None
     student_params = None
     if not teacher_only:
-        student = Student(
-            vision=cfg['student']['vision'],
-            text=cfg['student']['text'],
-            fusion_type=fusion_type,
-            fusion_layers=cfg['student']['fusion_layers'],
-            fusion_dim=cfg['student']['fusion_dim'],
-            fusion_heads=student_fusion_heads,
-            dropout=student_dropout,
-            num_modality_classes=num_modality_classes,
-            num_location_classes=num_location_classes,
-            fusion_params=fusion_params,
-        ).to(device)
+        if str(student_arch).lower() == 'custom_tiny':
+            custom_cfg = cfg.get('student', {}).get('custom', {}) or {}
+            vocab_size = _get_vocab_size(student_tokenizer)
+            pad_token_id = getattr(student_tokenizer, 'pad_token_id', 0) or 0
+            student = StudentCustom(
+                vocab_size=vocab_size,
+                pad_token_id=pad_token_id,
+                vision_d=int(custom_cfg.get('vision_d', 192)),
+                vision_depth=int(custom_cfg.get('vision_depth', 4)),
+                vision_heads=int(custom_cfg.get('vision_heads', 3)),
+                vision_mlp_ratio=float(custom_cfg.get('vision_mlp_ratio', 4.0)),
+                text_d=int(custom_cfg.get('text_d', 128)),
+                text_depth=int(custom_cfg.get('text_depth', 4)),
+                text_heads=int(custom_cfg.get('text_heads', 4)),
+                text_mlp_ratio=float(custom_cfg.get('text_mlp_ratio', 4.0)),
+                max_len=int(custom_cfg.get('max_len', 256)),
+                fusion_dim=int(custom_cfg.get('fusion_dim', 256)),
+                dropout=float(custom_cfg.get('dropout', student_dropout)),
+                num_modality_classes=num_modality_classes,
+                num_location_classes=num_location_classes,
+            ).to(device)
+        else:
+            student = Student(
+                vision=cfg['student']['vision'],
+                text=cfg['student']['text'],
+                fusion_type=fusion_type,
+                fusion_layers=cfg['student']['fusion_layers'],
+                fusion_dim=cfg['student']['fusion_dim'],
+                fusion_heads=student_fusion_heads,
+                dropout=student_dropout,
+                num_modality_classes=num_modality_classes,
+                num_location_classes=num_location_classes,
+                fusion_params=fusion_params,
+            ).to(device)
         student_params = count_parameters(student)
         print(f"Student parameters: {student_params['params_millions']:.2f}M ({student_params['total_params']:,})")
     else:

@@ -1,0 +1,67 @@
+# Custom student (<10M params) for MedPix
+
+data:
+  type: "medpix"
+  root: "datasets/MedPix-2-0"
+  batch_size: 16
+  num_workers: 4
+  task1_label: "modality"
+  task2_label: "location"
+
+teacher:
+  vision: "vit-base"
+  text: "bio-clinical-bert"
+  fusion_layers: 3
+  fusion_dim: 256
+  fusion_heads: 4
+  dropout: 0.09621361388138176
+
+student:
+  arch: "custom_tiny"
+  # vision/text backbones are custom in custom_tiny
+  vision: "custom"
+  text: "custom"
+  # tokenizer selection for student text inputs
+  tokenizer: "bert-mini"
+  fusion_layers: 1
+  fusion_dim: 256
+  fusion_heads: 8
+  dropout: 0.29239615694113963
+  custom:
+    vision_d: 192
+    vision_depth: 4
+    vision_heads: 3
+    vision_mlp_ratio: 4.0
+    text_d: 128
+    text_depth: 4
+    text_heads: 4
+    text_mlp_ratio: 4.0
+    max_len: 256
+    fusion_dim: 256
+    dropout: 0.29239615694113963
+
+training:
+  teacher_epochs: 3
+  student_epochs: 50
+  teacher_lr: 9.021655603568134e-05
+  student_lr: 0.00036732078004620474
+  alpha: 0.9569206537600561
+  beta: 64.65081710095758
+  T: 4.736932106048627
+
+logging:
+  log_dir: "logs/custom-student-medpix"
+
+fusion:
+  type: "cross_attention"
+
+loss:
+  type: "combined"
+
+device: "cuda:0"
+
+evaluation:
+  save_teacher_metrics: true
+  mcnemar: true
+  mcnemar_exact: true
+  mcnemar_cc: true
