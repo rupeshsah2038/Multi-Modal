@@ -1,0 +1,173 @@
+{
+  "train": {
+    "n_samples": 1094,
+    "type_dist": {
+      "Pressure": 234,
+      "Diabetic": 215,
+      "Venous": 171,
+      "Surgical": 150,
+      "Bruises": 95,
+      "Burn": 61,
+      "Abrasion": 59,
+      "Laceration": 49,
+      "Normal": 36,
+      "Cut": 24
+    },
+    "severity_dist": {
+      "Severe": 547,
+      "Moderate": 388,
+      "Mild": 159
+    },
+    "text_len": {
+      "mean": 229.3345521023766,
+      "median": 221.0,
+      "max": 463
+    },
+    "samples": [
+      {
+        "img_path": "surgical_wounds_416.png",
+        "type": "Surgical",
+        "severity": "Moderate",
+        "description": "The wound is incision with surrounding erythema and edema. The wound base is red and elevated. The wound has a purplish hue and shows signs of tissue breakdown. There is no visible bleeding. The wound is about 2 cm in diameter."
+      },
+      {
+        "img_path": "venous_wounds_372.png",
+        "type": "Venous",
+        "severity": "Severe",
+        "description": "The wound appears to be a large, irregularly shaped area of skin discoloration with surrounding erythema and possible signs of infection. The wound is deep, with exposed granulation tissue and some areas of necrosis. There is significant edema and hyperpigmentation around the wound."
+      },
+      {
+        "img_path": "pressure_wounds_157.png",
+        "type": "Pressure",
+        "severity": "Moderate",
+        "description": "The wound is a injury with a small, circular entry point. The surrounding skin is erythematous, indicating some inflammation. There is minimal visible bleeding, but the depth and potential for infection suggest it may require medical attention."
+      },
+      {
+        "img_path": "diabetic_wounds_232.png",
+        "type": "Diabetic",
+        "severity": "Moderate",
+        "description": "The wound is a injury with a small, round entry point. The surrounding skin is erythematous, indicating inflammation, and there is some exudate present. The wound is relatively shallow but has caused significant tissue disruption around the entry site."
+      },
+      {
+        "img_path": "venous_wounds_272.png",
+        "type": "Venous",
+        "severity": "Severe",
+        "description": "The wound is approximately 4 inches long and 3 inches wide. It extends through the subcutaneous tissue, exposing the muscle. The edges of the wound are well-defined and the surrounding skin is red and swollen. There is a large amount of yellow, foul-smelling exudate present. The wound base is black and necrotic, with areas of tissue loss and exposed muscle. There are no signs of infection or inflammation."
+      }
+    ]
+  },
+  "dev": {
+    "n_samples": 235,
+    "type_dist": {
+      "Pressure": 50,
+      "Diabetic": 46,
+      "Venous": 37,
+      "Surgical": 33,
+      "Bruises": 20,
+      "Burn": 13,
+      "Abrasion": 12,
+      "Laceration": 11,
+      "Normal": 8,
+      "Cut": 5
+    },
+    "severity_dist": {
+      "Severe": 120,
+      "Moderate": 91,
+      "Mild": 24
+    },
+    "text_len": {
+      "mean": 231.08510638297872,
+      "median": 229.0,
+      "max": 446
+    },
+    "samples": [
+      {
+        "img_path": "diabetic_wounds_47.png",
+        "type": "Diabetic",
+        "severity": "Severe",
+        "description": "The wound is a deep, open injury on the left toe, with significant tissue loss. The wound is approximately 3 cm in length and 2 cm in width, with an irregular, non-defined edge. The base is pink and moist, with moderate amounts of yellow-green exudate. The surrounding skin is reddened and edematous. There is no odor or pain. There are no visible indicators of infection."
+      },
+      {
+        "img_path": "pressure_wounds_87.png",
+        "type": "Pressure",
+        "severity": "Moderate",
+        "description": "The wound is approximately 1 cm in length and has a jagged edge. There is erythema surrounding the wound. There is a small amount of exudate present. The wound shows signs of inflammation and potential for infection if not properly treated."
+      },
+      {
+        "img_path": "pressure_wounds_602.png",
+        "type": "Pressure",
+        "severity": "Severe",
+        "description": "The wound is a injury with a dark center and a reddened rim. The size is approximately 1 cm in diameter. There is significant tissue damage and potential for infection."
+      },
+      {
+        "img_path": "venous_wounds_219.png",
+        "type": "Venous",
+        "severity": "Severe",
+        "description": "The wound appears to be characterized by extensive necrotic tissue, significant erythema, and induration. The area is large, covering a significant portion of the leg, and shows signs of advanced tissue breakdown with possible infection. "
+      },
+      {
+        "img_path": "diabetic_wounds_238.png",
+        "type": "Diabetic",
+        "severity": "Severe",
+        "description": "The wound appears to be exposed tissue, significant redness, and potential for infection due to the depth and size. "
+      }
+    ]
+  },
+  "test": {
+    "n_samples": 235,
+    "type_dist": {
+      "Pressure": 51,
+      "Diabetic": 46,
+      "Venous": 37,
+      "Surgical": 32,
+      "Bruises": 20,
+      "Burn": 13,
+      "Abrasion": 13,
+      "Laceration": 10,
+      "Normal": 8,
+      "Cut": 5
+    },
+    "severity_dist": {
+      "Severe": 117,
+      "Moderate": 93,
+      "Mild": 25
+    },
+    "text_len": {
+      "mean": 229.62553191489363,
+      "median": 218.0,
+      "max": 450
+    },
+    "samples": [
+      {
+        "img_path": "venous_wounds_492.png",
+        "type": "Venous",
+        "severity": "Severe",
+        "description": "The wound has irregular edges, exposed bone, and surrounding erythema. The ulcer is large and has a significant amount of slough and eschar. There is also evidence of surrounding cellulitis."
+      },
+      {
+        "img_path": "diabetic_wounds_38.png",
+        "type": "Diabetic",
+        "severity": "Severe",
+        "description": "The wound measures 7 cm x 5 cm. The base is necrotic tissue, and the surrounding skin is erythematous. The edges are poorly defined, and there is evidence of infection. There is no exudate, odor, or pain."
+      },
+      {
+        "img_path": "venous_wounds_156.png",
+        "type": "Venous",
+        "severity": "Moderate",
+        "description": "The wound is approximately 5mm in diameter and has a central depression. The wound shows signs of inflammation but no active bleeding. There is a small amount of exudate present around the wound edge."
+      },
+      {
+        "img_path": "surgical_wounds_324.png",
+        "type": "Surgical",
+        "severity": "Severe",
+        "description": "The wound is approximately 4 cm in diameter. The wound base is a light pink, with a surrounding area of red, inflamed skin. There is no bleeding or exudate."
+      },
+      {
+        "img_path": "normal_146.png",
+        "type": "Normal",
+        "severity": "Mild",
+        "description": "The skin is intact, without any visible signs of injury or irritation. The skin maintains normal hydration and elasticity."
+      }
+    ]
+  }
+}

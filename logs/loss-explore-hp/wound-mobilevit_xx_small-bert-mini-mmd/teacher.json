@@ -1,0 +1,71 @@
+{
+  "timestamp": "2026-09-19T00:41:49.704990",
+  "config": {
+    "teacher": {
+      "vision": "vit-base",
+      "text": "bio-clinical-bert",
+      "fusion_layers": 3,
+      "fusion_dim": 256,
+      "fusion_heads": 4,
+      "dropout": 0.09621361388138176
+    },
+    "training": {
+      "teacher_epochs": 3,
+      "teacher_lr": 9.021655603568134e-05
+    },
+    "data": {
+      "type": "wound",
+      "root": "datasets/Wound-1-0",
+      "batch_size": 16,
+      "num_workers": 4,
+      "task1_label": "type",
+      "task2_label": "severity",
+      "type_column": "type",
+      "severity_column": "severity",
+      "description_column": "description",
+      "filepath_column": "img_path"
+    },
+    "evaluation": {},
+    "fusion": {
+      "type": "cross_attention"
+    },
+    "loss": {
+      "type": "mmd"
+    }
+  },
+  "metrics": {
+    "dev": {
+      "teacher_dev_type_acc": 0.8851063829787233,
+      "teacher_dev_severity_acc": 0.902127659574468,
+      "teacher_dev_type_f1": 0.8798239985126379,
+      "teacher_dev_severity_f1": 0.8921463474820165,
+      "teacher_dev_type_prec": 0.8894986498434774,
+      "teacher_dev_severity_prec": 0.8696110156065663,
+      "teacher_dev_type_rec": 0.8734422549639941,
+      "teacher_dev_severity_rec": 0.9246031746031745,
+      "teacher_dev_type_auc": 0.9779616888763693,
+      "teacher_dev_severity_auc": 0.9769788090579353,
+      "teacher_dev_infer_ms": 24.603881227209214
+    },
+    "test": {
+      "teacher_test_type_acc": 0.8893617021276595,
+      "teacher_test_severity_acc": 0.9234042553191489,
+      "teacher_test_type_f1": 0.8960475199981758,
+      "teacher_test_severity_f1": 0.9050461033219653,
+      "teacher_test_type_prec": 0.8980295195001078,
+      "teacher_test_severity_prec": 0.8869197514327287,
+      "teacher_test_type_rec": 0.8957584314345823,
+      "teacher_test_severity_rec": 0.9301461262751586,
+      "teacher_test_type_auc": 0.9889295328862332,
+      "teacher_test_severity_auc": 0.9826609982412814,
+      "teacher_test_infer_ms": 15.997711141058739
+    }
+  },
+  "model": {
+    "vision": "vit-base",
+    "text": "bio-clinical-bert",
+    "fusion_layers": 3,
+    "total_params": 195886349,
+    "params_millions": 195.89
+  }
+}

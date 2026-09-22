@@ -1,0 +1,316 @@
+{
+  "timestamp": "2026-01-22T18:42:26.820974",
+  "config": {
+    "data": {
+      "type": "medpix",
+      "root": "datasets/MedPix-2-0",
+      "batch_size": 16,
+      "num_workers": 4,
+      "task1_label": "modality",
+      "task2_label": "location"
+    },
+    "teacher": {
+      "vision": "vit-base",
+      "text": "bio-clinical-bert",
+      "fusion_layers": 3,
+      "fusion_dim": 256,
+      "fusion_heads": 4,
+      "dropout": 0.09621361388138176
+    },
+    "student": {
+      "vision": "mobilevit-small",
+      "text": "distilbert",
+      "fusion_layers": 1,
+      "fusion_dim": 256,
+      "fusion_heads": 8,
+      "dropout": 0.29239615694113963
+    },
+    "training": {
+      "teacher_epochs": 3,
+      "student_epochs": 10,
+      "teacher_lr": 9.021655603568134e-05,
+      "student_lr": 0.00036732078004620474,
+      "alpha": 0.9569206537600561,
+      "beta": 64.65081710095758,
+      "T": 4.736932106048627
+    },
+    "logging": {
+      "log_dir": "logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert"
+    },
+    "fusion": {
+      "type": "cross_attention"
+    },
+    "loss": {
+      "type": "combined"
+    },
+    "device": "cuda:0",
+    "evaluation": {
+      "save_teacher_metrics": true,
+      "mcnemar": true,
+      "mcnemar_exact": true,
+      "mcnemar_cc": true
+    }
+  },
+  "metrics": {
+    "train": {
+      "history": {
+        "epoch": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "train_loss": [
+          33.48815237558805,
+          23.358887984202457,
+          21.08316208766057,
+          19.653629605586712,
+          22.084418755311233,
+          26.38315905057467,
+          25.507183955265926,
+          25.95871824484605,
+          26.525407020862286,
+          26.09445680104769
+        ],
+        "dev_modality_acc": [
+          0.9796954314720813,
+          0.9644670050761421,
+          0.9796954314720813,
+          0.9695431472081218,
+          0.9796954314720813,
+          0.9796954314720813,
+          0.9644670050761421,
+          0.9898477157360406,
+          0.9898477157360406,
+          0.9847715736040609
+        ],
+        "dev_location_acc": [
+          0.6649746192893401,
+          0.7055837563451777,
+          0.8020304568527918,
+          0.8121827411167513,
+          0.7411167512690355,
+          0.7360406091370558,
+          0.7614213197969543,
+          0.7055837563451777,
+          0.700507614213198,
+          0.7309644670050761
+        ],
+        "dev_modality_f1": [
+          0.9792456805731142,
+          0.963837096478116,
+          0.9792456805731142,
+          0.9689600840336134,
+          0.9792456805731142,
+          0.9793067226890756,
+          0.9637343852728468,
+          0.9895899387021772,
+          0.9895899387021772,
+          0.9843588725684795
+        ],
+        "dev_location_f1": [
+          0.5435898192993902,
+          0.6741267428926198,
+          0.7393228512709032,
+          0.7771502570493846,
+          0.6977678894227661,
+          0.6580418312663912,
+          0.7158473810885675,
+          0.5861515617162556,
+          0.5966852380729435,
+          0.6529216451635594
+        ],
+        "dev_modality_prec": [
+          0.9792456805731142,
+          0.9621734587251829,
+          0.9792456805731142,
+          0.9677351770375027,
+          0.9792456805731142,
+          0.9780536350303792,
+          0.963077731092437,
+          0.991304347826087,
+          0.991304347826087,
+          0.9870689655172413
+        ],
+        "dev_location_prec": [
+          0.5339591261451726,
+          0.7399552516041877,
+          0.7780053130053128,
+          0.7799857108835437,
+          0.7191486240685325,
+          0.6636477325491409,
+          0.7818694794501246,
+          0.6533563074352549,
+          0.6238202247191011,
+          0.6996083916083917
+        ],
+        "dev_modality_rec": [
+          0.9792456805731142,
+          0.9659713442899284,
+          0.9792456805731142,
+          0.9703961230509903,
+          0.9792456805731142,
+          0.9807732827644332,
+          0.9644437420986094,
+          0.9880952380952381,
+          0.9880952380952381,
+          0.9821428571428572
+        ],
+        "dev_location_rec": [
+          0.5805760755985643,
+          0.6588501203943482,
+          0.7304543182953978,
+          0.7816246422243424,
+          0.6875753032574621,
+          0.665354595429558,
+          0.7337762936713462,
+          0.6007623460996774,
+          0.6137594838944165,
+          0.6489800554268321
+        ],
+        "dev_modality_auc": [
+          0.9941002949852508,
+          0.9882005899705015,
+          0.994732406236831,
+          0.9892541087231354,
+          0.989464812473662,
+          0.9936788874841973,
+          0.9895701643489254,
+          0.9953645174884113,
+          0.9962073324905183,
+          0.9892541087231352
+        ],
+        "dev_location_auc": [
+          0.9171245279739096,
+          0.8995910974074235,
+          0.9511354532037701,
+          0.9574639323046628,
+          0.9215821836635628,
+          0.9307980627092014,
+          0.9302892161874363,
+          0.9130467036917869,
+          0.9131452198015889,
+          0.9204430868908169
+        ],
+        "dev_infer_ms": [
+          7.500088154361937,
+          7.420922293880869,
+          7.41519419674946,
+          7.414779082167572,
+          7.33074560988373,
+          7.45440013517583,
+          7.336581418962043,
+          7.507943865006345,
+          7.3524138649103,
+          7.569118199614704
+        ]
+      },
+      "final_loss": 26.09445680104769
+    },
+    "dev": {
+      "dev_modality_acc": 0.9847715736040609,
+      "dev_location_acc": 0.7309644670050761,
+      "dev_modality_f1": 0.9843588725684795,
+      "dev_location_f1": 0.6529216451635594,
+      "dev_modality_prec": 0.9870689655172413,
+      "dev_location_prec": 0.6996083916083917,
+      "dev_modality_rec": 0.9821428571428572,
+      "dev_location_rec": 0.6489800554268321,
+      "dev_modality_auc": 0.9892541087231352,
+      "dev_location_auc": 0.9204430868908169,
+      "dev_infer_ms": 7.569118199614704
+    },
+    "test": {
+      "test_modality_acc": 0.965,
+      "test_location_acc": 0.805,
+      "test_modality_f1": 0.9649781113195748,
+      "test_location_f1": 0.7589139514676746,
+      "test_modality_prec": 0.9661654135338346,
+      "test_location_prec": 0.7605628890243054,
+      "test_modality_rec": 0.965,
+      "test_location_rec": 0.764403956120901,
+      "test_modality_auc": 0.998,
+      "test_location_auc": 0.9233986733225894,
+      "test_infer_ms": 7.435258626937866,
+      "test_modality_mcnemar_p": 0.0625,
+      "test_modality_mcnemar_b": 0,
+      "test_modality_mcnemar_c": 5,
+      "test_modality_mcnemar_method": "exact-binomial",
+      "test_location_mcnemar_p": 0.557197093963623,
+      "test_location_mcnemar_b": 11,
+      "test_location_mcnemar_c": 15,
+      "test_location_mcnemar_method": "exact-binomial"
+    },
+    "teacher": {
+      "dev": {
+        "teacher_dev_modality_acc": 0.9593908629441624,
+        "teacher_dev_location_acc": 0.8223350253807107,
+        "teacher_dev_modality_f1": 0.9586134453781512,
+        "teacher_dev_location_f1": 0.8028910829821136,
+        "teacher_dev_modality_prec": 0.9574167190446261,
+        "teacher_dev_location_prec": 0.809654713102989,
+        "teacher_dev_modality_rec": 0.9600189633375474,
+        "teacher_dev_location_rec": 0.7983799009586116,
+        "teacher_dev_modality_auc": 0.989148756847872,
+        "teacher_dev_location_auc": 0.9519728741247683,
+        "teacher_dev_infer_ms": 13.323233212311255
+      },
+      "test": {
+        "teacher_test_modality_acc": 0.94,
+        "teacher_test_location_acc": 0.785,
+        "teacher_test_modality_f1": 0.9399038461538461,
+        "teacher_test_location_f1": 0.7356824016432675,
+        "teacher_test_modality_prec": 0.9428341384863124,
+        "teacher_test_location_prec": 0.739152856276144,
+        "teacher_test_modality_rec": 0.94,
+        "teacher_test_location_rec": 0.7463437974092659,
+        "teacher_test_modality_auc": 0.9882,
+        "teacher_test_location_auc": 0.9315948480602192,
+        "teacher_test_infer_ms": 13.126260042190552
+      }
+    }
+  },
+  "models": {
+    "teacher": {
+      "vision": "vit-base",
+      "text": "bio-clinical-bert",
+      "fusion_layers": 3,
+      "total_params": 195884807,
+      "params_millions": 195.88
+    },
+    "student": {
+      "vision": "mobilevit-small",
+      "text": "distilbert",
+      "fusion_layers": 1,
+      "total_params": 72453031,
+      "params_millions": 72.45
+    }
+  },
+  "training": {
+    "teacher_epochs": 3,
+    "student_epochs": 10,
+    "teacher_lr": 9.021655603568134e-05,
+    "student_lr": 0.00036732078004620474,
+    "alpha": 0.9569206537600561,
+    "beta": 64.65081710095758,
+    "gamma": null,
+    "T": 4.736932106048627
+  },
+  "data": {
+    "root": "datasets/MedPix-2-0",
+    "batch_size": 16,
+    "num_workers": 4
+  },
+  "fusion": {
+    "type": "cross_attention"
+  },
+  "loss": {
+    "type": "combined"
+  }
+}

@@ -14,8 +14,10 @@ def gaussian_kernel(x, y, bandwidths=[0.2, 0.5, 1, 2, 5]):
     return kernels / len(bandwidths)
 
 class MMDLoss(nn.Module):
-    def __init__(self):
+    def __init__(self, include_ce=True):
         super().__init__()
+        self.ce = nn.CrossEntropyLoss()
+        self.include_ce = include_ce
         # Projection layers will be created lazily on first forward pass
         self.proj_t_img = None
         self.proj_t_txt = None
@@ -69,6 +71,12 @@ class MMDLoss(nn.Module):
             mmd_vals.append(compute_mmd(s_txt, t_txt))
 
         if not mmd_vals:
-            return torch.tensor(0.0, device=s_img.device if isinstance(s_img, torch.Tensor) else None)
+            loss_mmd = torch.tensor(0.0, device=s_img.device if isinstance(s_img, torch.Tensor) else None)
+        else:
+            loss_mmd = sum(mmd_vals) / len(mmd_vals)
 
-        return sum(mmd_vals) / len(mmd_vals)
+        if self.include_ce and isinstance(s_feats, dict) and y_mod is not None and y_loc is not None and 'logits_modality' in s_feats and 'logits_location' in s_feats:
+            loss_ce = self.ce(s_feats['logits_modality'], y_mod) + self.ce(s_feats['logits_location'], y_loc)
+            return loss_mmd + loss_ce
+
+        return loss_mmd

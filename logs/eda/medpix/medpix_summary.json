@@ -1,0 +1,89 @@
+{
+  "train": {
+    "n_samples": 1653,
+    "text_len": {
+      "mean": 182.22081064730793,
+      "max": 1185
+    },
+    "samples": [
+      {
+        "image": "MPX1024_synpic40275",
+        "caption": "CT of the chest reveals an obstructing mass and resultant LUL collapse."
+      },
+      {
+        "image": "MPX1024_synpic40277",
+        "caption": "CT of the chest reveals an obstructing mass and resultant LUL collapse."
+      },
+      {
+        "image": "MPX1012_synpic22949",
+        "caption": "pelvis"
+      },
+      {
+        "image": "MPX1012_synpic22950",
+        "caption": "pelvis"
+      },
+      {
+        "image": "MPX1016_synpic34317",
+        "caption": "Contrast enhanced chest CT shows diffuse increased interstitial markings involving the right middle and lower lobes."
+      }
+    ]
+  },
+  "dev": {
+    "n_samples": 197,
+    "text_len": {
+      "mean": 168.76142131979697,
+      "max": 631
+    },
+    "samples": [
+      {
+        "image": "MPX1009_synpic46283",
+        "caption": "The prostate is enlarged with several calcifications  noted within.  No dominant prostate mass is evident."
+      },
+      {
+        "image": "MPX1009_synpic46295",
+        "caption": "Bladder is prominent with mildly thickened wall. There is a small posteriolateral diverticulum on the rightward aspect."
+      },
+      {
+        "image": "MPX1075_synpic20513",
+        "caption": "1.6 x 1.8cm right middle lobe nodule, adjacent/anterior to the medial segment bronchus."
+      },
+      {
+        "image": "MPX1109_synpic28526",
+        "caption": "Coronal reconstruction of the axial non-contrast chest CT demonstrates a diffusely dilated esophagus filled with mottled soft tissue consistent with ingested food material."
+      },
+      {
+        "image": "MPX1135_synpic16704",
+        "caption": "Large soft tissue mass arising from left adrenal gland measuring 9.5 X 8.9 X 13cm in the oblique coronal, AP, and Craniocaudal dimensions.  Loss of tissue plane between tail of pancreas, spleen, and bowel."
+      }
+    ]
+  },
+  "test": {
+    "n_samples": 200,
+    "text_len": {
+      "mean": 173.015,
+      "max": 578
+    },
+    "samples": [
+      {
+        "image": "MPX1031_synpic20041",
+        "caption": "CT (3mm collimation) shows peripheral interlobular septal thickening with scattered focal consolidation and GGO."
+      },
+      {
+        "image": "MPX1063_synpic22165",
+        "caption": "Multiple axial CT images of the chest with intravenous contrast material demonstrates a Stanford type A thoracic aortic dissection, with a clear intimal flap separating the true and false lumens of the ascending aorta.  Additionally, a pericardial effusion is noted suspicious for hemopericardium."
+      },
+      {
+        "image": "MPX1063_synpic22166",
+        "caption": "Multiple axial CT images of the chest with intravenous contrast material demonstrates a Stanford type A thoracic aortic dissection, with a clear intimal flap separating the true and false lumens of the ascending aorta.  Additionally, the pericardium full of dense fluid, likely hemopericardium."
+      },
+      {
+        "image": "MPX1063_synpic22167",
+        "caption": "Multiple axial CT images of the chest with intravenous contrast material demonstrates a Stanford type A thoracic aortic dissection, with a clear intimal flap separating the true and false lumens of the ascending aorta.  Additionally, the pericardium full of dense fluid, likely hemopericardium."
+      },
+      {
+        "image": "MPX1238_synpic27745",
+        "caption": ">Skull cap in left anterior abdominal wall with underlying liquified hematoma"
+      }
+    ]
+  }
+}

@@ -3,15 +3,17 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class CRDLoss(nn.Module):
-    def __init__(self, temperature=0.1, base_temperature=0.07):
+    def __init__(self, temperature=0.1, base_temperature=0.07, include_ce=True):
         super().__init__()
+        self.ce = nn.CrossEntropyLoss()
         self.temperature = temperature
         self.base_temperature = base_temperature
+        self.include_ce = include_ce
         # Projection layers will be created lazily on first forward pass
         self.proj_t_img = None
         self.proj_t_txt = None
 
-    def forward(self, s_out, t_out, y_mod, y_loc):
+    def forward(self, s_out, t_out, y_mod=None, y_loc=None):
         # Accept both dict-based calls (from trainer) and direct tensor calls (for compatibility)
         if isinstance(s_out, dict):
             s_img = s_out["img_proj"]
@@ -50,4 +52,10 @@ class CRDLoss(nn.Module):
         targets = torch.arange(batch_size, device=s_img.device)
         loss_img = F.cross_entropy(logits_img, targets)
         loss_txt = F.cross_entropy(logits_txt, targets)
-        return (loss_img + loss_txt) / 2
+        crd_loss = (loss_img + loss_txt) / 2
+
+        if self.include_ce and isinstance(s_out, dict) and y_mod is not None and y_loc is not None and 'logits_modality' in s_out and 'logits_location' in s_out:
+            loss_ce = self.ce(s_out['logits_modality'], y_mod) + self.ce(s_out['logits_location'], y_loc)
+            return crd_loss + loss_ce
+
+        return crd_loss

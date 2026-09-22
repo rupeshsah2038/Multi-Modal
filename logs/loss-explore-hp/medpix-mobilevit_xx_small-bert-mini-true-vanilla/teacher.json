@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-09-19T00:56:37.673897",
+  "config": {
+    "teacher": {
+      "vision": "vit-base",
+      "text": "bio-clinical-bert",
+      "fusion_layers": 3,
+      "fusion_dim": 256,
+      "fusion_heads": 4,
+      "dropout": 0.09621361388138176
+    },
+    "training": {
+      "teacher_epochs": 3,
+      "teacher_lr": 9.021655603568134e-05
+    },
+    "data": {
+      "type": "medpix",
+      "root": "datasets/MedPix-2-0",
+      "batch_size": 16,
+      "num_workers": 4,
+      "task1_label": "modality",
+      "task2_label": "location"
+    },
+    "evaluation": {},
+    "fusion": {
+      "type": "cross_attention"
+    },
+    "loss": {
+      "type": "vanilla"
+    }
+  },
+  "metrics": {
+    "dev": {
+      "teacher_dev_modality_acc": 0.9847715736040609,
+      "teacher_dev_location_acc": 0.766497461928934,
+      "teacher_dev_modality_f1": 0.9843588725684795,
+      "teacher_dev_location_f1": 0.7714839204921502,
+      "teacher_dev_modality_prec": 0.9870689655172413,
+      "teacher_dev_location_prec": 0.8146194216200202,
+      "teacher_dev_modality_rec": 0.9821428571428572,
+      "teacher_dev_location_rec": 0.7639775566762074,
+      "teacher_dev_modality_auc": 0.9911504424778761,
+      "teacher_dev_location_auc": 0.9457160788419919,
+      "teacher_dev_infer_ms": 25.07555787333377
+    },
+    "test": {
+      "teacher_test_modality_acc": 0.955,
+      "teacher_test_location_acc": 0.75,
+      "teacher_test_modality_f1": 0.9549448073890516,
+      "teacher_test_location_f1": 0.6329943196199499,
+      "teacher_test_modality_prec": 0.957240478343885,
+      "teacher_test_location_prec": 0.7246358543417367,
+      "teacher_test_modality_rec": 0.9550000000000001,
+      "teacher_test_location_rec": 0.6281240518146808,
+      "teacher_test_modality_auc": 0.9896,
+      "teacher_test_location_auc": 0.9366247816110617,
+      "teacher_test_infer_ms": 24.7025203704834
+    }
+  },
+  "model": {
+    "vision": "vit-base",
+    "text": "bio-clinical-bert",
+    "fusion_layers": 3,
+    "total_params": 195884807,
+    "params_millions": 195.88
+  }
+}

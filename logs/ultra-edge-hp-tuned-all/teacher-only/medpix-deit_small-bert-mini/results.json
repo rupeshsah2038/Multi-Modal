@@ -1,0 +1,120 @@
+{
+  "timestamp": "2026-04-07T16:19:49.428219",
+  "config": {
+    "data": {
+      "type": "medpix",
+      "root": "datasets/MedPix-2-0",
+      "batch_size": 16,
+      "num_workers": 4,
+      "task1_label": "modality",
+      "task2_label": "location"
+    },
+    "teacher": {
+      "vision": "vit-base",
+      "text": "bio-clinical-bert",
+      "fusion_layers": 3,
+      "fusion_dim": 256,
+      "fusion_heads": 4,
+      "dropout": 0.09621361388138176
+    },
+    "student": {
+      "vision": "deit-small",
+      "text": "bert-mini",
+      "fusion_layers": 1,
+      "fusion_dim": 256,
+      "fusion_heads": 8,
+      "dropout": 0.29239615694113963
+    },
+    "training": {
+      "teacher_only": true,
+      "teacher_epochs": 3,
+      "teacher_lr": 9.021655603568134e-05
+    },
+    "logging": {
+      "log_dir": "logs/ultra-edge-hp-tuned-all/teacher-only/medpix-deit_small-bert-mini"
+    },
+    "fusion": {
+      "type": "cross_attention"
+    },
+    "loss": {
+      "type": "combined"
+    },
+    "device": "cuda:0",
+    "evaluation": {
+      "save_teacher_metrics": true,
+      "mcnemar": false,
+      "mcnemar_exact": true,
+      "mcnemar_cc": true
+    }
+  },
+  "metrics": {
+    "train": {},
+    "dev": {},
+    "test": {},
+    "teacher": {
+      "dev": {
+        "teacher_dev_modality_acc": 0.9543147208121827,
+        "teacher_dev_location_acc": 0.8071065989847716,
+        "teacher_dev_modality_f1": 0.9536264483561321,
+        "teacher_dev_location_f1": 0.8013277696423063,
+        "teacher_dev_modality_prec": 0.9514148980441115,
+        "teacher_dev_location_prec": 0.8226657546739625,
+        "teacher_dev_modality_rec": 0.9571217867678045,
+        "teacher_dev_location_rec": 0.7968579346690291,
+        "teacher_dev_modality_auc": 0.9863042562157607,
+        "teacher_dev_location_auc": 0.952998871781146,
+        "teacher_dev_infer_ms": 15.637893967216995
+      },
+      "test": {
+        "teacher_test_modality_acc": 0.915,
+        "teacher_test_location_acc": 0.775,
+        "teacher_test_modality_f1": 0.9145191703331239,
+        "teacher_test_location_f1": 0.7541246496176074,
+        "teacher_test_modality_prec": 0.9245524296675192,
+        "teacher_test_location_prec": 0.83087008781828,
+        "teacher_test_modality_rec": 0.915,
+        "teacher_test_location_rec": 0.7414012720270743,
+        "teacher_test_modality_auc": 0.9946,
+        "teacher_test_location_auc": 0.9208228781040122,
+        "teacher_test_infer_ms": 14.117957353591919
+      }
+    }
+  },
+  "models": {
+    "teacher": {
+      "vision": "vit-base",
+      "text": "bio-clinical-bert",
+      "fusion_layers": 3,
+      "total_params": 195884807,
+      "params_millions": 195.88
+    },
+    "student": {
+      "vision": "deit-small",
+      "text": "bert-mini",
+      "fusion_layers": 1,
+      "total_params": null,
+      "params_millions": null
+    }
+  },
+  "training": {
+    "teacher_epochs": 3,
+    "student_epochs": null,
+    "teacher_lr": 9.021655603568134e-05,
+    "student_lr": null,
+    "alpha": null,
+    "beta": null,
+    "gamma": null,
+    "T": null
+  },
+  "data": {
+    "root": "datasets/MedPix-2-0",
+    "batch_size": 16,
+    "num_workers": 4
+  },
+  "fusion": {
+    "type": "cross_attention"
+  },
+  "loss": {
+    "type": "combined"
+  }
+}

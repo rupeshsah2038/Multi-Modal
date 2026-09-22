@@ -9,7 +9,7 @@ class MedKDCombinedLoss(nn.Module):
         self.ce = nn.CrossEntropyLoss()
         self.kl = nn.KLDivLoss(reduction="batchmean")
         self.mse = nn.MSELoss()
-        self.crd = CRDLoss()
+        self.crd = CRDLoss(include_ce=False)
         self.alpha, self.beta, self.gamma, self.T = alpha, beta, gamma, T
         # Projection layers will be created lazily on first forward pass
         self.proj_t_img = None

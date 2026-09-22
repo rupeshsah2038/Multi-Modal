@@ -3,10 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class RKDLoss(nn.Module):
-    def __init__(self, w_dist=25.0, w_angle=50.0):
+    def __init__(self, w_dist=25.0, w_angle=50.0, include_ce=True):
         super().__init__()
+        self.ce = nn.CrossEntropyLoss()
         self.w_dist = w_dist
         self.w_angle = w_angle
+        self.include_ce = include_ce
         # Projection layers will be created lazily on first forward pass to
         # support swapping backbones with different feature sizes.
         self.proj_t_img = None
@@ -49,7 +51,13 @@ class RKDLoss(nn.Module):
             t_txt = F.normalize(t_txt, dim=-1)
             loss_img = self._compute_rkd(s_img, t_img)
             loss_txt = self._compute_rkd(s_txt, t_txt)
-            return (loss_img + loss_txt) / 2
+            loss_rkd = (loss_img + loss_txt) / 2
+
+            if self.include_ce and y_mod is not None and y_loc is not None and 'logits_modality' in s_out and 'logits_location' in s_out:
+                loss_ce = self.ce(s_out['logits_modality'], y_mod) + self.ce(s_out['logits_location'], y_loc)
+                return loss_rkd + loss_ce
+
+            return loss_rkd
         else:
             # Direct tensor calls (old interface for backward compatibility)
             s_feats = s_out

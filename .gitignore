@@ -1,6 +1,14 @@
-logs/
+#logs/
 __pycache__/
 *.pyc
 .pytest_cache/
 .ipynb_checkpoints/
 third_party/
+
+# Model checkpoints
+*.pth
+*.pt
+*.ckpt
+*.bin
+*.safetensors
+checkpoints/

@@ -1,0 +1,4121 @@
+==== [Thu Jan 22 05:28:01 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-small-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/labels_modality.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/labels_location.npy
+
+Teacher parameters: 195.88M (195,884,807)
+Student parameters: 33.94M (33,939,975)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 0.8263
+Teacher Epoch 2/3 – loss 0.3123
+Teacher Epoch 3/3 – loss 0.1919
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_teacher_dev.npy
+teacher_dev_modality_acc: 0.9848
+teacher_dev_location_acc: 0.8376
+teacher_dev_modality_f1: 0.9844
+teacher_dev_location_f1: 0.8061
+teacher_dev_modality_prec: 0.9852
+teacher_dev_location_prec: 0.8022
+teacher_dev_modality_rec: 0.9837
+teacher_dev_location_rec: 0.8261
+teacher_dev_modality_auc: 0.9948
+teacher_dev_location_auc: 0.9605
+teacher_dev_infer_ms: 13.47ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_teacher_test.npy
+teacher_test_modality_acc: 0.9650
+teacher_test_location_acc: 0.7550
+teacher_test_modality_f1: 0.9650
+teacher_test_location_f1: 0.7399
+teacher_test_modality_prec: 0.9654
+teacher_test_location_prec: 0.7455
+teacher_test_modality_rec: 0.9650
+teacher_test_location_rec: 0.7653
+teacher_test_modality_auc: 0.9960
+teacher_test_location_auc: 0.9465
+teacher_test_infer_ms: 13.25ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 38.4530
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9594
+dev_location_acc: 0.7310
+dev_modality_f1: 0.9586
+dev_location_f1: 0.5949
+dev_modality_prec: 0.9574
+dev_location_prec: 0.5710
+dev_modality_rec: 0.9600
+dev_location_rec: 0.6348
+dev_modality_auc: 0.9891
+dev_location_auc: 0.9055
+dev_infer_ms: 5.33ms
+  New best dev score: 0.7768
+Student Epoch 1/1 – loss 24.9365
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9188
+dev_location_acc: 0.7868
+dev_modality_f1: 0.9182
+dev_location_f1: 0.7541
+dev_modality_prec: 0.9172
+dev_location_prec: 0.7653
+dev_modality_rec: 0.9261
+dev_location_rec: 0.7593
+dev_modality_auc: 0.9769
+dev_location_auc: 0.9547
+dev_infer_ms: 5.44ms
+  New best dev score: 0.8361
+Student Epoch 1/1 – loss 20.9984
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9239
+dev_location_acc: 0.8020
+dev_modality_f1: 0.9199
+dev_location_f1: 0.7766
+dev_modality_prec: 0.9414
+dev_location_prec: 0.7833
+dev_modality_rec: 0.9107
+dev_location_rec: 0.7739
+dev_modality_auc: 0.9751
+dev_location_auc: 0.9401
+dev_infer_ms: 5.41ms
+  New best dev score: 0.8482
+Student Epoch 1/1 – loss 19.1451
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9645
+dev_location_acc: 0.8122
+dev_modality_f1: 0.9638
+dev_location_f1: 0.7920
+dev_modality_prec: 0.9622
+dev_location_prec: 0.8212
+dev_modality_rec: 0.9660
+dev_location_rec: 0.7901
+dev_modality_auc: 0.9861
+dev_location_auc: 0.9479
+dev_infer_ms: 5.28ms
+  New best dev score: 0.8779
+Student Epoch 1/1 – loss 17.9098
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9543
+dev_location_acc: 0.7462
+dev_modality_f1: 0.9534
+dev_location_f1: 0.7195
+dev_modality_prec: 0.9527
+dev_location_prec: 0.7497
+dev_modality_rec: 0.9541
+dev_location_rec: 0.7180
+dev_modality_auc: 0.9700
+dev_location_auc: 0.9257
+dev_infer_ms: 5.41ms
+Student Epoch 1/1 – loss 17.1309
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9086
+dev_location_acc: 0.8071
+dev_modality_f1: 0.9079
+dev_location_f1: 0.8037
+dev_modality_prec: 0.9070
+dev_location_prec: 0.8121
+dev_modality_rec: 0.9158
+dev_location_rec: 0.8192
+dev_modality_auc: 0.9402
+dev_location_auc: 0.9517
+dev_infer_ms: 5.48ms
+Student Epoch 1/1 – loss 16.5230
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.7766
+dev_modality_f1: 0.9689
+dev_location_f1: 0.7257
+dev_modality_prec: 0.9689
+dev_location_prec: 0.7902
+dev_modality_rec: 0.9689
+dev_location_rec: 0.7383
+dev_modality_auc: 0.9858
+dev_location_auc: 0.9463
+dev_infer_ms: 5.30ms
+Student Epoch 1/1 – loss 15.7626
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9442
+dev_location_acc: 0.8223
+dev_modality_f1: 0.9435
+dev_location_f1: 0.8078
+dev_modality_prec: 0.9411
+dev_location_prec: 0.8082
+dev_modality_rec: 0.9483
+dev_location_rec: 0.8251
+dev_modality_auc: 0.9747
+dev_location_auc: 0.9665
+dev_infer_ms: 5.33ms
+Student Epoch 1/1 – loss 15.4414
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9594
+dev_location_acc: 0.8376
+dev_modality_f1: 0.9586
+dev_location_f1: 0.8124
+dev_modality_prec: 0.9574
+dev_location_prec: 0.8159
+dev_modality_rec: 0.9600
+dev_location_rec: 0.8164
+dev_modality_auc: 0.9840
+dev_location_auc: 0.9708
+dev_infer_ms: 5.39ms
+  New best dev score: 0.8855
+Student Epoch 1/1 – loss 15.2352
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.8122
+dev_modality_f1: 0.9686
+dev_location_f1: 0.7845
+dev_modality_prec: 0.9748
+dev_location_prec: 0.8117
+dev_modality_rec: 0.9643
+dev_location_rec: 0.7740
+dev_modality_auc: 0.9863
+dev_location_auc: 0.9574
+dev_infer_ms: 5.34ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_modality_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/cm_location_test.npy
+test_modality_acc: 0.9600
+test_location_acc: 0.8150
+test_modality_f1: 0.9600
+test_location_f1: 0.7723
+test_modality_prec: 0.9602
+test_location_prec: 0.8320
+test_modality_rec: 0.9600
+test_location_rec: 0.7608
+test_modality_auc: 0.9913
+test_location_auc: 0.9489
+test_infer_ms: 5.17ms
+test_modality_acc: 0.9650
+test_location_acc: 0.7550
+test_modality_f1: 0.9650
+test_location_f1: 0.7399
+test_modality_prec: 0.9654
+test_location_prec: 0.7455
+test_modality_rec: 0.9650
+test_location_rec: 0.7653
+test_modality_auc: 0.9960
+test_location_auc: 0.9465
+test_infer_ms: 13.29ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini
+==== [Thu Jan 22 05:36:45 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/medpix-deit_small-bert-mini.yaml exit=0 ====
+==== [Thu Jan 22 05:36:45 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-small-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/labels_modality.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/labels_location.npy
+
+Teacher parameters: 195.88M (195,884,807)
+Student parameters: 27.12M (27,122,567)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 0.7970
+Teacher Epoch 2/3 – loss 0.3183
+Teacher Epoch 3/3 – loss 0.2154
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_teacher_dev.npy
+teacher_dev_modality_acc: 0.9746
+teacher_dev_location_acc: 0.8528
+teacher_dev_modality_f1: 0.9738
+teacher_dev_location_f1: 0.8243
+teacher_dev_modality_prec: 0.9788
+teacher_dev_location_prec: 0.8450
+teacher_dev_modality_rec: 0.9702
+teacher_dev_location_rec: 0.8122
+teacher_dev_modality_auc: 0.9902
+teacher_dev_location_auc: 0.9567
+teacher_dev_infer_ms: 13.44ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_teacher_test.npy
+teacher_test_modality_acc: 0.9700
+teacher_test_location_acc: 0.8600
+teacher_test_modality_f1: 0.9700
+teacher_test_location_f1: 0.8639
+teacher_test_modality_prec: 0.9708
+teacher_test_location_prec: 0.8543
+teacher_test_modality_rec: 0.9700
+teacher_test_location_rec: 0.8805
+teacher_test_modality_auc: 0.9963
+teacher_test_location_auc: 0.9532
+teacher_test_infer_ms: 13.24ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 40.9878
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_dev.npy
+dev_modality_acc: 0.9492
+dev_location_acc: 0.6751
+dev_modality_f1: 0.9472
+dev_location_f1: 0.5796
+dev_modality_prec: 0.9593
+dev_location_prec: 0.6594
+dev_modality_rec: 0.9405
+dev_location_rec: 0.5890
+dev_modality_auc: 0.9761
+dev_location_auc: 0.8835
+dev_infer_ms: 5.17ms
+  New best dev score: 0.7634
+Student Epoch 1/1 – loss 27.9803
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_dev.npy
+dev_modality_acc: 0.9746
+dev_location_acc: 0.7766
+dev_modality_f1: 0.9739
+dev_location_f1: 0.7276
+dev_modality_prec: 0.9766
+dev_location_prec: 0.7368
+dev_modality_rec: 0.9718
+dev_location_rec: 0.7234
+dev_modality_auc: 0.9865
+dev_location_auc: 0.9301
+dev_infer_ms: 5.13ms
+  New best dev score: 0.8508
+Student Epoch 1/1 – loss 22.8822
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_dev.npy
+dev_modality_acc: 0.9797
+dev_location_acc: 0.7919
+dev_modality_f1: 0.9792
+dev_location_f1: 0.7478
+dev_modality_prec: 0.9809
+dev_location_prec: 0.7675
+dev_modality_rec: 0.9777
+dev_location_rec: 0.7362
+dev_modality_auc: 0.9913
+dev_location_auc: 0.9338
+dev_infer_ms: 5.44ms
+  New best dev score: 0.8635
+Student Epoch 1/1 – loss 20.2962
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.8020
+dev_modality_f1: 0.9686
+dev_location_f1: 0.7573
+dev_modality_prec: 0.9748
+dev_location_prec: 0.7665
+dev_modality_rec: 0.9643
+dev_location_rec: 0.7520
+dev_modality_auc: 0.9801
+dev_location_auc: 0.9505
+dev_infer_ms: 5.15ms
+Student Epoch 1/1 – loss 18.6545
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.8122
+dev_modality_f1: 0.9688
+dev_location_f1: 0.7628
+dev_modality_prec: 0.9704
+dev_location_prec: 0.7840
+dev_modality_rec: 0.9673
+dev_location_rec: 0.7492
+dev_modality_auc: 0.9789
+dev_location_auc: 0.9544
+dev_infer_ms: 5.20ms
+  New best dev score: 0.8658
+Student Epoch 1/1 – loss 17.8368
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.8071
+dev_modality_f1: 0.9688
+dev_location_f1: 0.7694
+dev_modality_prec: 0.9704
+dev_location_prec: 0.8109
+dev_modality_rec: 0.9673
+dev_location_rec: 0.7506
+dev_modality_auc: 0.9870
+dev_location_auc: 0.9552
+dev_infer_ms: 5.29ms
+  New best dev score: 0.8691
+Student Epoch 1/1 – loss 16.9742
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_dev.npy
+dev_modality_acc: 0.9797
+dev_location_acc: 0.7766
+dev_modality_f1: 0.9792
+dev_location_f1: 0.7224
+dev_modality_prec: 0.9809
+dev_location_prec: 0.7290
+dev_modality_rec: 0.9777
+dev_location_rec: 0.7186
+dev_modality_auc: 0.9917
+dev_location_auc: 0.9453
+dev_infer_ms: 5.57ms
+Student Epoch 1/1 – loss 16.1713
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_dev.npy
+dev_modality_acc: 0.9746
+dev_location_acc: 0.8274
+dev_modality_f1: 0.9738
+dev_location_f1: 0.7965
+dev_modality_prec: 0.9788
+dev_location_prec: 0.8129
+dev_modality_rec: 0.9702
+dev_location_rec: 0.7924
+dev_modality_auc: 0.9933
+dev_location_auc: 0.9603
+dev_infer_ms: 5.18ms
+  New best dev score: 0.8852
+Student Epoch 1/1 – loss 15.8668
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_dev.npy
+dev_modality_acc: 0.9645
+dev_location_acc: 0.8173
+dev_modality_f1: 0.9638
+dev_location_f1: 0.7812
+dev_modality_prec: 0.9622
+dev_location_prec: 0.7780
+dev_modality_rec: 0.9660
+dev_location_rec: 0.7865
+dev_modality_auc: 0.9835
+dev_location_auc: 0.9635
+dev_infer_ms: 5.26ms
+Student Epoch 1/1 – loss 15.1977
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_dev.npy
+dev_modality_acc: 0.9797
+dev_location_acc: 0.8528
+dev_modality_f1: 0.9791
+dev_location_f1: 0.8260
+dev_modality_prec: 0.9829
+dev_location_prec: 0.8311
+dev_modality_rec: 0.9762
+dev_location_rec: 0.8302
+dev_modality_auc: 0.9906
+dev_location_auc: 0.9632
+dev_infer_ms: 5.00ms
+  New best dev score: 0.9026
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_modality_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/cm_location_test.npy
+test_modality_acc: 0.9750
+test_location_acc: 0.8500
+test_modality_f1: 0.9750
+test_location_f1: 0.8144
+test_modality_prec: 0.9754
+test_location_prec: 0.8161
+test_modality_rec: 0.9750
+test_location_rec: 0.8145
+test_modality_auc: 0.9837
+test_location_auc: 0.9576
+test_infer_ms: 5.14ms
+test_modality_acc: 0.9700
+test_location_acc: 0.8600
+test_modality_f1: 0.9700
+test_location_f1: 0.8639
+test_modality_prec: 0.9708
+test_location_prec: 0.8543
+test_modality_rec: 0.9700
+test_location_rec: 0.8805
+test_modality_auc: 0.9963
+test_location_auc: 0.9532
+test_infer_ms: 13.38ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny
+==== [Thu Jan 22 05:45:13 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/medpix-deit_small-bert-tiny.yaml exit=0 ====
+==== [Thu Jan 22 05:45:13 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-small-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/labels_modality.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/labels_location.npy
+
+Teacher parameters: 195.88M (195,884,807)
+Student parameters: 89.26M (89,263,367)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 0.8714
+Teacher Epoch 2/3 – loss 0.3197
+Teacher Epoch 3/3 – loss 0.1921
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_teacher_dev.npy
+teacher_dev_modality_acc: 0.9797
+teacher_dev_location_acc: 0.7563
+teacher_dev_modality_f1: 0.9791
+teacher_dev_location_f1: 0.7475
+teacher_dev_modality_prec: 0.9829
+teacher_dev_location_prec: 0.7908
+teacher_dev_modality_rec: 0.9762
+teacher_dev_location_rec: 0.7463
+teacher_dev_modality_auc: 0.9864
+teacher_dev_location_auc: 0.9549
+teacher_dev_infer_ms: 13.38ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_teacher_test.npy
+teacher_test_modality_acc: 0.9250
+teacher_test_location_acc: 0.7850
+teacher_test_modality_f1: 0.9250
+teacher_test_location_f1: 0.7451
+teacher_test_modality_prec: 0.9250
+teacher_test_location_prec: 0.8398
+teacher_test_modality_rec: 0.9250
+teacher_test_location_rec: 0.7150
+teacher_test_modality_auc: 0.9882
+teacher_test_location_auc: 0.9386
+teacher_test_infer_ms: 13.25ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 36.4512
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9340
+dev_location_acc: 0.5635
+dev_modality_f1: 0.9330
+dev_location_f1: 0.5479
+dev_modality_prec: 0.9309
+dev_location_prec: 0.6048
+dev_modality_rec: 0.9364
+dev_location_rec: 0.5743
+dev_modality_auc: 0.9784
+dev_location_auc: 0.8557
+dev_infer_ms: 7.61ms
+  New best dev score: 0.7405
+Student Epoch 1/1 – loss 25.4372
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9239
+dev_location_acc: 0.8173
+dev_modality_f1: 0.9227
+dev_location_f1: 0.7871
+dev_modality_prec: 0.9207
+dev_location_prec: 0.8275
+dev_modality_rec: 0.9260
+dev_location_rec: 0.7762
+dev_modality_auc: 0.9723
+dev_location_auc: 0.9440
+dev_infer_ms: 7.54ms
+  New best dev score: 0.8549
+Student Epoch 1/1 – loss 22.2750
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9594
+dev_location_acc: 0.7766
+dev_modality_f1: 0.9579
+dev_location_f1: 0.7584
+dev_modality_prec: 0.9669
+dev_location_prec: 0.8083
+dev_modality_rec: 0.9524
+dev_location_rec: 0.7295
+dev_modality_auc: 0.9687
+dev_location_auc: 0.9237
+dev_infer_ms: 7.57ms
+  New best dev score: 0.8582
+Student Epoch 1/1 – loss 20.1309
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.7411
+dev_modality_f1: 0.9687
+dev_location_f1: 0.6613
+dev_modality_prec: 0.9724
+dev_location_prec: 0.7135
+dev_modality_rec: 0.9658
+dev_location_rec: 0.6618
+dev_modality_auc: 0.9808
+dev_location_auc: 0.9103
+dev_infer_ms: 7.75ms
+Student Epoch 1/1 – loss 19.0086
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9492
+dev_location_acc: 0.6802
+dev_modality_f1: 0.9483
+dev_location_f1: 0.6753
+dev_modality_prec: 0.9471
+dev_location_prec: 0.7475
+dev_modality_rec: 0.9496
+dev_location_rec: 0.6814
+dev_modality_auc: 0.9800
+dev_location_auc: 0.9265
+dev_infer_ms: 7.62ms
+Student Epoch 1/1 – loss 19.5232
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9543
+dev_location_acc: 0.6954
+dev_modality_f1: 0.9529
+dev_location_f1: 0.6653
+dev_modality_prec: 0.9577
+dev_location_prec: 0.7682
+dev_modality_rec: 0.9495
+dev_location_rec: 0.6356
+dev_modality_auc: 0.9744
+dev_location_auc: 0.9366
+dev_infer_ms: 7.52ms
+Student Epoch 1/1 – loss 19.9137
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.7766
+dev_modality_f1: 0.9689
+dev_location_f1: 0.7238
+dev_modality_prec: 0.9689
+dev_location_prec: 0.7693
+dev_modality_rec: 0.9689
+dev_location_rec: 0.7248
+dev_modality_auc: 0.9814
+dev_location_auc: 0.9267
+dev_infer_ms: 7.63ms
+Student Epoch 1/1 – loss 18.3125
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9543
+dev_location_acc: 0.7665
+dev_modality_f1: 0.9527
+dev_location_f1: 0.7440
+dev_modality_prec: 0.9602
+dev_location_prec: 0.8011
+dev_modality_rec: 0.9480
+dev_location_rec: 0.7335
+dev_modality_auc: 0.9822
+dev_location_auc: 0.9551
+dev_infer_ms: 7.60ms
+Student Epoch 1/1 – loss 18.2421
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9645
+dev_location_acc: 0.7665
+dev_modality_f1: 0.9635
+dev_location_f1: 0.7477
+dev_modality_prec: 0.9661
+dev_location_prec: 0.8094
+dev_modality_rec: 0.9614
+dev_location_rec: 0.7287
+dev_modality_auc: 0.9766
+dev_location_auc: 0.9285
+dev_infer_ms: 7.61ms
+Student Epoch 1/1 – loss 18.2423
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9594
+dev_location_acc: 0.7310
+dev_modality_f1: 0.9581
+dev_location_f1: 0.7081
+dev_modality_prec: 0.9642
+dev_location_prec: 0.7498
+dev_modality_rec: 0.9539
+dev_location_rec: 0.6909
+dev_modality_auc: 0.9785
+dev_location_auc: 0.9360
+dev_infer_ms: 7.59ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_modality_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/cm_location_test.npy
+test_modality_acc: 0.9350
+test_location_acc: 0.8250
+test_modality_f1: 0.9347
+test_location_f1: 0.7868
+test_modality_prec: 0.9425
+test_location_prec: 0.8796
+test_modality_rec: 0.9350
+test_location_rec: 0.7449
+test_modality_auc: 0.9839
+test_location_auc: 0.9311
+test_infer_ms: 7.57ms
+test_modality_acc: 0.9250
+test_location_acc: 0.7850
+test_modality_f1: 0.9250
+test_location_f1: 0.7451
+test_modality_prec: 0.9250
+test_location_prec: 0.8398
+test_modality_rec: 0.9250
+test_location_rec: 0.7150
+test_modality_auc: 0.9882
+test_location_auc: 0.9386
+test_infer_ms: 13.35ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert
+==== [Thu Jan 22 05:56:08 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/medpix-deit_small-distilbert.yaml exit=0 ====
+==== [Thu Jan 22 05:56:08 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/medpix-deit_small-minilm.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-small-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/labels_modality.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/labels_location.npy
+
+Teacher parameters: 195.88M (195,884,807)
+Student parameters: 45.52M (45,515,399)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 0.9461
+Teacher Epoch 2/3 – loss 0.4206
+Teacher Epoch 3/3 – loss 0.2123
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_teacher_dev.npy
+teacher_dev_modality_acc: 0.9239
+teacher_dev_location_acc: 0.8122
+teacher_dev_modality_f1: 0.9232
+teacher_dev_location_f1: 0.7731
+teacher_dev_modality_prec: 0.9218
+teacher_dev_location_prec: 0.8027
+teacher_dev_modality_rec: 0.9306
+teacher_dev_location_rec: 0.7623
+teacher_dev_modality_auc: 0.9843
+teacher_dev_location_auc: 0.9496
+teacher_dev_infer_ms: 13.28ms
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_teacher_test.npy
+teacher_test_modality_acc: 0.9050
+teacher_test_location_acc: 0.8200
+teacher_test_modality_f1: 0.9046
+teacher_test_location_f1: 0.6727
+teacher_test_modality_prec: 0.9120
+teacher_test_location_prec: 0.6581
+teacher_test_modality_rec: 0.9050
+teacher_test_location_rec: 0.6917
+teacher_test_modality_auc: 0.9809
+teacher_test_location_auc: 0.9408
+teacher_test_infer_ms: 13.10ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 35.6898
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9391
+dev_location_acc: 0.7208
+dev_modality_f1: 0.9371
+dev_location_f1: 0.5790
+dev_modality_prec: 0.9430
+dev_location_prec: 0.5727
+dev_modality_rec: 0.9332
+dev_location_rec: 0.6057
+dev_modality_auc: 0.9748
+dev_location_auc: 0.9256
+dev_infer_ms: 5.55ms
+  New best dev score: 0.7581
+Student Epoch 1/1 – loss 24.7921
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9391
+dev_location_acc: 0.7259
+dev_modality_f1: 0.9379
+dev_location_f1: 0.6006
+dev_modality_prec: 0.9368
+dev_location_prec: 0.5835
+dev_modality_rec: 0.9393
+dev_location_rec: 0.6369
+dev_modality_auc: 0.9747
+dev_location_auc: 0.9430
+dev_infer_ms: 6.16ms
+  New best dev score: 0.7692
+Student Epoch 1/1 – loss 21.6166
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_dev.npy
+dev_modality_acc: 0.8274
+dev_location_acc: 0.8020
+dev_modality_f1: 0.8274
+dev_location_f1: 0.7779
+dev_modality_prec: 0.8406
+dev_location_prec: 0.8183
+dev_modality_rec: 0.8434
+dev_location_rec: 0.7655
+dev_modality_auc: 0.9640
+dev_location_auc: 0.9471
+dev_infer_ms: 6.01ms
+  New best dev score: 0.8026
+Student Epoch 1/1 – loss 19.8607
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9492
+dev_location_acc: 0.7462
+dev_modality_f1: 0.9485
+dev_location_f1: 0.6570
+dev_modality_prec: 0.9462
+dev_location_prec: 0.7041
+dev_modality_rec: 0.9527
+dev_location_rec: 0.6704
+dev_modality_auc: 0.9914
+dev_location_auc: 0.9436
+dev_infer_ms: 5.61ms
+  New best dev score: 0.8028
+Student Epoch 1/1 – loss 18.4027
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9391
+dev_location_acc: 0.8071
+dev_modality_f1: 0.9384
+dev_location_f1: 0.7942
+dev_modality_prec: 0.9361
+dev_location_prec: 0.8263
+dev_modality_rec: 0.9438
+dev_location_rec: 0.7782
+dev_modality_auc: 0.9798
+dev_location_auc: 0.9390
+dev_infer_ms: 5.69ms
+  New best dev score: 0.8663
+Student Epoch 1/1 – loss 17.5839
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9543
+dev_location_acc: 0.7868
+dev_modality_f1: 0.9527
+dev_location_f1: 0.7848
+dev_modality_prec: 0.9602
+dev_location_prec: 0.8352
+dev_modality_rec: 0.9480
+dev_location_rec: 0.7604
+dev_modality_auc: 0.9855
+dev_location_auc: 0.9328
+dev_infer_ms: 5.67ms
+  New best dev score: 0.8687
+Student Epoch 1/1 – loss 17.0619
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9594
+dev_location_acc: 0.8528
+dev_modality_f1: 0.9586
+dev_location_f1: 0.8634
+dev_modality_prec: 0.9574
+dev_location_prec: 0.8789
+dev_modality_rec: 0.9600
+dev_location_rec: 0.8575
+dev_modality_auc: 0.9850
+dev_location_auc: 0.9488
+dev_infer_ms: 5.63ms
+  New best dev score: 0.9110
+Student Epoch 1/1 – loss 16.2767
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9543
+dev_location_acc: 0.7868
+dev_modality_f1: 0.9537
+dev_location_f1: 0.7405
+dev_modality_prec: 0.9513
+dev_location_prec: 0.7860
+dev_modality_rec: 0.9586
+dev_location_rec: 0.7336
+dev_modality_auc: 0.9910
+dev_location_auc: 0.9524
+dev_infer_ms: 5.76ms
+Student Epoch 1/1 – loss 16.0182
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9188
+dev_location_acc: 0.8173
+dev_modality_f1: 0.9180
+dev_location_f1: 0.8051
+dev_modality_prec: 0.9163
+dev_location_prec: 0.8196
+dev_modality_rec: 0.9246
+dev_location_rec: 0.7998
+dev_modality_auc: 0.9842
+dev_location_auc: 0.9520
+dev_infer_ms: 5.77ms
+Student Epoch 1/1 – loss 15.4806
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9746
+dev_location_acc: 0.7665
+dev_modality_f1: 0.9740
+dev_location_f1: 0.6371
+dev_modality_prec: 0.9748
+dev_location_prec: 0.6081
+dev_modality_rec: 0.9733
+dev_location_rec: 0.6806
+dev_modality_auc: 0.9959
+dev_location_auc: 0.9473
+dev_infer_ms: 5.91ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_modality_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/cm_location_test.npy
+test_modality_acc: 0.9250
+test_location_acc: 0.8250
+test_modality_f1: 0.9248
+test_location_f1: 0.7334
+test_modality_prec: 0.9285
+test_location_prec: 0.7733
+test_modality_rec: 0.9250
+test_location_rec: 0.7243
+test_modality_auc: 0.9850
+test_location_auc: 0.9387
+test_infer_ms: 5.49ms
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+test_modality_acc: 0.9050
+test_location_acc: 0.8200
+test_modality_f1: 0.9046
+test_location_f1: 0.6727
+test_modality_prec: 0.9120
+test_location_prec: 0.6581
+test_modality_rec: 0.9050
+test_location_rec: 0.6917
+test_modality_auc: 0.9809
+test_location_auc: 0.9408
+test_infer_ms: 13.11ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/medpix-deit_small-minilm
+==== [Thu Jan 22 06:05:22 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/medpix-deit_small-minilm.yaml exit=0 ====
+==== [Thu Jan 22 06:05:22 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-tiny-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/labels_modality.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/labels_location.npy
+
+Teacher parameters: 195.88M (195,884,807)
+Student parameters: 17.64M (17,638,791)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 0.8460
+Teacher Epoch 2/3 – loss 0.3508
+Teacher Epoch 3/3 – loss 0.1982
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_teacher_dev.npy
+teacher_dev_modality_acc: 0.9848
+teacher_dev_location_acc: 0.8477
+teacher_dev_modality_f1: 0.9844
+teacher_dev_location_f1: 0.8308
+teacher_dev_modality_prec: 0.9852
+teacher_dev_location_prec: 0.8399
+teacher_dev_modality_rec: 0.9837
+teacher_dev_location_rec: 0.8244
+teacher_dev_modality_auc: 0.9860
+teacher_dev_location_auc: 0.9636
+teacher_dev_infer_ms: 13.52ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_teacher_test.npy
+teacher_test_modality_acc: 0.9800
+teacher_test_location_acc: 0.8500
+teacher_test_modality_f1: 0.9800
+teacher_test_location_f1: 0.8288
+teacher_test_modality_prec: 0.9802
+teacher_test_location_prec: 0.8378
+teacher_test_modality_rec: 0.9800
+teacher_test_location_rec: 0.8298
+teacher_test_modality_auc: 0.9922
+teacher_test_location_auc: 0.9532
+teacher_test_infer_ms: 13.14ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 38.6142
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9594
+dev_location_acc: 0.6802
+dev_modality_f1: 0.9586
+dev_location_f1: 0.6587
+dev_modality_prec: 0.9574
+dev_location_prec: 0.7340
+dev_modality_rec: 0.9600
+dev_location_rec: 0.6434
+dev_modality_auc: 0.9854
+dev_location_auc: 0.9130
+dev_infer_ms: 4.91ms
+  New best dev score: 0.8087
+Student Epoch 1/1 – loss 25.8330
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9645
+dev_location_acc: 0.7411
+dev_modality_f1: 0.9634
+dev_location_f1: 0.6850
+dev_modality_prec: 0.9682
+dev_location_prec: 0.7309
+dev_modality_rec: 0.9599
+dev_location_rec: 0.6642
+dev_modality_auc: 0.9822
+dev_location_auc: 0.9211
+dev_infer_ms: 4.88ms
+  New best dev score: 0.8242
+Student Epoch 1/1 – loss 21.2494
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9594
+dev_location_acc: 0.6853
+dev_modality_f1: 0.9585
+dev_location_f1: 0.6725
+dev_modality_prec: 0.9585
+dev_location_prec: 0.7322
+dev_modality_rec: 0.9585
+dev_location_rec: 0.6694
+dev_modality_auc: 0.9723
+dev_location_auc: 0.9254
+dev_infer_ms: 5.03ms
+Student Epoch 1/1 – loss 19.4061
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9340
+dev_location_acc: 0.8020
+dev_modality_f1: 0.9333
+dev_location_f1: 0.7875
+dev_modality_prec: 0.9312
+dev_location_prec: 0.7979
+dev_modality_rec: 0.9394
+dev_location_rec: 0.7960
+dev_modality_auc: 0.9691
+dev_location_auc: 0.9363
+dev_infer_ms: 4.94ms
+  New best dev score: 0.8604
+Student Epoch 1/1 – loss 17.9744
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9848
+dev_location_acc: 0.8274
+dev_modality_f1: 0.9844
+dev_location_f1: 0.8023
+dev_modality_prec: 0.9871
+dev_location_prec: 0.8043
+dev_modality_rec: 0.9821
+dev_location_rec: 0.8096
+dev_modality_auc: 0.9806
+dev_location_auc: 0.9585
+dev_infer_ms: 4.98ms
+  New best dev score: 0.8933
+Student Epoch 1/1 – loss 17.2643
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9340
+dev_location_acc: 0.8173
+dev_modality_f1: 0.9332
+dev_location_f1: 0.8049
+dev_modality_prec: 0.9309
+dev_location_prec: 0.8092
+dev_modality_rec: 0.9379
+dev_location_rec: 0.8228
+dev_modality_auc: 0.9788
+dev_location_auc: 0.9708
+dev_infer_ms: 4.96ms
+Student Epoch 1/1 – loss 16.4380
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9594
+dev_location_acc: 0.7563
+dev_modality_f1: 0.9586
+dev_location_f1: 0.7636
+dev_modality_prec: 0.9574
+dev_location_prec: 0.8233
+dev_modality_rec: 0.9600
+dev_location_rec: 0.7387
+dev_modality_auc: 0.9844
+dev_location_auc: 0.9371
+dev_infer_ms: 4.83ms
+Student Epoch 1/1 – loss 15.8136
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9645
+dev_location_acc: 0.8122
+dev_modality_f1: 0.9632
+dev_location_f1: 0.7921
+dev_modality_prec: 0.9708
+dev_location_prec: 0.7968
+dev_modality_rec: 0.9583
+dev_location_rec: 0.8004
+dev_modality_auc: 0.9728
+dev_location_auc: 0.9509
+dev_infer_ms: 5.03ms
+Student Epoch 1/1 – loss 15.3426
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9898
+dev_location_acc: 0.8477
+dev_modality_f1: 0.9896
+dev_location_f1: 0.8395
+dev_modality_prec: 0.9913
+dev_location_prec: 0.8331
+dev_modality_rec: 0.9881
+dev_location_rec: 0.8550
+dev_modality_auc: 0.9921
+dev_location_auc: 0.9640
+dev_infer_ms: 4.94ms
+  New best dev score: 0.9145
+Student Epoch 1/1 – loss 15.0531
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9848
+dev_location_acc: 0.8629
+dev_modality_f1: 0.9844
+dev_location_f1: 0.8637
+dev_modality_prec: 0.9852
+dev_location_prec: 0.8559
+dev_modality_rec: 0.9837
+dev_location_rec: 0.8773
+dev_modality_auc: 0.9882
+dev_location_auc: 0.9715
+dev_infer_ms: 4.79ms
+  New best dev score: 0.9241
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_modality_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/cm_location_test.npy
+test_modality_acc: 0.9450
+test_location_acc: 0.8650
+test_modality_f1: 0.9450
+test_location_f1: 0.8262
+test_modality_prec: 0.9450
+test_location_prec: 0.8388
+test_modality_rec: 0.9450
+test_location_rec: 0.8230
+test_modality_auc: 0.9834
+test_location_auc: 0.9515
+test_infer_ms: 4.76ms
+test_modality_acc: 0.9800
+test_location_acc: 0.8500
+test_modality_f1: 0.9800
+test_location_f1: 0.8288
+test_modality_prec: 0.9802
+test_location_prec: 0.8378
+test_modality_rec: 0.9800
+test_location_rec: 0.8298
+test_modality_auc: 0.9922
+test_location_auc: 0.9532
+test_infer_ms: 13.24ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini
+==== [Thu Jan 22 06:13:14 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/medpix-deit_tiny-bert-mini.yaml exit=0 ====
+==== [Thu Jan 22 06:13:14 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-tiny-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/labels_modality.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/labels_location.npy
+
+Teacher parameters: 195.88M (195,884,807)
+Student parameters: 72.96M (72,962,183)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 1.0028
+Teacher Epoch 2/3 – loss 0.3677
+Teacher Epoch 3/3 – loss 0.2110
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_teacher_dev.npy
+teacher_dev_modality_acc: 0.9898
+teacher_dev_location_acc: 0.8071
+teacher_dev_modality_f1: 0.9896
+teacher_dev_location_f1: 0.7603
+teacher_dev_modality_prec: 0.9913
+teacher_dev_location_prec: 0.7909
+teacher_dev_modality_rec: 0.9881
+teacher_dev_location_rec: 0.7583
+teacher_dev_modality_auc: 0.9953
+teacher_dev_location_auc: 0.9382
+teacher_dev_infer_ms: 13.27ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_teacher_test.npy
+teacher_test_modality_acc: 0.9800
+teacher_test_location_acc: 0.8200
+teacher_test_modality_f1: 0.9800
+teacher_test_location_f1: 0.7415
+teacher_test_modality_prec: 0.9808
+teacher_test_location_prec: 0.8614
+teacher_test_modality_rec: 0.9800
+teacher_test_location_rec: 0.7256
+teacher_test_modality_auc: 0.9969
+teacher_test_location_auc: 0.9420
+teacher_test_infer_ms: 13.24ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 37.2575
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.8579
+dev_location_acc: 0.6497
+dev_modality_f1: 0.8578
+dev_location_f1: 0.5575
+dev_modality_prec: 0.8684
+dev_location_prec: 0.5587
+dev_modality_rec: 0.8731
+dev_location_rec: 0.5737
+dev_modality_auc: 0.9811
+dev_location_auc: 0.8705
+dev_infer_ms: 6.65ms
+  New best dev score: 0.7076
+Student Epoch 1/1 – loss 25.9436
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9645
+dev_location_acc: 0.7107
+dev_modality_f1: 0.9638
+dev_location_f1: 0.5908
+dev_modality_prec: 0.9622
+dev_location_prec: 0.5754
+dev_modality_rec: 0.9660
+dev_location_rec: 0.6250
+dev_modality_auc: 0.9851
+dev_location_auc: 0.9151
+dev_infer_ms: 6.57ms
+  New best dev score: 0.7773
+Student Epoch 1/1 – loss 22.1468
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9239
+dev_location_acc: 0.7259
+dev_modality_f1: 0.9232
+dev_location_f1: 0.6843
+dev_modality_prec: 0.9218
+dev_location_prec: 0.7512
+dev_modality_rec: 0.9306
+dev_location_rec: 0.6661
+dev_modality_auc: 0.9841
+dev_location_auc: 0.9247
+dev_infer_ms: 6.63ms
+  New best dev score: 0.8038
+Student Epoch 1/1 – loss 20.5709
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9594
+dev_location_acc: 0.7157
+dev_modality_f1: 0.9579
+dev_location_f1: 0.6821
+dev_modality_prec: 0.9669
+dev_location_prec: 0.7392
+dev_modality_rec: 0.9524
+dev_location_rec: 0.6651
+dev_modality_auc: 0.9988
+dev_location_auc: 0.9272
+dev_infer_ms: 6.57ms
+  New best dev score: 0.8200
+Student Epoch 1/1 – loss 19.0176
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.7107
+dev_modality_f1: 0.9689
+dev_location_f1: 0.6451
+dev_modality_prec: 0.9689
+dev_location_prec: 0.7048
+dev_modality_rec: 0.9689
+dev_location_rec: 0.6560
+dev_modality_auc: 0.9927
+dev_location_auc: 0.9362
+dev_infer_ms: 6.64ms
+Student Epoch 1/1 – loss 17.9344
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.7919
+dev_modality_f1: 0.9689
+dev_location_f1: 0.7721
+dev_modality_prec: 0.9689
+dev_location_prec: 0.8034
+dev_modality_rec: 0.9689
+dev_location_rec: 0.7660
+dev_modality_auc: 0.9802
+dev_location_auc: 0.9526
+dev_infer_ms: 6.64ms
+  New best dev score: 0.8705
+Student Epoch 1/1 – loss 17.2244
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9543
+dev_location_acc: 0.7919
+dev_modality_f1: 0.9525
+dev_location_f1: 0.7555
+dev_modality_prec: 0.9631
+dev_location_prec: 0.8026
+dev_modality_rec: 0.9464
+dev_location_rec: 0.7292
+dev_modality_auc: 0.9807
+dev_location_auc: 0.9405
+dev_infer_ms: 6.74ms
+Student Epoch 1/1 – loss 16.8678
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9746
+dev_location_acc: 0.7766
+dev_modality_f1: 0.9740
+dev_location_f1: 0.6955
+dev_modality_prec: 0.9748
+dev_location_prec: 0.8218
+dev_modality_rec: 0.9733
+dev_location_rec: 0.6891
+dev_modality_auc: 0.9959
+dev_location_auc: 0.9277
+dev_infer_ms: 6.60ms
+Student Epoch 1/1 – loss 16.4708
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9746
+dev_location_acc: 0.7665
+dev_modality_f1: 0.9740
+dev_location_f1: 0.7189
+dev_modality_prec: 0.9748
+dev_location_prec: 0.7621
+dev_modality_rec: 0.9733
+dev_location_rec: 0.7168
+dev_modality_auc: 0.9862
+dev_location_auc: 0.9316
+dev_infer_ms: 6.47ms
+Student Epoch 1/1 – loss 15.4609
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9543
+dev_location_acc: 0.7665
+dev_modality_f1: 0.9527
+dev_location_f1: 0.7603
+dev_modality_prec: 0.9602
+dev_location_prec: 0.8003
+dev_modality_rec: 0.9480
+dev_location_rec: 0.7393
+dev_modality_auc: 0.9803
+dev_location_auc: 0.9175
+dev_infer_ms: 6.84ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_modality_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/cm_location_test.npy
+test_modality_acc: 0.9200
+test_location_acc: 0.8900
+test_modality_f1: 0.9200
+test_location_f1: 0.8345
+test_modality_prec: 0.9200
+test_location_prec: 0.9114
+test_modality_rec: 0.9200
+test_location_rec: 0.8130
+test_modality_auc: 0.9812
+test_location_auc: 0.9643
+test_infer_ms: 6.48ms
+test_modality_acc: 0.9800
+test_location_acc: 0.8200
+test_modality_f1: 0.9800
+test_location_f1: 0.7415
+test_modality_prec: 0.9808
+test_location_prec: 0.8614
+test_modality_rec: 0.9800
+test_location_rec: 0.7256
+test_modality_auc: 0.9969
+test_location_auc: 0.9420
+test_infer_ms: 13.20ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert
+==== [Thu Jan 22 06:23:18 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/medpix-deit_tiny-distilbert.yaml exit=0 ====
+==== [Thu Jan 22 06:23:18 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-tiny-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/labels_modality.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/labels_location.npy
+
+Teacher parameters: 195.88M (195,884,807)
+Student parameters: 29.21M (29,214,215)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 0.9428
+Teacher Epoch 2/3 – loss 0.3861
+Teacher Epoch 3/3 – loss 0.2321
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_teacher_dev.npy
+teacher_dev_modality_acc: 0.9848
+teacher_dev_location_acc: 0.8731
+teacher_dev_modality_f1: 0.9844
+teacher_dev_location_f1: 0.8597
+teacher_dev_modality_prec: 0.9852
+teacher_dev_location_prec: 0.8712
+teacher_dev_modality_rec: 0.9837
+teacher_dev_location_rec: 0.8514
+teacher_dev_modality_auc: 0.9894
+teacher_dev_location_auc: 0.9602
+teacher_dev_infer_ms: 13.23ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_teacher_test.npy
+teacher_test_modality_acc: 0.9650
+teacher_test_location_acc: 0.8750
+teacher_test_modality_f1: 0.9650
+teacher_test_location_f1: 0.8641
+teacher_test_modality_prec: 0.9654
+teacher_test_location_prec: 0.8732
+teacher_test_modality_rec: 0.9650
+teacher_test_location_rec: 0.8646
+teacher_test_modality_auc: 0.9974
+teacher_test_location_auc: 0.9603
+teacher_test_infer_ms: 13.07ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 36.1234
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9543
+dev_location_acc: 0.7259
+dev_modality_f1: 0.9529
+dev_location_f1: 0.5982
+dev_modality_prec: 0.9577
+dev_location_prec: 0.5774
+dev_modality_rec: 0.9495
+dev_location_rec: 0.6382
+dev_modality_auc: 0.9799
+dev_location_auc: 0.9124
+dev_infer_ms: 4.88ms
+  New best dev score: 0.7756
+Student Epoch 1/1 – loss 25.3404
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9492
+dev_location_acc: 0.7716
+dev_modality_f1: 0.9474
+dev_location_f1: 0.7200
+dev_modality_prec: 0.9562
+dev_location_prec: 0.7524
+dev_modality_rec: 0.9420
+dev_location_rec: 0.7043
+dev_modality_auc: 0.9748
+dev_location_auc: 0.9141
+dev_infer_ms: 4.89ms
+  New best dev score: 0.8337
+Student Epoch 1/1 – loss 21.5976
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9340
+dev_location_acc: 0.8020
+dev_modality_f1: 0.9332
+dev_location_f1: 0.7689
+dev_modality_prec: 0.9309
+dev_location_prec: 0.7719
+dev_modality_rec: 0.9379
+dev_location_rec: 0.7667
+dev_modality_auc: 0.9807
+dev_location_auc: 0.9352
+dev_infer_ms: 5.11ms
+  New best dev score: 0.8510
+Student Epoch 1/1 – loss 19.9510
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9340
+dev_location_acc: 0.8020
+dev_modality_f1: 0.9312
+dev_location_f1: 0.7715
+dev_modality_prec: 0.9448
+dev_location_prec: 0.7864
+dev_modality_rec: 0.9241
+dev_location_rec: 0.7606
+dev_modality_auc: 0.9862
+dev_location_auc: 0.9315
+dev_infer_ms: 5.04ms
+  New best dev score: 0.8514
+Student Epoch 1/1 – loss 18.7216
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9492
+dev_location_acc: 0.8173
+dev_modality_f1: 0.9483
+dev_location_f1: 0.7999
+dev_modality_prec: 0.9471
+dev_location_prec: 0.8256
+dev_modality_rec: 0.9496
+dev_location_rec: 0.7862
+dev_modality_auc: 0.9811
+dev_location_auc: 0.9527
+dev_infer_ms: 4.89ms
+  New best dev score: 0.8741
+Student Epoch 1/1 – loss 17.6358
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9746
+dev_location_acc: 0.7868
+dev_modality_f1: 0.9740
+dev_location_f1: 0.7767
+dev_modality_prec: 0.9748
+dev_location_prec: 0.8160
+dev_modality_rec: 0.9733
+dev_location_rec: 0.7513
+dev_modality_auc: 0.9862
+dev_location_auc: 0.9333
+dev_infer_ms: 5.09ms
+  New best dev score: 0.8754
+Student Epoch 1/1 – loss 17.0110
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.8223
+dev_modality_f1: 0.9687
+dev_location_f1: 0.8085
+dev_modality_prec: 0.9724
+dev_location_prec: 0.8338
+dev_modality_rec: 0.9658
+dev_location_rec: 0.7914
+dev_modality_auc: 0.9856
+dev_location_auc: 0.9428
+dev_infer_ms: 4.75ms
+  New best dev score: 0.8886
+Student Epoch 1/1 – loss 16.1622
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.8376
+dev_modality_f1: 0.9688
+dev_location_f1: 0.8156
+dev_modality_prec: 0.9704
+dev_location_prec: 0.8290
+dev_modality_rec: 0.9673
+dev_location_rec: 0.8092
+dev_modality_auc: 0.9807
+dev_location_auc: 0.9500
+dev_infer_ms: 4.99ms
+  New best dev score: 0.8922
+Student Epoch 1/1 – loss 15.8015
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9492
+dev_location_acc: 0.7665
+dev_modality_f1: 0.9478
+dev_location_f1: 0.7388
+dev_modality_prec: 0.9513
+dev_location_prec: 0.7617
+dev_modality_rec: 0.9451
+dev_location_rec: 0.7252
+dev_modality_auc: 0.9698
+dev_location_auc: 0.9252
+dev_infer_ms: 5.35ms
+Student Epoch 1/1 – loss 15.5517
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_dev.npy
+dev_modality_acc: 0.9492
+dev_location_acc: 0.8020
+dev_modality_f1: 0.9484
+dev_location_f1: 0.7922
+dev_modality_prec: 0.9465
+dev_location_prec: 0.8051
+dev_modality_rec: 0.9512
+dev_location_rec: 0.7876
+dev_modality_auc: 0.9762
+dev_location_auc: 0.9520
+dev_infer_ms: 4.92ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_modality_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/cm_location_test.npy
+test_modality_acc: 0.9050
+test_location_acc: 0.8600
+test_modality_f1: 0.9049
+test_location_f1: 0.8138
+test_modality_prec: 0.9070
+test_location_prec: 0.8804
+test_modality_rec: 0.9050
+test_location_rec: 0.7967
+test_modality_auc: 0.9861
+test_location_auc: 0.9618
+test_infer_ms: 4.91ms
+test_modality_acc: 0.9650
+test_location_acc: 0.8750
+test_modality_f1: 0.9650
+test_location_f1: 0.8641
+test_modality_prec: 0.9654
+test_location_prec: 0.8732
+test_modality_rec: 0.9650
+test_location_rec: 0.8646
+test_modality_auc: 0.9974
+test_location_auc: 0.9603
+test_infer_ms: 13.16ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm
+==== [Thu Jan 22 06:31:38 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/medpix-deit_tiny-minilm.yaml exit=0 ====
+==== [Thu Jan 22 06:31:38 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/labels_modality.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/labels_location.npy
+
+Teacher parameters: 195.88M (195,884,807)
+Student parameters: 72.45M (72,453,031)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 0.8562
+Teacher Epoch 2/3 – loss 0.3391
+Teacher Epoch 3/3 – loss 0.1967
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_teacher_dev.npy
+teacher_dev_modality_acc: 0.9594
+teacher_dev_location_acc: 0.8223
+teacher_dev_modality_f1: 0.9586
+teacher_dev_location_f1: 0.8029
+teacher_dev_modality_prec: 0.9574
+teacher_dev_location_prec: 0.8097
+teacher_dev_modality_rec: 0.9600
+teacher_dev_location_rec: 0.7984
+teacher_dev_modality_auc: 0.9891
+teacher_dev_location_auc: 0.9520
+teacher_dev_infer_ms: 13.32ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_teacher_test.npy
+teacher_test_modality_acc: 0.9400
+teacher_test_location_acc: 0.7850
+teacher_test_modality_f1: 0.9399
+teacher_test_location_f1: 0.7357
+teacher_test_modality_prec: 0.9428
+teacher_test_location_prec: 0.7392
+teacher_test_modality_rec: 0.9400
+teacher_test_location_rec: 0.7463
+teacher_test_modality_auc: 0.9882
+teacher_test_location_auc: 0.9316
+teacher_test_infer_ms: 13.13ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 33.4882
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9797
+dev_location_acc: 0.6650
+dev_modality_f1: 0.9792
+dev_location_f1: 0.5436
+dev_modality_prec: 0.9792
+dev_location_prec: 0.5340
+dev_modality_rec: 0.9792
+dev_location_rec: 0.5806
+dev_modality_auc: 0.9941
+dev_location_auc: 0.9171
+dev_infer_ms: 7.50ms
+  New best dev score: 0.7614
+Student Epoch 1/1 – loss 23.3589
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9645
+dev_location_acc: 0.7056
+dev_modality_f1: 0.9638
+dev_location_f1: 0.6741
+dev_modality_prec: 0.9622
+dev_location_prec: 0.7400
+dev_modality_rec: 0.9660
+dev_location_rec: 0.6589
+dev_modality_auc: 0.9882
+dev_location_auc: 0.8996
+dev_infer_ms: 7.42ms
+  New best dev score: 0.8190
+Student Epoch 1/1 – loss 21.0832
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9797
+dev_location_acc: 0.8020
+dev_modality_f1: 0.9792
+dev_location_f1: 0.7393
+dev_modality_prec: 0.9792
+dev_location_prec: 0.7780
+dev_modality_rec: 0.9792
+dev_location_rec: 0.7305
+dev_modality_auc: 0.9947
+dev_location_auc: 0.9511
+dev_infer_ms: 7.42ms
+  New best dev score: 0.8593
+Student Epoch 1/1 – loss 19.6536
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.8122
+dev_modality_f1: 0.9690
+dev_location_f1: 0.7772
+dev_modality_prec: 0.9677
+dev_location_prec: 0.7800
+dev_modality_rec: 0.9704
+dev_location_rec: 0.7816
+dev_modality_auc: 0.9893
+dev_location_auc: 0.9575
+dev_infer_ms: 7.41ms
+  New best dev score: 0.8731
+Student Epoch 1/1 – loss 22.0844
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9797
+dev_location_acc: 0.7411
+dev_modality_f1: 0.9792
+dev_location_f1: 0.6978
+dev_modality_prec: 0.9792
+dev_location_prec: 0.7191
+dev_modality_rec: 0.9792
+dev_location_rec: 0.6876
+dev_modality_auc: 0.9895
+dev_location_auc: 0.9216
+dev_infer_ms: 7.33ms
+Student Epoch 1/1 – loss 26.3832
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9797
+dev_location_acc: 0.7360
+dev_modality_f1: 0.9793
+dev_location_f1: 0.6580
+dev_modality_prec: 0.9781
+dev_location_prec: 0.6636
+dev_modality_rec: 0.9808
+dev_location_rec: 0.6654
+dev_modality_auc: 0.9937
+dev_location_auc: 0.9308
+dev_infer_ms: 7.45ms
+Student Epoch 1/1 – loss 25.5072
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9645
+dev_location_acc: 0.7614
+dev_modality_f1: 0.9637
+dev_location_f1: 0.7158
+dev_modality_prec: 0.9631
+dev_location_prec: 0.7819
+dev_modality_rec: 0.9644
+dev_location_rec: 0.7338
+dev_modality_auc: 0.9896
+dev_location_auc: 0.9303
+dev_infer_ms: 7.34ms
+Student Epoch 1/1 – loss 25.9587
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9898
+dev_location_acc: 0.7056
+dev_modality_f1: 0.9896
+dev_location_f1: 0.5862
+dev_modality_prec: 0.9913
+dev_location_prec: 0.6534
+dev_modality_rec: 0.9881
+dev_location_rec: 0.6008
+dev_modality_auc: 0.9954
+dev_location_auc: 0.9130
+dev_infer_ms: 7.51ms
+Student Epoch 1/1 – loss 26.5254
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9898
+dev_location_acc: 0.7005
+dev_modality_f1: 0.9896
+dev_location_f1: 0.5967
+dev_modality_prec: 0.9913
+dev_location_prec: 0.6238
+dev_modality_rec: 0.9881
+dev_location_rec: 0.6138
+dev_modality_auc: 0.9962
+dev_location_auc: 0.9131
+dev_infer_ms: 7.35ms
+Student Epoch 1/1 – loss 26.0945
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_dev.npy
+dev_modality_acc: 0.9848
+dev_location_acc: 0.7310
+dev_modality_f1: 0.9844
+dev_location_f1: 0.6529
+dev_modality_prec: 0.9871
+dev_location_prec: 0.6996
+dev_modality_rec: 0.9821
+dev_location_rec: 0.6490
+dev_modality_auc: 0.9893
+dev_location_auc: 0.9204
+dev_infer_ms: 7.57ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_modality_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/cm_location_test.npy
+test_modality_acc: 0.9650
+test_location_acc: 0.8050
+test_modality_f1: 0.9650
+test_location_f1: 0.7589
+test_modality_prec: 0.9662
+test_location_prec: 0.7606
+test_modality_rec: 0.9650
+test_location_rec: 0.7644
+test_modality_auc: 0.9980
+test_location_auc: 0.9234
+test_infer_ms: 7.44ms
+test_modality_acc: 0.9400
+test_location_acc: 0.7850
+test_modality_f1: 0.9399
+test_location_f1: 0.7357
+test_modality_prec: 0.9428
+test_location_prec: 0.7392
+test_modality_rec: 0.9400
+test_location_rec: 0.7463
+test_modality_auc: 0.9882
+test_location_auc: 0.9316
+test_infer_ms: 13.13ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert
+==== [Thu Jan 22 06:42:28 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/medpix-mobilevit_small-distilbert.yaml exit=0 ====
+==== [Thu Jan 22 06:42:28 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/labels_modality.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/labels_location.npy
+
+Teacher parameters: 195.88M (195,884,807)
+Student parameters: 13.06M (13,061,111)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 0.7977
+Teacher Epoch 2/3 – loss 0.3450
+Teacher Epoch 3/3 – loss 0.1682
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_teacher_dev.npy
+teacher_dev_modality_acc: 0.9797
+teacher_dev_location_acc: 0.8122
+teacher_dev_modality_f1: 0.9792
+teacher_dev_location_f1: 0.7877
+teacher_dev_modality_prec: 0.9792
+teacher_dev_location_prec: 0.8075
+teacher_dev_modality_rec: 0.9792
+teacher_dev_location_rec: 0.7747
+teacher_dev_modality_auc: 0.9913
+teacher_dev_location_auc: 0.9496
+teacher_dev_infer_ms: 13.20ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_teacher_test.npy
+teacher_test_modality_acc: 0.9550
+teacher_test_location_acc: 0.8200
+teacher_test_modality_f1: 0.9550
+teacher_test_location_f1: 0.7768
+teacher_test_modality_prec: 0.9554
+teacher_test_location_prec: 0.8670
+teacher_test_modality_rec: 0.9550
+teacher_test_location_rec: 0.7552
+teacher_test_modality_auc: 0.9934
+teacher_test_location_auc: 0.9302
+teacher_test_infer_ms: 13.03ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 37.2417
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9543
+dev_location_acc: 0.7056
+dev_modality_f1: 0.9536
+dev_location_f1: 0.6086
+dev_modality_prec: 0.9514
+dev_location_prec: 0.6695
+dev_modality_rec: 0.9571
+dev_location_rec: 0.6401
+dev_modality_auc: 0.9862
+dev_location_auc: 0.9200
+dev_infer_ms: 5.07ms
+  New best dev score: 0.7811
+Student Epoch 1/1 – loss 24.2508
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.7462
+dev_modality_f1: 0.9690
+dev_location_f1: 0.6591
+dev_modality_prec: 0.9677
+dev_location_prec: 0.7363
+dev_modality_rec: 0.9704
+dev_location_rec: 0.6647
+dev_modality_auc: 0.9890
+dev_location_auc: 0.9332
+dev_infer_ms: 4.87ms
+  New best dev score: 0.8140
+Student Epoch 1/1 – loss 21.1069
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9797
+dev_location_acc: 0.7462
+dev_modality_f1: 0.9793
+dev_location_f1: 0.7024
+dev_modality_prec: 0.9781
+dev_location_prec: 0.7645
+dev_modality_rec: 0.9808
+dev_location_rec: 0.6833
+dev_modality_auc: 0.9893
+dev_location_auc: 0.9148
+dev_infer_ms: 4.98ms
+  New best dev score: 0.8408
+Student Epoch 1/1 – loss 19.2354
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9594
+dev_location_acc: 0.7665
+dev_modality_f1: 0.9585
+dev_location_f1: 0.7233
+dev_modality_prec: 0.9585
+dev_location_prec: 0.7861
+dev_modality_rec: 0.9585
+dev_location_rec: 0.7044
+dev_modality_auc: 0.9855
+dev_location_auc: 0.9493
+dev_infer_ms: 5.32ms
+  New best dev score: 0.8409
+Student Epoch 1/1 – loss 17.8764
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9797
+dev_location_acc: 0.7665
+dev_modality_f1: 0.9792
+dev_location_f1: 0.7279
+dev_modality_prec: 0.9792
+dev_location_prec: 0.8012
+dev_modality_rec: 0.9792
+dev_location_rec: 0.7015
+dev_modality_auc: 0.9878
+dev_location_auc: 0.9283
+dev_infer_ms: 4.83ms
+  New best dev score: 0.8536
+Student Epoch 1/1 – loss 17.3226
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.6904
+dev_modality_f1: 0.9688
+dev_location_f1: 0.6763
+dev_modality_prec: 0.9704
+dev_location_prec: 0.7859
+dev_modality_rec: 0.9673
+dev_location_rec: 0.6468
+dev_modality_auc: 0.9863
+dev_location_auc: 0.9184
+dev_infer_ms: 5.40ms
+Student Epoch 1/1 – loss 16.7353
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9746
+dev_location_acc: 0.7868
+dev_modality_f1: 0.9741
+dev_location_f1: 0.7777
+dev_modality_prec: 0.9734
+dev_location_prec: 0.8155
+dev_modality_rec: 0.9748
+dev_location_rec: 0.7647
+dev_modality_auc: 0.9871
+dev_location_auc: 0.9326
+dev_infer_ms: 5.01ms
+  New best dev score: 0.8759
+Student Epoch 1/1 – loss 16.2771
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9797
+dev_location_acc: 0.7462
+dev_modality_f1: 0.9792
+dev_location_f1: 0.6897
+dev_modality_prec: 0.9809
+dev_location_prec: 0.7511
+dev_modality_rec: 0.9777
+dev_location_rec: 0.6691
+dev_modality_auc: 0.9799
+dev_location_auc: 0.9451
+dev_infer_ms: 4.96ms
+Student Epoch 1/1 – loss 15.8728
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9848
+dev_location_acc: 0.8223
+dev_modality_f1: 0.9844
+dev_location_f1: 0.8027
+dev_modality_prec: 0.9871
+dev_location_prec: 0.8151
+dev_modality_rec: 0.9821
+dev_location_rec: 0.8020
+dev_modality_auc: 0.9864
+dev_location_auc: 0.9413
+dev_infer_ms: 4.98ms
+  New best dev score: 0.8935
+Student Epoch 1/1 – loss 15.7455
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_dev.npy
+dev_modality_acc: 0.9695
+dev_location_acc: 0.7817
+dev_modality_f1: 0.9690
+dev_location_f1: 0.7528
+dev_modality_prec: 0.9670
+dev_location_prec: 0.7782
+dev_modality_rec: 0.9719
+dev_location_rec: 0.7371
+dev_modality_auc: 0.9874
+dev_location_auc: 0.9431
+dev_infer_ms: 4.80ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_modality_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/cm_location_test.npy
+test_modality_acc: 0.9600
+test_location_acc: 0.8800
+test_modality_f1: 0.9600
+test_location_f1: 0.8398
+test_modality_prec: 0.9602
+test_location_prec: 0.8586
+test_modality_rec: 0.9600
+test_location_rec: 0.8299
+test_modality_auc: 0.9930
+test_location_auc: 0.9526
+test_infer_ms: 5.96ms
+test_modality_acc: 0.9550
+test_location_acc: 0.8200
+test_modality_f1: 0.9550
+test_location_f1: 0.7768
+test_modality_prec: 0.9554
+test_location_prec: 0.8670
+test_modality_rec: 0.9550
+test_location_rec: 0.7552
+test_modality_auc: 0.9934
+test_location_auc: 0.9302
+test_infer_ms: 13.24ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini
+==== [Thu Jan 22 06:50:18 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/medpix-mobilevit_xx_small-bert-mini.yaml exit=0 ====
+==== [Thu Jan 22 06:50:18 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-small-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Wound dataset loaded: 1094 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/labels_type.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/labels_severity.npy
+
+Teacher parameters: 195.89M (195,886,349)
+Student parameters: 33.94M (33,941,517)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 2.1430
+Teacher Epoch 2/3 – loss 0.8242
+Teacher Epoch 3/3 – loss 0.4320
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_teacher_dev.npy
+teacher_dev_type_acc: 0.8809
+teacher_dev_severity_acc: 0.8894
+teacher_dev_type_f1: 0.8439
+teacher_dev_severity_f1: 0.8814
+teacher_dev_type_prec: 0.9024
+teacher_dev_severity_prec: 0.8920
+teacher_dev_type_rec: 0.8424
+teacher_dev_severity_rec: 0.8718
+teacher_dev_type_auc: 0.9919
+teacher_dev_severity_auc: 0.9720
+teacher_dev_infer_ms: 12.57ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_teacher_test.npy
+teacher_test_type_acc: 0.9149
+teacher_test_severity_acc: 0.9021
+teacher_test_type_f1: 0.9365
+teacher_test_severity_f1: 0.8939
+teacher_test_type_prec: 0.9455
+teacher_test_severity_prec: 0.8959
+teacher_test_type_rec: 0.9300
+teacher_test_severity_rec: 0.8927
+teacher_test_type_auc: 0.9933
+teacher_test_severity_auc: 0.9747
+teacher_test_infer_ms: 12.67ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 38.6046
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.5447
+dev_severity_acc: 0.8894
+dev_type_f1: 0.3479
+dev_severity_f1: 0.8633
+dev_type_prec: 0.3862
+dev_severity_prec: 0.8390
+dev_type_rec: 0.4185
+dev_severity_rec: 0.9118
+dev_type_auc: 0.9011
+dev_severity_auc: 0.9752
+dev_infer_ms: 4.60ms
+  New best dev score: 0.6056
+Student Epoch 1/1 – loss 28.0047
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.5745
+dev_severity_acc: 0.8851
+dev_type_f1: 0.5050
+dev_severity_f1: 0.8591
+dev_type_prec: 0.5853
+dev_severity_prec: 0.8471
+dev_type_rec: 0.5122
+dev_severity_rec: 0.8935
+dev_type_auc: 0.9369
+dev_severity_auc: 0.9815
+dev_infer_ms: 4.58ms
+  New best dev score: 0.6820
+Student Epoch 1/1 – loss 23.5192
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.6553
+dev_severity_acc: 0.9234
+dev_type_f1: 0.6015
+dev_severity_f1: 0.9110
+dev_type_prec: 0.6634
+dev_severity_prec: 0.9421
+dev_type_rec: 0.5864
+dev_severity_rec: 0.8882
+dev_type_auc: 0.9343
+dev_severity_auc: 0.9760
+dev_infer_ms: 4.47ms
+  New best dev score: 0.7563
+Student Epoch 1/1 – loss 21.5325
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7702
+dev_severity_acc: 0.9149
+dev_type_f1: 0.7214
+dev_severity_f1: 0.8883
+dev_type_prec: 0.7708
+dev_severity_prec: 0.9001
+dev_type_rec: 0.7219
+dev_severity_rec: 0.8783
+dev_type_auc: 0.9533
+dev_severity_auc: 0.9743
+dev_infer_ms: 4.63ms
+  New best dev score: 0.8048
+Student Epoch 1/1 – loss 20.0797
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7830
+dev_severity_acc: 0.9447
+dev_type_f1: 0.7694
+dev_severity_f1: 0.9374
+dev_type_prec: 0.8139
+dev_severity_prec: 0.9231
+dev_type_rec: 0.7714
+dev_severity_rec: 0.9559
+dev_type_auc: 0.9646
+dev_severity_auc: 0.9824
+dev_infer_ms: 4.60ms
+  New best dev score: 0.8534
+Student Epoch 1/1 – loss 19.5442
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7617
+dev_severity_acc: 0.9319
+dev_type_f1: 0.6954
+dev_severity_f1: 0.9204
+dev_type_prec: 0.7481
+dev_severity_prec: 0.9245
+dev_type_rec: 0.7062
+dev_severity_rec: 0.9169
+dev_type_auc: 0.9666
+dev_severity_auc: 0.9799
+dev_infer_ms: 4.73ms
+Student Epoch 1/1 – loss 18.5606
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7915
+dev_severity_acc: 0.8809
+dev_type_f1: 0.7788
+dev_severity_f1: 0.8782
+dev_type_prec: 0.8352
+dev_severity_prec: 0.8698
+dev_type_rec: 0.7774
+dev_severity_rec: 0.8876
+dev_type_auc: 0.9659
+dev_severity_auc: 0.9645
+dev_infer_ms: 4.81ms
+Student Epoch 1/1 – loss 18.2038
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.8553
+dev_severity_acc: 0.9149
+dev_type_f1: 0.8181
+dev_severity_f1: 0.8984
+dev_type_prec: 0.8292
+dev_severity_prec: 0.9264
+dev_type_rec: 0.8221
+dev_severity_rec: 0.8774
+dev_type_auc: 0.9672
+dev_severity_auc: 0.9736
+dev_infer_ms: 4.73ms
+  New best dev score: 0.8583
+Student Epoch 1/1 – loss 17.7336
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.8255
+dev_severity_acc: 0.9319
+dev_type_f1: 0.8012
+dev_severity_f1: 0.9263
+dev_type_prec: 0.8160
+dev_severity_prec: 0.9263
+dev_type_rec: 0.7914
+dev_severity_rec: 0.9263
+dev_type_auc: 0.9757
+dev_severity_auc: 0.9789
+dev_infer_ms: 4.61ms
+  New best dev score: 0.8637
+Student Epoch 1/1 – loss 17.5764
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.8383
+dev_severity_acc: 0.9319
+dev_type_f1: 0.8008
+dev_severity_f1: 0.9213
+dev_type_prec: 0.8548
+dev_severity_prec: 0.9167
+dev_type_rec: 0.7967
+dev_severity_rec: 0.9263
+dev_type_auc: 0.9702
+dev_severity_auc: 0.9816
+dev_infer_ms: 4.60ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_type_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/cm_severity_test.npy
+test_type_acc: 0.8085
+test_severity_acc: 0.9191
+test_type_f1: 0.8231
+test_severity_f1: 0.9040
+test_type_prec: 0.8192
+test_severity_prec: 0.8944
+test_type_rec: 0.8337
+test_severity_rec: 0.9161
+test_type_auc: 0.9806
+test_severity_auc: 0.9849
+test_infer_ms: 4.68ms
+test_type_acc: 0.9149
+test_severity_acc: 0.9021
+test_type_f1: 0.9365
+test_severity_f1: 0.8939
+test_type_prec: 0.9455
+test_severity_prec: 0.8959
+test_type_rec: 0.9300
+test_severity_rec: 0.8927
+test_type_auc: 0.9933
+test_severity_auc: 0.9747
+test_infer_ms: 12.69ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini
+==== [Thu Jan 22 06:56:20 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/wound-deit_small-bert-mini.yaml exit=0 ====
+==== [Thu Jan 22 06:56:20 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-small-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Wound dataset loaded: 1094 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/labels_type.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/labels_severity.npy
+
+Teacher parameters: 195.89M (195,886,349)
+Student parameters: 27.12M (27,124,109)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 2.0244
+Teacher Epoch 2/3 – loss 0.8941
+Teacher Epoch 3/3 – loss 0.4394
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_teacher_dev.npy
+teacher_dev_type_acc: 0.8596
+teacher_dev_severity_acc: 0.9191
+teacher_dev_type_f1: 0.8546
+teacher_dev_severity_f1: 0.9026
+teacher_dev_type_prec: 0.9090
+teacher_dev_severity_prec: 0.9188
+teacher_dev_type_rec: 0.8393
+teacher_dev_severity_rec: 0.8904
+teacher_dev_type_auc: 0.9883
+teacher_dev_severity_auc: 0.9848
+teacher_dev_infer_ms: 12.94ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_teacher_test.npy
+teacher_test_type_acc: 0.8851
+teacher_test_severity_acc: 0.9489
+teacher_test_type_f1: 0.8852
+teacher_test_severity_f1: 0.9400
+teacher_test_type_prec: 0.9214
+teacher_test_severity_prec: 0.9429
+teacher_test_type_rec: 0.8676
+teacher_test_severity_rec: 0.9382
+teacher_test_type_auc: 0.9954
+teacher_test_severity_auc: 0.9947
+teacher_test_infer_ms: 12.85ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 43.8785
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_dev.npy
+dev_type_acc: 0.5915
+dev_severity_acc: 0.8723
+dev_type_f1: 0.4852
+dev_severity_f1: 0.8476
+dev_type_prec: 0.5977
+dev_severity_prec: 0.8397
+dev_type_rec: 0.5108
+dev_severity_rec: 0.8732
+dev_type_auc: 0.9087
+dev_severity_auc: 0.9687
+dev_infer_ms: 4.86ms
+  New best dev score: 0.6664
+Student Epoch 1/1 – loss 30.7572
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_dev.npy
+dev_type_acc: 0.6851
+dev_severity_acc: 0.9191
+dev_type_f1: 0.5867
+dev_severity_f1: 0.8980
+dev_type_prec: 0.6015
+dev_severity_prec: 0.8876
+dev_type_rec: 0.6159
+dev_severity_rec: 0.9211
+dev_type_auc: 0.9350
+dev_severity_auc: 0.9834
+dev_infer_ms: 4.92ms
+  New best dev score: 0.7423
+Student Epoch 1/1 – loss 25.4499
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_dev.npy
+dev_type_acc: 0.7234
+dev_severity_acc: 0.9064
+dev_type_f1: 0.6240
+dev_severity_f1: 0.8787
+dev_type_prec: 0.6443
+dev_severity_prec: 0.9057
+dev_type_rec: 0.6276
+dev_severity_rec: 0.8589
+dev_type_auc: 0.9543
+dev_severity_auc: 0.9833
+dev_infer_ms: 4.80ms
+  New best dev score: 0.7514
+Student Epoch 1/1 – loss 23.0054
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_dev.npy
+dev_type_acc: 0.7617
+dev_severity_acc: 0.9149
+dev_type_f1: 0.6723
+dev_severity_f1: 0.9050
+dev_type_prec: 0.8001
+dev_severity_prec: 0.9257
+dev_type_rec: 0.6668
+dev_severity_rec: 0.8885
+dev_type_auc: 0.9550
+dev_severity_auc: 0.9851
+dev_infer_ms: 4.89ms
+  New best dev score: 0.7887
+Student Epoch 1/1 – loss 21.0661
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_dev.npy
+dev_type_acc: 0.7660
+dev_severity_acc: 0.9064
+dev_type_f1: 0.6884
+dev_severity_f1: 0.8886
+dev_type_prec: 0.7027
+dev_severity_prec: 0.8988
+dev_type_rec: 0.6991
+dev_severity_rec: 0.8812
+dev_type_auc: 0.9610
+dev_severity_auc: 0.9841
+dev_infer_ms: 4.93ms
+Student Epoch 1/1 – loss 19.8892
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_dev.npy
+dev_type_acc: 0.7617
+dev_severity_acc: 0.9149
+dev_type_f1: 0.6930
+dev_severity_f1: 0.8981
+dev_type_prec: 0.6924
+dev_severity_prec: 0.9362
+dev_type_rec: 0.7219
+dev_severity_rec: 0.8734
+dev_type_auc: 0.9638
+dev_severity_auc: 0.9868
+dev_infer_ms: 4.88ms
+  New best dev score: 0.7956
+Student Epoch 1/1 – loss 18.7861
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_dev.npy
+dev_type_acc: 0.8043
+dev_severity_acc: 0.9021
+dev_type_f1: 0.7669
+dev_severity_f1: 0.8869
+dev_type_prec: 0.8009
+dev_severity_prec: 0.8858
+dev_type_rec: 0.7708
+dev_severity_rec: 0.8895
+dev_type_auc: 0.9627
+dev_severity_auc: 0.9834
+dev_infer_ms: 4.87ms
+  New best dev score: 0.8269
+Student Epoch 1/1 – loss 18.3249
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_dev.npy
+dev_type_acc: 0.7957
+dev_severity_acc: 0.9021
+dev_type_f1: 0.7264
+dev_severity_f1: 0.8847
+dev_type_prec: 0.7190
+dev_severity_prec: 0.8947
+dev_type_rec: 0.7417
+dev_severity_rec: 0.8775
+dev_type_auc: 0.9564
+dev_severity_auc: 0.9838
+dev_infer_ms: 4.89ms
+Student Epoch 1/1 – loss 17.8281
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_dev.npy
+dev_type_acc: 0.8128
+dev_severity_acc: 0.9149
+dev_type_f1: 0.8078
+dev_severity_f1: 0.8952
+dev_type_prec: 0.8581
+dev_severity_prec: 0.9019
+dev_type_rec: 0.7885
+dev_severity_rec: 0.8894
+dev_type_auc: 0.9664
+dev_severity_auc: 0.9854
+dev_infer_ms: 4.94ms
+  New best dev score: 0.8515
+Student Epoch 1/1 – loss 17.4568
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_dev.npy
+dev_type_acc: 0.7915
+dev_severity_acc: 0.9234
+dev_type_f1: 0.7594
+dev_severity_f1: 0.9205
+dev_type_prec: 0.8501
+dev_severity_prec: 0.9095
+dev_type_rec: 0.7275
+dev_severity_rec: 0.9376
+dev_type_auc: 0.9533
+dev_severity_auc: 0.9763
+dev_infer_ms: 4.91ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_type_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/cm_severity_test.npy
+test_type_acc: 0.8128
+test_severity_acc: 0.9447
+test_type_f1: 0.8362
+test_severity_f1: 0.9364
+test_type_prec: 0.8807
+test_severity_prec: 0.9488
+test_type_rec: 0.8136
+test_severity_rec: 0.9256
+test_type_auc: 0.9783
+test_severity_auc: 0.9935
+test_infer_ms: 5.02ms
+test_type_acc: 0.8851
+test_severity_acc: 0.9489
+test_type_f1: 0.8852
+test_severity_f1: 0.9400
+test_type_prec: 0.9214
+test_severity_prec: 0.9429
+test_type_rec: 0.8676
+test_severity_rec: 0.9382
+test_type_auc: 0.9954
+test_severity_auc: 0.9947
+test_infer_ms: 12.94ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny
+==== [Thu Jan 22 07:02:20 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/wound-deit_small-bert-tiny.yaml exit=0 ====
+==== [Thu Jan 22 07:02:20 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/wound-deit_small-distilbert.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-small-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Wound dataset loaded: 1094 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/labels_type.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/labels_severity.npy
+
+Teacher parameters: 195.89M (195,886,349)
+Student parameters: 89.26M (89,264,909)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 2.0161
+Teacher Epoch 2/3 – loss 0.8534
+Teacher Epoch 3/3 – loss 0.3702
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_teacher_dev.npy
+teacher_dev_type_acc: 0.8766
+teacher_dev_severity_acc: 0.8170
+teacher_dev_type_f1: 0.8690
+teacher_dev_severity_f1: 0.7828
+teacher_dev_type_prec: 0.9051
+teacher_dev_severity_prec: 0.7624
+teacher_dev_type_rec: 0.8586
+teacher_dev_severity_rec: 0.8327
+teacher_dev_type_auc: 0.9876
+teacher_dev_severity_auc: 0.9465
+teacher_dev_infer_ms: 12.89ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_teacher_test.npy
+teacher_test_type_acc: 0.9149
+teacher_test_severity_acc: 0.8340
+teacher_test_type_f1: 0.9278
+teacher_test_severity_f1: 0.7995
+teacher_test_type_prec: 0.9244
+teacher_test_severity_prec: 0.7902
+teacher_test_type_rec: 0.9372
+teacher_test_severity_rec: 0.8444
+teacher_test_type_auc: 0.9959
+teacher_test_severity_auc: 0.9504
+teacher_test_infer_ms: 12.76ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 44.7432
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.2894
+dev_severity_acc: 0.7021
+dev_type_f1: 0.1620
+dev_severity_f1: 0.4848
+dev_type_prec: 0.1614
+dev_severity_prec: 0.4600
+dev_type_rec: 0.1739
+dev_severity_rec: 0.5123
+dev_type_auc: 0.6775
+dev_severity_auc: 0.8416
+dev_infer_ms: 7.00ms
+  New best dev score: 0.3234
+Student Epoch 1/1 – loss 35.3268
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.5021
+dev_severity_acc: 0.7532
+dev_type_f1: 0.2943
+dev_severity_f1: 0.7149
+dev_type_prec: 0.3201
+dev_severity_prec: 0.7082
+dev_type_rec: 0.3371
+dev_severity_rec: 0.7982
+dev_type_auc: 0.8416
+dev_severity_auc: 0.9340
+dev_infer_ms: 7.37ms
+  New best dev score: 0.5046
+Student Epoch 1/1 – loss 31.4181
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.5362
+dev_severity_acc: 0.7404
+dev_type_f1: 0.4432
+dev_severity_f1: 0.6942
+dev_type_prec: 0.5524
+dev_severity_prec: 0.7352
+dev_type_rec: 0.4492
+dev_severity_rec: 0.7690
+dev_type_auc: 0.8904
+dev_severity_auc: 0.9613
+dev_infer_ms: 7.09ms
+  New best dev score: 0.5687
+Student Epoch 1/1 – loss 28.8202
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.5915
+dev_severity_acc: 0.8298
+dev_type_f1: 0.5623
+dev_severity_f1: 0.7746
+dev_type_prec: 0.6140
+dev_severity_prec: 0.7674
+dev_type_rec: 0.5861
+dev_severity_rec: 0.8383
+dev_type_auc: 0.9113
+dev_severity_auc: 0.9494
+dev_infer_ms: 7.03ms
+  New best dev score: 0.6684
+Student Epoch 1/1 – loss 30.2109
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.6085
+dev_severity_acc: 0.8170
+dev_type_f1: 0.5322
+dev_severity_f1: 0.7782
+dev_type_prec: 0.5609
+dev_severity_prec: 0.7965
+dev_type_rec: 0.5370
+dev_severity_rec: 0.7829
+dev_type_auc: 0.9264
+dev_severity_auc: 0.9433
+dev_infer_ms: 7.09ms
+Student Epoch 1/1 – loss 27.4380
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.7362
+dev_severity_acc: 0.7745
+dev_type_f1: 0.6579
+dev_severity_f1: 0.7493
+dev_type_prec: 0.6691
+dev_severity_prec: 0.7635
+dev_type_rec: 0.6749
+dev_severity_rec: 0.7440
+dev_type_auc: 0.9361
+dev_severity_auc: 0.9103
+dev_infer_ms: 6.99ms
+  New best dev score: 0.7036
+Student Epoch 1/1 – loss 25.4842
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.7574
+dev_severity_acc: 0.7957
+dev_type_f1: 0.7792
+dev_severity_f1: 0.7740
+dev_type_prec: 0.8060
+dev_severity_prec: 0.7544
+dev_type_rec: 0.7774
+dev_severity_rec: 0.8161
+dev_type_auc: 0.9547
+dev_severity_auc: 0.9195
+dev_infer_ms: 7.04ms
+  New best dev score: 0.7766
+Student Epoch 1/1 – loss 26.3317
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.7404
+dev_severity_acc: 0.7745
+dev_type_f1: 0.6812
+dev_severity_f1: 0.7491
+dev_type_prec: 0.7102
+dev_severity_prec: 0.7412
+dev_type_rec: 0.6722
+dev_severity_rec: 0.7596
+dev_type_auc: 0.9366
+dev_severity_auc: 0.9048
+dev_infer_ms: 7.10ms
+Student Epoch 1/1 – loss 24.2003
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.8000
+dev_severity_acc: 0.7660
+dev_type_f1: 0.8024
+dev_severity_f1: 0.7539
+dev_type_prec: 0.8465
+dev_severity_prec: 0.7558
+dev_type_rec: 0.7851
+dev_severity_rec: 0.7531
+dev_type_auc: 0.9715
+dev_severity_auc: 0.9108
+dev_infer_ms: 6.93ms
+  New best dev score: 0.7782
+Student Epoch 1/1 – loss 25.4010
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.7702
+dev_severity_acc: 0.7362
+dev_type_f1: 0.7590
+dev_severity_f1: 0.7054
+dev_type_prec: 0.8560
+dev_severity_prec: 0.7382
+dev_type_rec: 0.7490
+dev_severity_rec: 0.7075
+dev_type_auc: 0.9627
+dev_severity_auc: 0.8904
+dev_infer_ms: 7.01ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_type_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/cm_severity_test.npy
+test_type_acc: 0.8170
+test_severity_acc: 0.7574
+test_type_f1: 0.8379
+test_severity_f1: 0.7310
+test_type_prec: 0.8580
+test_severity_prec: 0.7299
+test_type_rec: 0.8356
+test_severity_rec: 0.7377
+test_type_auc: 0.9824
+test_severity_auc: 0.9162
+test_infer_ms: 7.08ms
+test_type_acc: 0.9149
+test_severity_acc: 0.8340
+test_type_f1: 0.9278
+test_severity_f1: 0.7995
+test_type_prec: 0.9244
+test_severity_prec: 0.7902
+test_type_rec: 0.9372
+test_severity_rec: 0.8444
+test_type_auc: 0.9959
+test_severity_auc: 0.9504
+test_infer_ms: 12.84ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/wound-deit_small-distilbert
+==== [Thu Jan 22 07:10:01 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/wound-deit_small-distilbert.yaml exit=0 ====
+==== [Thu Jan 22 07:10:01 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/wound-deit_small-minilm.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-small-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Wound dataset loaded: 1094 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/labels_type.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/labels_severity.npy
+
+Teacher parameters: 195.89M (195,886,349)
+Student parameters: 45.52M (45,516,941)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 2.0032
+Teacher Epoch 2/3 – loss 0.8413
+Teacher Epoch 3/3 – loss 0.3502
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_teacher_dev.npy
+teacher_dev_type_acc: 0.9064
+teacher_dev_severity_acc: 0.8979
+teacher_dev_type_f1: 0.8914
+teacher_dev_severity_f1: 0.8937
+teacher_dev_type_prec: 0.9295
+teacher_dev_severity_prec: 0.9007
+teacher_dev_type_rec: 0.8866
+teacher_dev_severity_rec: 0.8876
+teacher_dev_type_auc: 0.9937
+teacher_dev_severity_auc: 0.9724
+teacher_dev_infer_ms: 13.13ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_teacher_test.npy
+teacher_test_type_acc: 0.9404
+teacher_test_severity_acc: 0.9106
+teacher_test_type_f1: 0.9347
+teacher_test_severity_f1: 0.8906
+teacher_test_type_prec: 0.9464
+teacher_test_severity_prec: 0.8904
+teacher_test_type_rec: 0.9291
+teacher_test_severity_rec: 0.8962
+teacher_test_type_auc: 0.9964
+teacher_test_severity_auc: 0.9850
+teacher_test_infer_ms: 12.78ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 38.6324
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_dev.npy
+dev_type_acc: 0.5106
+dev_severity_acc: 0.8383
+dev_type_f1: 0.3041
+dev_severity_f1: 0.8236
+dev_type_prec: 0.3047
+dev_severity_prec: 0.8692
+dev_type_rec: 0.3367
+dev_severity_rec: 0.8012
+dev_type_auc: 0.8943
+dev_severity_auc: 0.9563
+dev_infer_ms: 5.29ms
+  New best dev score: 0.5639
+Student Epoch 1/1 – loss 28.7305
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7021
+dev_severity_acc: 0.8723
+dev_type_f1: 0.6382
+dev_severity_f1: 0.7880
+dev_type_prec: 0.6468
+dev_severity_prec: 0.9069
+dev_type_rec: 0.6513
+dev_severity_rec: 0.7505
+dev_type_auc: 0.9400
+dev_severity_auc: 0.9743
+dev_infer_ms: 5.24ms
+  New best dev score: 0.7131
+Student Epoch 1/1 – loss 23.9722
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7191
+dev_severity_acc: 0.8383
+dev_type_f1: 0.6201
+dev_severity_f1: 0.8036
+dev_type_prec: 0.6628
+dev_severity_prec: 0.8031
+dev_type_rec: 0.6182
+dev_severity_rec: 0.8635
+dev_type_auc: 0.9414
+dev_severity_auc: 0.9715
+dev_infer_ms: 5.21ms
+Student Epoch 1/1 – loss 21.7712
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7617
+dev_severity_acc: 0.8596
+dev_type_f1: 0.6899
+dev_severity_f1: 0.8318
+dev_type_prec: 0.7003
+dev_severity_prec: 0.8321
+dev_type_rec: 0.6911
+dev_severity_rec: 0.8604
+dev_type_auc: 0.9574
+dev_severity_auc: 0.9659
+dev_infer_ms: 5.28ms
+  New best dev score: 0.7608
+Student Epoch 1/1 – loss 19.8593
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7702
+dev_severity_acc: 0.8766
+dev_type_f1: 0.7732
+dev_severity_f1: 0.8811
+dev_type_prec: 0.7946
+dev_severity_prec: 0.9013
+dev_type_rec: 0.7643
+dev_severity_rec: 0.8675
+dev_type_auc: 0.9596
+dev_severity_auc: 0.9697
+dev_infer_ms: 5.91ms
+  New best dev score: 0.8271
+Student Epoch 1/1 – loss 18.9107
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_dev.npy
+dev_type_acc: 0.8128
+dev_severity_acc: 0.9277
+dev_type_f1: 0.7968
+dev_severity_f1: 0.9224
+dev_type_prec: 0.8299
+dev_severity_prec: 0.9337
+dev_type_rec: 0.7915
+dev_severity_rec: 0.9124
+dev_type_auc: 0.9688
+dev_severity_auc: 0.9764
+dev_infer_ms: 5.29ms
+  New best dev score: 0.8596
+Student Epoch 1/1 – loss 18.0089
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_dev.npy
+dev_type_acc: 0.8255
+dev_severity_acc: 0.9234
+dev_type_f1: 0.7979
+dev_severity_f1: 0.9140
+dev_type_prec: 0.8064
+dev_severity_prec: 0.9137
+dev_type_rec: 0.8008
+dev_severity_rec: 0.9163
+dev_type_auc: 0.9625
+dev_severity_auc: 0.9822
+dev_infer_ms: 5.28ms
+Student Epoch 1/1 – loss 17.8845
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_dev.npy
+dev_type_acc: 0.6979
+dev_severity_acc: 0.9234
+dev_type_f1: 0.6238
+dev_severity_f1: 0.9151
+dev_type_prec: 0.6849
+dev_severity_prec: 0.9113
+dev_type_rec: 0.6299
+dev_severity_rec: 0.9256
+dev_type_auc: 0.9467
+dev_severity_auc: 0.9836
+dev_infer_ms: 5.53ms
+Student Epoch 1/1 – loss 17.2774
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7660
+dev_severity_acc: 0.9234
+dev_type_f1: 0.7338
+dev_severity_f1: 0.9172
+dev_type_prec: 0.7615
+dev_severity_prec: 0.9445
+dev_type_rec: 0.7409
+dev_severity_rec: 0.8958
+dev_type_auc: 0.9559
+dev_severity_auc: 0.9714
+dev_infer_ms: 5.28ms
+Student Epoch 1/1 – loss 16.8186
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7617
+dev_severity_acc: 0.9149
+dev_type_f1: 0.6841
+dev_severity_f1: 0.8998
+dev_type_prec: 0.7123
+dev_severity_prec: 0.9136
+dev_type_rec: 0.6778
+dev_severity_rec: 0.8885
+dev_type_auc: 0.9502
+dev_severity_auc: 0.9821
+dev_infer_ms: 5.28ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_type_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/cm_severity_test.npy
+test_type_acc: 0.8170
+test_severity_acc: 0.9021
+test_type_f1: 0.8120
+test_severity_f1: 0.8937
+test_type_prec: 0.8415
+test_severity_prec: 0.9029
+test_type_rec: 0.7987
+test_severity_rec: 0.8859
+test_type_auc: 0.9758
+test_severity_auc: 0.9799
+test_infer_ms: 5.31ms
+test_type_acc: 0.9404
+test_severity_acc: 0.9106
+test_type_f1: 0.9347
+test_severity_f1: 0.8906
+test_type_prec: 0.9464
+test_severity_prec: 0.8904
+test_type_rec: 0.9291
+test_severity_rec: 0.8962
+test_type_auc: 0.9964
+test_severity_auc: 0.9850
+test_infer_ms: 12.86ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/wound-deit_small-minilm
+==== [Thu Jan 22 07:16:26 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/wound-deit_small-minilm.yaml exit=0 ====
+==== [Thu Jan 22 07:16:26 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-tiny-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Wound dataset loaded: 1094 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/labels_type.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/labels_severity.npy
+
+Teacher parameters: 195.89M (195,886,349)
+Student parameters: 17.64M (17,640,333)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 1.9961
+Teacher Epoch 2/3 – loss 0.8328
+Teacher Epoch 3/3 – loss 0.4243
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_teacher_dev.npy
+teacher_dev_type_acc: 0.8383
+teacher_dev_severity_acc: 0.9064
+teacher_dev_type_f1: 0.8277
+teacher_dev_severity_f1: 0.8766
+teacher_dev_type_prec: 0.9048
+teacher_dev_severity_prec: 0.9162
+teacher_dev_type_rec: 0.7952
+teacher_dev_severity_rec: 0.8496
+teacher_dev_type_auc: 0.9730
+teacher_dev_severity_auc: 0.9868
+teacher_dev_infer_ms: 12.88ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_teacher_test.npy
+teacher_test_type_acc: 0.8511
+teacher_test_severity_acc: 0.9277
+teacher_test_type_f1: 0.8611
+teacher_test_severity_f1: 0.9053
+teacher_test_type_prec: 0.9115
+teacher_test_severity_prec: 0.9230
+teacher_test_type_rec: 0.8311
+teacher_test_severity_rec: 0.8911
+teacher_test_type_auc: 0.9887
+teacher_test_severity_auc: 0.9884
+teacher_test_infer_ms: 12.77ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 41.5770
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.3660
+dev_severity_acc: 0.8894
+dev_type_f1: 0.2999
+dev_severity_f1: 0.8019
+dev_type_prec: 0.4182
+dev_severity_prec: 0.9198
+dev_type_rec: 0.2973
+dev_severity_rec: 0.7669
+dev_type_auc: 0.7914
+dev_severity_auc: 0.9831
+dev_infer_ms: 4.58ms
+  New best dev score: 0.5509
+Student Epoch 1/1 – loss 30.2761
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.6085
+dev_severity_acc: 0.9064
+dev_type_f1: 0.5441
+dev_severity_f1: 0.8922
+dev_type_prec: 0.5582
+dev_severity_prec: 0.8827
+dev_type_rec: 0.5791
+dev_severity_rec: 0.9118
+dev_type_auc: 0.9197
+dev_severity_auc: 0.9861
+dev_infer_ms: 4.64ms
+  New best dev score: 0.7182
+Student Epoch 1/1 – loss 26.1397
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7021
+dev_severity_acc: 0.9149
+dev_type_f1: 0.6037
+dev_severity_f1: 0.8623
+dev_type_prec: 0.6268
+dev_severity_prec: 0.9377
+dev_type_rec: 0.6060
+dev_severity_rec: 0.8245
+dev_type_auc: 0.9324
+dev_severity_auc: 0.9862
+dev_infer_ms: 5.24ms
+  New best dev score: 0.7330
+Student Epoch 1/1 – loss 23.4086
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7702
+dev_severity_acc: 0.9106
+dev_type_f1: 0.6831
+dev_severity_f1: 0.9032
+dev_type_prec: 0.6948
+dev_severity_prec: 0.9148
+dev_type_rec: 0.6913
+dev_severity_rec: 0.8951
+dev_type_auc: 0.9645
+dev_severity_auc: 0.9877
+dev_infer_ms: 4.64ms
+  New best dev score: 0.7932
+Student Epoch 1/1 – loss 21.6566
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.6851
+dev_severity_acc: 0.9234
+dev_type_f1: 0.6268
+dev_severity_f1: 0.9000
+dev_type_prec: 0.7327
+dev_severity_prec: 0.9233
+dev_type_rec: 0.6043
+dev_severity_rec: 0.8829
+dev_type_auc: 0.9459
+dev_severity_auc: 0.9904
+dev_infer_ms: 4.71ms
+Student Epoch 1/1 – loss 20.5334
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7532
+dev_severity_acc: 0.9277
+dev_type_f1: 0.7182
+dev_severity_f1: 0.9225
+dev_type_prec: 0.7650
+dev_severity_prec: 0.9250
+dev_type_rec: 0.7145
+dev_severity_rec: 0.9208
+dev_type_auc: 0.9391
+dev_severity_auc: 0.9908
+dev_infer_ms: 4.82ms
+  New best dev score: 0.8204
+Student Epoch 1/1 – loss 19.5171
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7574
+dev_severity_acc: 0.9234
+dev_type_f1: 0.7296
+dev_severity_f1: 0.8930
+dev_type_prec: 0.8189
+dev_severity_prec: 0.9144
+dev_type_rec: 0.7098
+dev_severity_rec: 0.8763
+dev_type_auc: 0.9643
+dev_severity_auc: 0.9873
+dev_infer_ms: 4.64ms
+Student Epoch 1/1 – loss 19.0751
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7447
+dev_severity_acc: 0.9277
+dev_type_f1: 0.7171
+dev_severity_f1: 0.9015
+dev_type_prec: 0.8159
+dev_severity_prec: 0.9304
+dev_type_rec: 0.6897
+dev_severity_rec: 0.8808
+dev_type_auc: 0.9546
+dev_severity_auc: 0.9872
+dev_infer_ms: 4.85ms
+Student Epoch 1/1 – loss 18.6487
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.8213
+dev_severity_acc: 0.9277
+dev_type_f1: 0.7895
+dev_severity_f1: 0.9124
+dev_type_prec: 0.8631
+dev_severity_prec: 0.9150
+dev_type_rec: 0.7758
+dev_severity_rec: 0.9106
+dev_type_auc: 0.9590
+dev_severity_auc: 0.9853
+dev_infer_ms: 4.68ms
+  New best dev score: 0.8510
+Student Epoch 1/1 – loss 18.0314
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.8128
+dev_severity_acc: 0.9362
+dev_type_f1: 0.7956
+dev_severity_f1: 0.9285
+dev_type_prec: 0.8347
+dev_severity_prec: 0.9393
+dev_type_rec: 0.7874
+dev_severity_rec: 0.9188
+dev_type_auc: 0.9525
+dev_severity_auc: 0.9915
+dev_infer_ms: 4.59ms
+  New best dev score: 0.8620
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_type_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/cm_severity_test.npy
+test_type_acc: 0.7872
+test_severity_acc: 0.9277
+test_type_f1: 0.7993
+test_severity_f1: 0.9348
+test_type_prec: 0.8251
+test_severity_prec: 0.9450
+test_type_rec: 0.7921
+test_severity_rec: 0.9262
+test_type_auc: 0.9698
+test_severity_auc: 0.9857
+test_infer_ms: 4.79ms
+test_type_acc: 0.8511
+test_severity_acc: 0.9277
+test_type_f1: 0.8611
+test_severity_f1: 0.9053
+test_type_prec: 0.9115
+test_severity_prec: 0.9230
+test_type_rec: 0.8311
+test_severity_rec: 0.8911
+test_type_auc: 0.9887
+test_severity_auc: 0.9884
+test_infer_ms: 13.28ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini
+==== [Thu Jan 22 07:21:58 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/wound-deit_tiny-bert-mini.yaml exit=0 ====
+==== [Thu Jan 22 07:21:58 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-tiny-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Wound dataset loaded: 1094 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/labels_type.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/labels_severity.npy
+
+Teacher parameters: 195.89M (195,886,349)
+Student parameters: 72.96M (72,963,725)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 2.0312
+Teacher Epoch 2/3 – loss 0.9154
+Teacher Epoch 3/3 – loss 0.3834
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_teacher_dev.npy
+teacher_dev_type_acc: 0.8511
+teacher_dev_severity_acc: 0.9404
+teacher_dev_type_f1: 0.8334
+teacher_dev_severity_f1: 0.9318
+teacher_dev_type_prec: 0.8970
+teacher_dev_severity_prec: 0.9384
+teacher_dev_type_rec: 0.8277
+teacher_dev_severity_rec: 0.9283
+teacher_dev_type_auc: 0.9868
+teacher_dev_severity_auc: 0.9886
+teacher_dev_infer_ms: 12.86ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_teacher_test.npy
+teacher_test_type_acc: 0.8936
+teacher_test_severity_acc: 0.9319
+teacher_test_type_f1: 0.9206
+teacher_test_severity_f1: 0.9062
+teacher_test_type_prec: 0.9395
+teacher_test_severity_prec: 0.9077
+teacher_test_type_rec: 0.9121
+teacher_test_severity_rec: 0.9051
+teacher_test_type_auc: 0.9905
+teacher_test_severity_auc: 0.9888
+teacher_test_infer_ms: 12.83ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 42.7032
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.4681
+dev_severity_acc: 0.8511
+dev_type_f1: 0.2486
+dev_severity_f1: 0.8030
+dev_type_prec: 0.2238
+dev_severity_prec: 0.7865
+dev_type_rec: 0.2917
+dev_severity_rec: 0.8295
+dev_type_auc: 0.8620
+dev_severity_auc: 0.9558
+dev_infer_ms: 5.96ms
+  New best dev score: 0.5258
+Student Epoch 1/1 – loss 33.1978
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.6638
+dev_severity_acc: 0.7872
+dev_type_f1: 0.5716
+dev_severity_f1: 0.7707
+dev_type_prec: 0.5815
+dev_severity_prec: 0.8289
+dev_type_rec: 0.5908
+dev_severity_rec: 0.7657
+dev_type_auc: 0.9276
+dev_severity_auc: 0.9547
+dev_infer_ms: 6.20ms
+  New best dev score: 0.6711
+Student Epoch 1/1 – loss 29.6275
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.6894
+dev_severity_acc: 0.8426
+dev_type_f1: 0.6352
+dev_severity_f1: 0.8357
+dev_type_prec: 0.6480
+dev_severity_prec: 0.8246
+dev_type_rec: 0.6472
+dev_severity_rec: 0.8515
+dev_type_auc: 0.9364
+dev_severity_auc: 0.9598
+dev_infer_ms: 6.14ms
+  New best dev score: 0.7354
+Student Epoch 1/1 – loss 27.9486
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.7021
+dev_severity_acc: 0.8638
+dev_type_f1: 0.6519
+dev_severity_f1: 0.8348
+dev_type_prec: 0.7027
+dev_severity_prec: 0.8116
+dev_type_rec: 0.6422
+dev_severity_rec: 0.8747
+dev_type_auc: 0.9537
+dev_severity_auc: 0.9548
+dev_infer_ms: 6.19ms
+  New best dev score: 0.7434
+Student Epoch 1/1 – loss 26.1517
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.7149
+dev_severity_acc: 0.8553
+dev_type_f1: 0.6465
+dev_severity_f1: 0.8380
+dev_type_prec: 0.7568
+dev_severity_prec: 0.8239
+dev_type_rec: 0.6242
+dev_severity_rec: 0.8625
+dev_type_auc: 0.9350
+dev_severity_auc: 0.9622
+dev_infer_ms: 6.18ms
+Student Epoch 1/1 – loss 24.6152
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.8170
+dev_severity_acc: 0.8638
+dev_type_f1: 0.7882
+dev_severity_f1: 0.8333
+dev_type_prec: 0.8174
+dev_severity_prec: 0.8290
+dev_type_rec: 0.7702
+dev_severity_rec: 0.8463
+dev_type_auc: 0.9682
+dev_severity_auc: 0.9464
+dev_infer_ms: 6.16ms
+  New best dev score: 0.8108
+Student Epoch 1/1 – loss 23.4922
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.7702
+dev_severity_acc: 0.8681
+dev_type_f1: 0.6990
+dev_severity_f1: 0.8423
+dev_type_prec: 0.6928
+dev_severity_prec: 0.8243
+dev_type_rec: 0.7123
+dev_severity_rec: 0.8673
+dev_type_auc: 0.9627
+dev_severity_auc: 0.9612
+dev_infer_ms: 6.22ms
+Student Epoch 1/1 – loss 22.7648
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.7957
+dev_severity_acc: 0.8383
+dev_type_f1: 0.7716
+dev_severity_f1: 0.7927
+dev_type_prec: 0.7878
+dev_severity_prec: 0.7732
+dev_type_rec: 0.7763
+dev_severity_rec: 0.8612
+dev_type_auc: 0.9656
+dev_severity_auc: 0.9570
+dev_infer_ms: 6.18ms
+Student Epoch 1/1 – loss 22.4941
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.7787
+dev_severity_acc: 0.8511
+dev_type_f1: 0.7442
+dev_severity_f1: 0.8018
+dev_type_prec: 0.8219
+dev_severity_prec: 0.8190
+dev_type_rec: 0.7392
+dev_severity_rec: 0.7886
+dev_type_auc: 0.9571
+dev_severity_auc: 0.9707
+dev_infer_ms: 6.16ms
+Student Epoch 1/1 – loss 23.1948
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.7404
+dev_severity_acc: 0.8426
+dev_type_f1: 0.7156
+dev_severity_f1: 0.7969
+dev_type_prec: 0.7626
+dev_severity_prec: 0.8025
+dev_type_rec: 0.7075
+dev_severity_rec: 0.8049
+dev_type_auc: 0.9410
+dev_severity_auc: 0.9532
+dev_infer_ms: 6.17ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_type_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/cm_severity_test.npy
+test_type_acc: 0.7702
+test_severity_acc: 0.8213
+test_type_f1: 0.7712
+test_severity_f1: 0.7789
+test_type_prec: 0.8253
+test_severity_prec: 0.7734
+test_type_rec: 0.7476
+test_severity_rec: 0.8044
+test_type_auc: 0.9744
+test_severity_auc: 0.9487
+test_infer_ms: 6.14ms
+test_type_acc: 0.8936
+test_severity_acc: 0.9319
+test_type_f1: 0.9206
+test_severity_f1: 0.9062
+test_type_prec: 0.9395
+test_severity_prec: 0.9077
+test_type_rec: 0.9121
+test_severity_rec: 0.9051
+test_type_auc: 0.9905
+test_severity_auc: 0.9888
+test_infer_ms: 12.97ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert
+==== [Thu Jan 22 07:28:57 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/wound-deit_tiny-distilbert.yaml exit=0 ====
+==== [Thu Jan 22 07:28:57 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of ViTModel were not initialized from the model checkpoint at facebook/deit-tiny-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Wound dataset loaded: 1094 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/labels_type.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/labels_severity.npy
+
+Teacher parameters: 195.89M (195,886,349)
+Student parameters: 29.22M (29,215,757)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 2.0199
+Teacher Epoch 2/3 – loss 0.8105
+Teacher Epoch 3/3 – loss 0.3593
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_teacher_dev.npy
+teacher_dev_type_acc: 0.8638
+teacher_dev_severity_acc: 0.9191
+teacher_dev_type_f1: 0.8419
+teacher_dev_severity_f1: 0.9266
+teacher_dev_type_prec: 0.8924
+teacher_dev_severity_prec: 0.9426
+teacher_dev_type_rec: 0.8309
+teacher_dev_severity_rec: 0.9135
+teacher_dev_type_auc: 0.9887
+teacher_dev_severity_auc: 0.9867
+teacher_dev_infer_ms: 12.58ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_teacher_test.npy
+teacher_test_type_acc: 0.9106
+teacher_test_severity_acc: 0.9319
+teacher_test_type_f1: 0.8916
+teacher_test_severity_f1: 0.9207
+teacher_test_type_prec: 0.9179
+teacher_test_severity_prec: 0.9315
+teacher_test_type_rec: 0.8797
+teacher_test_severity_rec: 0.9134
+teacher_test_type_auc: 0.9953
+teacher_test_severity_auc: 0.9807
+teacher_test_infer_ms: 12.59ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 39.7655
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_dev.npy
+dev_type_acc: 0.4766
+dev_severity_acc: 0.8553
+dev_type_f1: 0.3176
+dev_severity_f1: 0.8229
+dev_type_prec: 0.3812
+dev_severity_prec: 0.8110
+dev_type_rec: 0.3668
+dev_severity_rec: 0.8594
+dev_type_auc: 0.8592
+dev_severity_auc: 0.9667
+dev_infer_ms: 4.55ms
+  New best dev score: 0.5702
+Student Epoch 1/1 – loss 29.3379
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_dev.npy
+dev_type_acc: 0.6383
+dev_severity_acc: 0.8681
+dev_type_f1: 0.5597
+dev_severity_f1: 0.8673
+dev_type_prec: 0.5889
+dev_severity_prec: 0.8963
+dev_type_rec: 0.5989
+dev_severity_rec: 0.8567
+dev_type_auc: 0.9149
+dev_severity_auc: 0.9771
+dev_infer_ms: 4.59ms
+  New best dev score: 0.7135
+Student Epoch 1/1 – loss 25.6994
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_dev.npy
+dev_type_acc: 0.6426
+dev_severity_acc: 0.8936
+dev_type_f1: 0.5687
+dev_severity_f1: 0.8832
+dev_type_prec: 0.6348
+dev_severity_prec: 0.9021
+dev_type_rec: 0.6063
+dev_severity_rec: 0.8702
+dev_type_auc: 0.9222
+dev_severity_auc: 0.9836
+dev_infer_ms: 4.49ms
+  New best dev score: 0.7260
+Student Epoch 1/1 – loss 23.4225
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_dev.npy
+dev_type_acc: 0.6638
+dev_severity_acc: 0.8553
+dev_type_f1: 0.6411
+dev_severity_f1: 0.8679
+dev_type_prec: 0.6752
+dev_severity_prec: 0.9122
+dev_type_rec: 0.6377
+dev_severity_rec: 0.8466
+dev_type_auc: 0.9543
+dev_severity_auc: 0.9819
+dev_infer_ms: 4.50ms
+  New best dev score: 0.7545
+Student Epoch 1/1 – loss 21.9086
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7021
+dev_severity_acc: 0.9191
+dev_type_f1: 0.6355
+dev_severity_f1: 0.9033
+dev_type_prec: 0.8029
+dev_severity_prec: 0.8881
+dev_type_rec: 0.6259
+dev_severity_rec: 0.9246
+dev_type_auc: 0.9299
+dev_severity_auc: 0.9895
+dev_infer_ms: 5.18ms
+  New best dev score: 0.7694
+Student Epoch 1/1 – loss 20.4513
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7830
+dev_severity_acc: 0.9191
+dev_type_f1: 0.7028
+dev_severity_f1: 0.9164
+dev_type_prec: 0.7141
+dev_severity_prec: 0.9264
+dev_type_rec: 0.7065
+dev_severity_rec: 0.9095
+dev_type_auc: 0.9587
+dev_severity_auc: 0.9802
+dev_infer_ms: 4.50ms
+  New best dev score: 0.8096
+Student Epoch 1/1 – loss 19.6421
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7489
+dev_severity_acc: 0.9277
+dev_type_f1: 0.7169
+dev_severity_f1: 0.9148
+dev_type_prec: 0.7675
+dev_severity_prec: 0.9348
+dev_type_rec: 0.7177
+dev_severity_rec: 0.8986
+dev_type_auc: 0.9579
+dev_severity_auc: 0.9831
+dev_infer_ms: 5.06ms
+  New best dev score: 0.8159
+Student Epoch 1/1 – loss 19.5124
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7915
+dev_severity_acc: 0.9106
+dev_type_f1: 0.7491
+dev_severity_f1: 0.8926
+dev_type_prec: 0.7825
+dev_severity_prec: 0.9371
+dev_type_rec: 0.7434
+dev_severity_rec: 0.8626
+dev_type_auc: 0.9693
+dev_severity_auc: 0.9808
+dev_infer_ms: 4.52ms
+  New best dev score: 0.8209
+Student Epoch 1/1 – loss 18.6736
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_dev.npy
+dev_type_acc: 0.7574
+dev_severity_acc: 0.9277
+dev_type_f1: 0.7826
+dev_severity_f1: 0.9160
+dev_type_prec: 0.8375
+dev_severity_prec: 0.9251
+dev_type_rec: 0.7714
+dev_severity_rec: 0.9088
+dev_type_auc: 0.9677
+dev_severity_auc: 0.9891
+dev_infer_ms: 4.52ms
+  New best dev score: 0.8493
+Student Epoch 1/1 – loss 18.0302
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_dev.npy
+dev_type_acc: 0.8298
+dev_severity_acc: 0.9191
+dev_type_f1: 0.8260
+dev_severity_f1: 0.8965
+dev_type_prec: 0.8474
+dev_severity_prec: 0.8899
+dev_type_rec: 0.8218
+dev_severity_rec: 0.9108
+dev_type_auc: 0.9720
+dev_severity_auc: 0.9888
+dev_infer_ms: 4.55ms
+  New best dev score: 0.8613
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_type_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/cm_severity_test.npy
+test_type_acc: 0.8043
+test_severity_acc: 0.9106
+test_type_f1: 0.8025
+test_severity_f1: 0.9007
+test_type_prec: 0.8559
+test_severity_prec: 0.9001
+test_type_rec: 0.7851
+test_severity_rec: 0.9067
+test_type_auc: 0.9703
+test_severity_auc: 0.9832
+test_infer_ms: 4.56ms
+test_type_acc: 0.9106
+test_severity_acc: 0.9319
+test_type_f1: 0.8916
+test_severity_f1: 0.9207
+test_type_prec: 0.9179
+test_severity_prec: 0.9315
+test_type_rec: 0.8797
+test_severity_rec: 0.9134
+test_type_auc: 0.9953
+test_severity_auc: 0.9807
+test_infer_ms: 12.59ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm
+==== [Thu Jan 22 07:34:48 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/wound-deit_tiny-minilm.yaml exit=0 ====
+==== [Thu Jan 22 07:34:48 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Wound dataset loaded: 1094 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/labels_type.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/labels_severity.npy
+
+Teacher parameters: 195.89M (195,886,349)
+Student parameters: 72.45M (72,454,573)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 2.0750
+Teacher Epoch 2/3 – loss 0.8760
+Teacher Epoch 3/3 – loss 0.4236
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_teacher_dev.npy
+teacher_dev_type_acc: 0.8170
+teacher_dev_severity_acc: 0.9064
+teacher_dev_type_f1: 0.8175
+teacher_dev_severity_f1: 0.9074
+teacher_dev_type_prec: 0.8665
+teacher_dev_severity_prec: 0.9065
+teacher_dev_type_rec: 0.8140
+teacher_dev_severity_rec: 0.9087
+teacher_dev_type_auc: 0.9830
+teacher_dev_severity_auc: 0.9737
+teacher_dev_infer_ms: 12.89ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_teacher_test.npy
+teacher_test_type_acc: 0.8638
+teacher_test_severity_acc: 0.9064
+teacher_test_type_f1: 0.8866
+teacher_test_severity_f1: 0.8942
+teacher_test_type_prec: 0.9068
+teacher_test_severity_prec: 0.9184
+teacher_test_type_rec: 0.8903
+teacher_test_severity_rec: 0.8753
+teacher_test_type_auc: 0.9909
+teacher_test_severity_auc: 0.9787
+teacher_test_infer_ms: 12.74ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 33.7855
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.6426
+dev_severity_acc: 0.9234
+dev_type_f1: 0.5457
+dev_severity_f1: 0.9129
+dev_type_prec: 0.5606
+dev_severity_prec: 0.9292
+dev_type_rec: 0.5558
+dev_severity_rec: 0.8994
+dev_type_auc: 0.9170
+dev_severity_auc: 0.9796
+dev_infer_ms: 6.95ms
+  New best dev score: 0.7293
+Student Epoch 1/1 – loss 23.9751
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.6255
+dev_severity_acc: 0.9064
+dev_type_f1: 0.5643
+dev_severity_f1: 0.8975
+dev_type_prec: 0.6852
+dev_severity_prec: 0.8885
+dev_type_rec: 0.5725
+dev_severity_rec: 0.9078
+dev_type_auc: 0.9457
+dev_severity_auc: 0.9709
+dev_infer_ms: 6.95ms
+  New best dev score: 0.7309
+Student Epoch 1/1 – loss 20.9015
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.8128
+dev_severity_acc: 0.9106
+dev_type_f1: 0.7747
+dev_severity_f1: 0.8883
+dev_type_prec: 0.8167
+dev_severity_prec: 0.8906
+dev_type_rec: 0.7688
+dev_severity_rec: 0.8866
+dev_type_auc: 0.9767
+dev_severity_auc: 0.9743
+dev_infer_ms: 6.89ms
+  New best dev score: 0.8315
+Student Epoch 1/1 – loss 19.2580
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.8170
+dev_severity_acc: 0.8723
+dev_type_f1: 0.7849
+dev_severity_f1: 0.8547
+dev_type_prec: 0.8477
+dev_severity_prec: 0.9117
+dev_type_rec: 0.7703
+dev_severity_rec: 0.8203
+dev_type_auc: 0.9683
+dev_severity_auc: 0.9777
+dev_infer_ms: 6.93ms
+Student Epoch 1/1 – loss 18.0569
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.8213
+dev_severity_acc: 0.9191
+dev_type_f1: 0.7938
+dev_severity_f1: 0.9153
+dev_type_prec: 0.8795
+dev_severity_prec: 0.9388
+dev_type_rec: 0.7718
+dev_severity_rec: 0.8984
+dev_type_auc: 0.9618
+dev_severity_auc: 0.9769
+dev_infer_ms: 6.85ms
+  New best dev score: 0.8545
+Student Epoch 1/1 – loss 17.4333
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.8468
+dev_severity_acc: 0.8638
+dev_type_f1: 0.8341
+dev_severity_f1: 0.8474
+dev_type_prec: 0.8749
+dev_severity_prec: 0.8328
+dev_type_rec: 0.8314
+dev_severity_rec: 0.8881
+dev_type_auc: 0.9868
+dev_severity_auc: 0.9773
+dev_infer_ms: 6.84ms
+Student Epoch 1/1 – loss 16.9348
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.8383
+dev_severity_acc: 0.9191
+dev_type_f1: 0.8298
+dev_severity_f1: 0.9215
+dev_type_prec: 0.8537
+dev_severity_prec: 0.9386
+dev_type_rec: 0.8248
+dev_severity_rec: 0.9077
+dev_type_auc: 0.9818
+dev_severity_auc: 0.9850
+dev_infer_ms: 6.76ms
+  New best dev score: 0.8756
+Student Epoch 1/1 – loss 16.7678
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.8468
+dev_severity_acc: 0.9064
+dev_type_f1: 0.8492
+dev_severity_f1: 0.8989
+dev_type_prec: 0.9075
+dev_severity_prec: 0.9298
+dev_type_rec: 0.8366
+dev_severity_rec: 0.8780
+dev_type_auc: 0.9835
+dev_severity_auc: 0.9764
+dev_infer_ms: 6.92ms
+Student Epoch 1/1 – loss 16.5732
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.8766
+dev_severity_acc: 0.9277
+dev_type_f1: 0.8750
+dev_severity_f1: 0.9279
+dev_type_prec: 0.9143
+dev_severity_prec: 0.9449
+dev_type_rec: 0.8628
+dev_severity_rec: 0.9141
+dev_type_auc: 0.9870
+dev_severity_auc: 0.9799
+dev_infer_ms: 6.90ms
+  New best dev score: 0.9014
+Student Epoch 1/1 – loss 16.3618
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_dev.npy
+dev_type_acc: 0.8553
+dev_severity_acc: 0.8936
+dev_type_f1: 0.8472
+dev_severity_f1: 0.8848
+dev_type_prec: 0.8650
+dev_severity_prec: 0.8962
+dev_type_rec: 0.8422
+dev_severity_rec: 0.8746
+dev_type_auc: 0.9885
+dev_severity_auc: 0.9712
+dev_infer_ms: 6.84ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_type_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/cm_severity_test.npy
+test_type_acc: 0.8936
+test_severity_acc: 0.9362
+test_type_f1: 0.9163
+test_severity_f1: 0.9107
+test_type_prec: 0.9196
+test_severity_prec: 0.9386
+test_type_rec: 0.9165
+test_severity_rec: 0.8899
+test_type_auc: 0.9889
+test_severity_auc: 0.9903
+test_infer_ms: 6.90ms
+test_type_acc: 0.8638
+test_severity_acc: 0.9064
+test_type_f1: 0.8866
+test_severity_f1: 0.8942
+test_type_prec: 0.9068
+test_severity_prec: 0.9184
+test_type_rec: 0.8903
+test_severity_rec: 0.8753
+test_type_auc: 0.9909
+test_severity_auc: 0.9787
+test_infer_ms: 12.78ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert
+==== [Thu Jan 22 07:42:23 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/wound-mobilevit_small-distilbert.yaml exit=0 ====
+==== [Thu Jan 22 07:42:23 PM IST 2026] RUN config/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini.yaml ====
+Some weights of ViTModel were not initialized from the model checkpoint at google/vit-base-patch16-224 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Wound dataset loaded: 1094 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Wound dataset loaded: 235 samples
+Type classes (10): ['Abrasion', 'Bruises', 'Burn', 'Cut', 'Diabetic', 'Laceration', 'Normal', 'Pressure', 'Surgical', 'Venous']
+Severity classes (3): ['Mild', 'Moderate', 'Severe']
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/labels_type.npy
+Class labels saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/labels_severity.npy
+
+Teacher parameters: 195.89M (195,886,349)
+Student parameters: 13.06M (13,062,653)
+
+=== Training Teacher ===
+Teacher Epoch 1/3 – loss 2.0322
+Teacher Epoch 2/3 – loss 0.9081
+Teacher Epoch 3/3 – loss 0.3674
+
+=== Evaluating Teacher ===
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_teacher_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_teacher_dev.npy
+teacher_dev_type_acc: 0.8426
+teacher_dev_severity_acc: 0.8638
+teacher_dev_type_f1: 0.8326
+teacher_dev_severity_f1: 0.8588
+teacher_dev_type_prec: 0.8790
+teacher_dev_severity_prec: 0.8757
+teacher_dev_type_rec: 0.8318
+teacher_dev_severity_rec: 0.8726
+teacher_dev_type_auc: 0.9849
+teacher_dev_severity_auc: 0.9781
+teacher_dev_infer_ms: 12.88ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_teacher_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_teacher_test.npy
+teacher_test_type_acc: 0.8809
+teacher_test_severity_acc: 0.8553
+teacher_test_type_f1: 0.8759
+teacher_test_severity_f1: 0.8500
+teacher_test_type_prec: 0.8844
+teacher_test_severity_prec: 0.8646
+teacher_test_type_rec: 0.8782
+teacher_test_severity_rec: 0.8781
+teacher_test_type_auc: 0.9892
+teacher_test_severity_auc: 0.9785
+teacher_test_infer_ms: 12.68ms
+
+=== Distilling to Student ===
+Student Epoch 1/1 – loss 39.3094
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.5830
+dev_severity_acc: 0.9362
+dev_type_f1: 0.4447
+dev_severity_f1: 0.9342
+dev_type_prec: 0.5229
+dev_severity_prec: 0.9423
+dev_type_rec: 0.4650
+dev_severity_rec: 0.9273
+dev_type_auc: 0.9011
+dev_severity_auc: 0.9879
+dev_infer_ms: 4.83ms
+  New best dev score: 0.6895
+Student Epoch 1/1 – loss 26.8810
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.6298
+dev_severity_acc: 0.8979
+dev_type_f1: 0.5284
+dev_severity_f1: 0.9029
+dev_type_prec: 0.6081
+dev_severity_prec: 0.9321
+dev_type_rec: 0.5487
+dev_severity_rec: 0.8832
+dev_type_auc: 0.9309
+dev_severity_auc: 0.9814
+dev_infer_ms: 4.64ms
+  New best dev score: 0.7157
+Student Epoch 1/1 – loss 24.0343
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.6851
+dev_severity_acc: 0.9362
+dev_type_f1: 0.6375
+dev_severity_f1: 0.9404
+dev_type_prec: 0.6705
+dev_severity_prec: 0.9345
+dev_type_rec: 0.6579
+dev_severity_rec: 0.9486
+dev_type_auc: 0.9593
+dev_severity_auc: 0.9883
+dev_infer_ms: 4.71ms
+  New best dev score: 0.7890
+Student Epoch 1/1 – loss 21.9131
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.6979
+dev_severity_acc: 0.9404
+dev_type_f1: 0.5988
+dev_severity_f1: 0.9330
+dev_type_prec: 0.6440
+dev_severity_prec: 0.9283
+dev_type_rec: 0.6340
+dev_severity_rec: 0.9403
+dev_type_auc: 0.9574
+dev_severity_auc: 0.9885
+dev_infer_ms: 4.56ms
+Student Epoch 1/1 – loss 20.6036
+/DATA1/rupesh_2421cs03/myenv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1731: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7787
+dev_severity_acc: 0.9064
+dev_type_f1: 0.7140
+dev_severity_f1: 0.8978
+dev_type_prec: 0.7223
+dev_severity_prec: 0.8848
+dev_type_rec: 0.7345
+dev_severity_rec: 0.9230
+dev_type_auc: 0.9747
+dev_severity_auc: 0.9828
+dev_infer_ms: 4.56ms
+  New best dev score: 0.8059
+Student Epoch 1/1 – loss 19.2618
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7660
+dev_severity_acc: 0.9532
+dev_type_f1: 0.7168
+dev_severity_f1: 0.9534
+dev_type_prec: 0.7832
+dev_severity_prec: 0.9538
+dev_type_rec: 0.7082
+dev_severity_rec: 0.9530
+dev_type_auc: 0.9683
+dev_severity_auc: 0.9869
+dev_infer_ms: 4.68ms
+  New best dev score: 0.8351
+Student Epoch 1/1 – loss 18.6966
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7574
+dev_severity_acc: 0.9404
+dev_type_f1: 0.7605
+dev_severity_f1: 0.9435
+dev_type_prec: 0.8168
+dev_severity_prec: 0.9454
+dev_type_rec: 0.7629
+dev_severity_rec: 0.9420
+dev_type_auc: 0.9698
+dev_severity_auc: 0.9878
+dev_infer_ms: 4.61ms
+  New best dev score: 0.8520
+Student Epoch 1/1 – loss 18.0300
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7617
+dev_severity_acc: 0.9319
+dev_type_f1: 0.7451
+dev_severity_f1: 0.9366
+dev_type_prec: 0.7654
+dev_severity_prec: 0.9506
+dev_type_rec: 0.7566
+dev_severity_rec: 0.9245
+dev_type_auc: 0.9692
+dev_severity_auc: 0.9827
+dev_infer_ms: 4.67ms
+Student Epoch 1/1 – loss 17.8836
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.8255
+dev_severity_acc: 0.9319
+dev_type_f1: 0.7963
+dev_severity_f1: 0.9316
+dev_type_prec: 0.8341
+dev_severity_prec: 0.9297
+dev_type_rec: 0.7949
+dev_severity_rec: 0.9347
+dev_type_auc: 0.9742
+dev_severity_auc: 0.9907
+dev_infer_ms: 4.67ms
+  New best dev score: 0.8640
+Student Epoch 1/1 – loss 17.2485
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_dev.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_dev.npy
+dev_type_acc: 0.7702
+dev_severity_acc: 0.9319
+dev_type_f1: 0.7503
+dev_severity_f1: 0.9266
+dev_type_prec: 0.7893
+dev_severity_prec: 0.9204
+dev_type_rec: 0.7684
+dev_severity_rec: 0.9347
+dev_type_auc: 0.9758
+dev_severity_auc: 0.9813
+dev_infer_ms: 5.47ms
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_type_test.npy
+Confusion matrix saved: logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/cm_severity_test.npy
+test_type_acc: 0.8255
+test_severity_acc: 0.9277
+test_type_f1: 0.8184
+test_severity_f1: 0.9246
+test_type_prec: 0.8526
+test_severity_prec: 0.9190
+test_type_rec: 0.8096
+test_severity_rec: 0.9323
+test_type_auc: 0.9801
+test_severity_auc: 0.9824
+test_infer_ms: 5.19ms
+test_type_acc: 0.8809
+test_severity_acc: 0.8553
+test_type_f1: 0.8759
+test_severity_f1: 0.8500
+test_type_prec: 0.8844
+test_severity_prec: 0.8646
+test_type_rec: 0.8782
+test_severity_rec: 0.8781
+test_type_auc: 0.9892
+test_severity_auc: 0.9785
+test_infer_ms: 12.82ms
+Metrics saved to logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/metrics.csv
+Metrics JSON saved to logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/metrics.json
+Experiment results saved to logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini/results.json
+All outputs saved in logs/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini
+==== [Thu Jan 22 07:47:58 PM IST 2026] DONE config/ultra-edge-hp-tuned-all/wound-mobilevit_xx_small-bert-mini.yaml exit=0 ====
+ALL DONE at Thu Jan 22 07:47:58 PM IST 2026

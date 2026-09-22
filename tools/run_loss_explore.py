@@ -13,17 +13,17 @@ from datetime import datetime
 # All loss-explore configs
 CONFIGS = [
     # Wound dataset
-    "config/loss-explore/wound-cross_attention-vanilla.yaml",
-    "config/loss-explore/wound-cross_attention-combined.yaml",
-    "config/loss-explore/wound-cross_attention-crd.yaml",
-    "config/loss-explore/wound-cross_attention-rkd.yaml",
-    "config/loss-explore/wound-cross_attention-mmd.yaml",
+    "config/loss-explore-hp-wound/wound-mobilevit_xx_small-bert-mini-true-vanilla.yaml",
+    "config/loss-explore-hp-wound/wound-mobilevit_xx_small-bert-mini-crd.yaml",
+    "config/loss-explore-hp-wound/wound-mobilevit_xx_small-bert-mini-rkd.yaml",
+    "config/loss-explore-hp-wound/wound-mobilevit_xx_small-bert-mini-mmd.yaml",
+    
     # MedPix dataset
-    "config/loss-explore/medpix-cross_attention-vanilla.yaml",
-    "config/loss-explore/medpix-cross_attention-combined.yaml",
-    "config/loss-explore/medpix-cross_attention-crd.yaml",
-    "config/loss-explore/medpix-cross_attention-rkd.yaml",
-    "config/loss-explore/medpix-cross_attention-mmd.yaml",
+
+    "config/loss-explore-hp-medpix/medpix-mobilevit_xx_small-bert-mini-true-vanilla.yaml",
+    "config/loss-explore-hp-medpix/medpix-mobilevit_xx_small-bert-mini-crd.yaml",
+    "config/loss-explore-hp-medpix/medpix-mobilevit_xx_small-bert-mini-rkd.yaml",
+    "config/loss-explore-hp-medpix/medpix-mobilevit_xx_small-bert-mini-mmd.yaml",   
 ]
 
 
