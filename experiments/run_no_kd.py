@@ -214,9 +214,42 @@ def main(cfg: dict, cfg_path: str, overrides: dict):
     except Exception:
         raise TypeError(f"data.num_workers must be int-like, got {cfg.get('data', {}).get('num_workers')}")
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-    dev_loader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+    seed = cfg.get("seed", None)
+    generator = None
+    worker_init_fn = None
+    if seed is not None:
+        generator = torch.Generator()
+        generator.manual_seed(int(seed))
+        def seed_worker(worker_id):
+            worker_seed = torch.initial_seed() % 2**32
+            np.random.seed(worker_seed)
+            random.seed(worker_seed)
+        worker_init_fn = seed_worker
+
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=num_workers,
+        generator=generator,
+        worker_init_fn=worker_init_fn,
+    )
+    dev_loader = DataLoader(
+        dev_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=num_workers,
+        generator=generator,
+        worker_init_fn=worker_init_fn,
+    )
+    test_loader = DataLoader(
+        test_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=num_workers,
+        generator=generator,
+        worker_init_fn=worker_init_fn,
+    )
 
     # Model
     fusion_type = cfg.get("fusion", {}).get("type", "simple")
@@ -316,6 +349,8 @@ def main(cfg: dict, cfg_path: str, overrides: dict):
     final_path = os.path.join(log_dir, "student_final.pth")
     torch.save(student.state_dict(), final_path)
 
+    if test_metrics and hasattr(logger, "log_test"):
+        logger.log_test(test_metrics)
     logger.save_csv()
     logger.save_json()
 
@@ -353,10 +388,15 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    set_seed(args.seed)
 
     with open(args.cfg, "r") as f:
         cfg = yaml.safe_load(f)
+
+    seed = args.seed if args.seed is not None else cfg.get("seed", None)
+    if seed is not None:
+        seed = int(seed)
+        set_seed(seed)
+        cfg["seed"] = seed
 
     overrides = {
         "device": args.device,

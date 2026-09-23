@@ -64,6 +64,7 @@ class ResultsLogger:
                 },
             },
             'training': {
+                'seed': config.get('seed'),
                 'teacher_epochs': config.get('training', {}).get('teacher_epochs'),
                 'student_epochs': config.get('training', {}).get('student_epochs'),
                 'teacher_lr': config.get('training', {}).get('teacher_lr'),

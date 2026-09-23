@@ -154,10 +154,6 @@ def evaluate_detailed(model, loader, device, logger=None, split="dev", token_typ
     except:
         mod_auc = loc_auc = 0.0
 
-    if logger:
-        logger.save_confusion(mod_true, mod_pred, task1_label, split)
-        logger.save_confusion(loc_true, loc_pred, task2_label, split)
-
     metrics = {
         f"{split}_{task1_label}_acc": float(mod_acc),
         f"{split}_{task2_label}_acc": float(loc_acc),
@@ -171,6 +167,12 @@ def evaluate_detailed(model, loader, device, logger=None, split="dev", token_typ
         f"{split}_{task2_label}_auc": float(loc_auc),
         f"{split}_infer_ms": float(infer_time),
     }
+
+    if logger:
+        logger.save_confusion(mod_true, mod_pred, task1_label, split)
+        logger.save_confusion(loc_true, loc_pred, task2_label, split)
+        if "test" in split.lower() and hasattr(logger, "log_test"):
+            logger.log_test(metrics)
 
     for k, v in metrics.items():
         if 'infer_ms' in k:

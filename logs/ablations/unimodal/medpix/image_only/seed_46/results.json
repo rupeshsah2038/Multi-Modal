@@ -1,0 +1,22 @@
+{
+  "modality": "image_only",
+  "dataset": "medpix",
+  "seed": 46,
+  "metrics": {
+    "test": {
+      "avg_acc": 0.8225,
+      "avg_f1": 0.764853651306464,
+      "modality_acc": 0.965,
+      "modality_f1": 0.9649921232277263,
+      "modality_prec": 0.9654188769892904,
+      "modality_rec": 0.965,
+      "modality_auc": 0.9931,
+      "location_acc": 0.68,
+      "location_f1": 0.5647151793852017,
+      "location_prec": 0.6001470971950424,
+      "location_rec": 0.5583117925078772,
+      "location_auc": 0.8989174986662828,
+      "infer_ms": 7.1708619594573975
+    }
+  }
+}

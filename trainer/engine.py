@@ -1,3 +1,5 @@
+import random
+import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from data.dataset import get_dataset, get_num_classes, MedPixDataset, WoundDataset
@@ -14,6 +16,20 @@ import os
 from datetime import datetime
 from transformers import AutoTokenizer
 from models.backbones import get_text_pretrained_name
+
+def set_seed(seed: int = None):
+    """
+    Set random seed across random, numpy, and torch (CPU and CUDA)
+    for reproducible experiment execution.
+    """
+    if seed is None:
+        return
+    seed = int(seed)
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
 
 def count_parameters(model):
     """
@@ -106,6 +122,12 @@ def train_student(student, teacher, loader, device, epochs, lr, distill_fn):
     return student, avg
 
 def main(cfg):
+    # Set random seed if configured
+    seed = cfg.get('seed', None)
+    if seed is not None:
+        set_seed(seed)
+        print(f"[Engine] Random seed set to {seed}")
+
     # Allow overriding device from the config (e.g. 'cuda:3' or 'cpu').
     cfg_device = cfg.get('device', None)
     if cfg_device:
@@ -221,9 +243,41 @@ def main(cfg):
     except Exception:
         raise TypeError(f"data.num_workers must be int-like, got {cfg['data'].get('num_workers')}")
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-    dev_loader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+    generator = None
+    worker_init_fn = None
+    if seed is not None:
+        generator = torch.Generator()
+        generator.manual_seed(int(seed))
+        def seed_worker(worker_id):
+            worker_seed = torch.initial_seed() % 2**32
+            np.random.seed(worker_seed)
+            random.seed(worker_seed)
+        worker_init_fn = seed_worker
+
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=num_workers,
+        generator=generator,
+        worker_init_fn=worker_init_fn,
+    )
+    dev_loader = DataLoader(
+        dev_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=num_workers,
+        generator=generator,
+        worker_init_fn=worker_init_fn,
+    )
+    test_loader = DataLoader(
+        test_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=num_workers,
+        generator=generator,
+        worker_init_fn=worker_init_fn,
+    )
     
     # Get fusion type from config (default to 'simple' for backward compatibility)
     fusion_type = cfg.get('fusion', {}).get('type', 'simple')
@@ -354,13 +408,46 @@ def main(cfg):
     if not teacher_only:
         distill_fn = _make_loss_from_cfg(cfg)
     
-    # Train teacher
-    print("\n=== Training Teacher ===")
-    teacher = train_teacher(
-        teacher, train_loader, device,
-        epochs=cfg['training'].get('teacher_epochs', 1),
-        lr=cfg['training'].get('teacher_lr', 1e-5)
+    # Teacher checkpoint management:
+    # Look for existing teacher checkpoint from logs/ultra-edge-hp-tuned-all/teacher-only/{dataset}/
+    # or an explicit path from cfg['teacher']['checkpoint'] / cfg['training']['teacher_checkpoint'].
+    teacher_ckpt_path = (
+        cfg.get('teacher', {}).get('checkpoint')
+        or cfg.get('training', {}).get('teacher_checkpoint')
+        or os.path.join("logs/ultra-edge-hp-tuned-all/teacher-only", dataset_type, "teacher_final.pth")
     )
+    reuse_teacher = bool(cfg.get('training', {}).get('reuse_teacher', True))
+    force_retrain = bool(cfg.get('training', {}).get('force_retrain_teacher', False))
+
+    loaded_teacher = False
+    if not teacher_only and reuse_teacher and not force_retrain:
+        if os.path.exists(teacher_ckpt_path):
+            try:
+                print(f"\n[Teacher] Found existing teacher checkpoint at: {teacher_ckpt_path}")
+                sd = torch.load(teacher_ckpt_path, map_location=device)
+                teacher.load_state_dict(sd, strict=True)
+                loaded_teacher = True
+                print("[Teacher] Pretrained teacher checkpoint loaded successfully! Skipping teacher training.")
+            except Exception as e:
+                print(f"[Teacher Warning] Failed to load checkpoint {teacher_ckpt_path} ({e}). Falling back to training teacher.")
+                loaded_teacher = False
+        else:
+            print(f"\n[Teacher] No existing checkpoint found at {teacher_ckpt_path}. Will train teacher.")
+
+    if not loaded_teacher:
+        print("\n=== Training Teacher ===")
+        teacher = train_teacher(
+            teacher, train_loader, device,
+            epochs=cfg['training'].get('teacher_epochs', 1),
+            lr=cfg['training'].get('teacher_lr', 1e-5)
+        )
+        # If trained fresh, save checkpoint to the target location for subsequent runs
+        try:
+            os.makedirs(os.path.dirname(teacher_ckpt_path), exist_ok=True)
+            torch.save(teacher.state_dict(), teacher_ckpt_path)
+            print(f"[Teacher] Checkpoint saved to: {teacher_ckpt_path}")
+        except Exception as e:
+            print(f"[Teacher Warning] Could not save teacher checkpoint to {teacher_ckpt_path}: {e}")
 
     # Optional: evaluate teacher metrics (saved into results.json)
     save_teacher_metrics = cfg.get('evaluation', {}).get('save_teacher_metrics', True)
@@ -387,6 +474,8 @@ def main(cfg):
         print(f"Teacher checkpoint saved to {teacher_path}")
 
         # Persist log artifacts (labels/confusions already saved via MetricsLogger)
+        if teacher_test_metrics and hasattr(logger, "log_test"):
+            logger.log_test(teacher_test_metrics)
         logger.save_csv()
         logger.save_json()
 
@@ -489,6 +578,8 @@ def main(cfg):
     
     final_path = os.path.join(cfg['logging']['log_dir'], "student_final.pth")
     torch.save(student.state_dict(), final_path)
+    if test_metrics and hasattr(logger, "log_test"):
+        logger.log_test(test_metrics)
     logger.save_csv()
     logger.save_json()
 

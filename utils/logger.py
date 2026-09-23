@@ -9,6 +9,7 @@ class MetricsLogger:
         os.makedirs(run_dir, exist_ok=True)
         self.run_dir = run_dir
         self.history = defaultdict(list)
+        self.test_metrics = {}
 
     def log_epoch(self, epoch, train_loss, all_metrics):
         self.history['epoch'].append(epoch)
@@ -18,19 +19,26 @@ class MetricsLogger:
                 continue
             self.history[k].append(v)
 
-    def save_csv(self, filename="metrics.csv"):
+    def log_test(self, test_metrics):
+        if test_metrics and isinstance(test_metrics, dict):
+            self.test_metrics.update(test_metrics)
+
+    def save_csv(self, filename="metrics.csv", test_metrics=None):
+        if test_metrics and isinstance(test_metrics, dict):
+            self.test_metrics.update(test_metrics)
+
         path = os.path.join(self.run_dir, filename)
-        keys = list(self.history.keys())
-        n = len(self.history['epoch'])
-        rows = []
-        for i in range(n):
-            row = {k: self.history[k][i] if i < len(self.history[k]) else None for k in keys}
-            rows.append(row)
-        with open(path, 'w', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=keys)
-            writer.writeheader()
-            writer.writerows(rows)
-        print(f"Metrics saved to {path}")
+        if self.test_metrics:
+            keys = list(self.test_metrics.keys())
+            with open(path, 'w', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=keys)
+                writer.writeheader()
+                writer.writerow(self.test_metrics)
+            print(f"Test metrics saved to {path}")
+        else:
+            with open(path, 'w', newline='') as f:
+                pass
+            print(f"Metrics saved to {path} (empty: no test metrics recorded)")
 
     def save_json(self, filename="metrics.json"):
         path = os.path.join(self.run_dir, filename)
