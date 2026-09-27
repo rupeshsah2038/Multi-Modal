@@ -1,0 +1,57 @@
+{
+  "timestamp": "2026-09-27T18:51:15",
+  "mode": "single_phase_joint_training",
+  "dataset": "medpix",
+  "seed": 42,
+  "hardware_profile": {
+    "static_vram_mb": 797.8623046875,
+    "peak_allocated_vram_mb": 7827.65625,
+    "peak_allocated_vram_gb": 7.644195556640625,
+    "peak_reserved_vram_mb": 8564.0,
+    "peak_reserved_vram_gb": 8.36328125,
+    "avg_step_time_ms": 614.8687769816472,
+    "throughput_samples_sec": 26.02181245654237,
+    "avg_epoch_duration_sec": 65.09761097431183,
+    "total_train_duration_sec": 706.1239793300629
+  },
+  "student_params": {
+    "total_params": 13061111,
+    "trainable_params": 13061111,
+    "params_millions": 13.06
+  },
+  "teacher_params": {
+    "total_params": 195884807,
+    "trainable_params": 195884807,
+    "params_millions": 195.88
+  },
+  "student_test_metrics": {
+    "test_modality_acc": 0.94,
+    "test_location_acc": 0.865,
+    "test_modality_f1": 0.9399759903961584,
+    "test_location_f1": 0.8059285004965243,
+    "test_modality_prec": 0.9407051282051282,
+    "test_location_prec": 0.8394750430292598,
+    "test_modality_rec": 0.94,
+    "test_location_rec": 0.7926180126035709,
+    "test_modality_auc": 0.9747,
+    "test_location_auc": 0.9627831491815702,
+    "test_infer_ms": 4.9365198612213135
+  },
+  "teacher_test_metrics": {
+    "teacher_test_modality_acc": 0.98,
+    "teacher_test_location_acc": 0.875,
+    "teacher_test_modality_f1": 0.9799919967987194,
+    "teacher_test_location_f1": 0.8336027404456334,
+    "teacher_test_modality_prec": 0.9807692307692308,
+    "teacher_test_location_prec": 0.8962730084681304,
+    "teacher_test_modality_rec": 0.98,
+    "teacher_test_location_rec": 0.8138503617691679,
+    "teacher_test_modality_auc": 0.9952,
+    "teacher_test_location_auc": 0.9668382435532514,
+    "teacher_test_infer_ms": 13.141107559204102
+  },
+  "mcnemar": {
+    "modality_p": 0.03857421875,
+    "location_p": 0.8238029479980469
+  }
+}
